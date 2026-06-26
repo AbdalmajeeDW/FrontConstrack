@@ -1,0 +1,33 @@
+export interface TaskEmployee {
+  id: number;
+  name: string;
+  email?: string;
+  role?: string;
+  avatar?: string;
+}
+
+export interface Task {
+  id: number;
+  taskName: string;        
+  taskDescription?: string;
+  projectName: string;
+  priority: "low" | "medium" | "high" | "urgent";
+  status: "todo" | "in_progress" | "review" | "done"|"high";
+  startWork: string;       
+  endWork: string;         
+  assigned_at?: string;
+  is_active?: boolean;
+  
+  city?: string;
+  postal_code?: string;
+  house_number?: string;
+  
+  worker_arrival_time?: string;
+  task_type?: string;
+  work_area?: number;
+  
+  bus_number?: string;
+  driver_name?: string;
+  
+  employees?: TaskEmployee[];
+}
