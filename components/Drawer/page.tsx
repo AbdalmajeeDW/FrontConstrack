@@ -199,7 +199,6 @@ const handleLogout = async () => {
             </motion.div>
           </div>
           <div className="h-0.5 bg-linear-to-r from-transparent via-purple-800 to-transparent mx-4 "></div>{" "}
-          {/* Navigation Menu */}
           <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-3 min-h-0">
             <ul className="space-y-1">
               {menuItems.map((link, index) => {
@@ -215,7 +214,8 @@ const handleLogout = async () => {
                     variants={linkVariants}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Link
+                    {
+                      !link.name.includes('Logout') &&  <Link
                       href={link.url}
                       className={`
                         relative flex items-center 
@@ -265,24 +265,14 @@ const handleLogout = async () => {
                         </div>
                       )}
                     </Link>
+                    }
+           
                   </motion.li>
                 );
               })}
             </ul>
-          </nav><button
-  onClick={handleLogout}
-  className={`
-    flex items-center 
-    ${isCollapsed ? "justify-center" : "gap-3"} 
-    px-3 py-3 rounded-xl
-    transition-all duration-300 group
-    text-red-300 hover:text-red-400 hover:bg-red-500/10
-  `}
->
-  <LogOut className="w-5 h-5 shrink-0" />
-  {!isCollapsed && <span>Logout</span>}
-</button>
-          {/* Logout Button */}
+          </nav>
+
           <div className="p-3 mt-auto border-t border-gray-700/50 shrink-0">
             <Link
               href={logoutItem?.url || "/login"}
@@ -293,10 +283,10 @@ const handleLogout = async () => {
                 transition-all duration-300 group
                 text-red-300 hover:text-red-400 hover:bg-red-500/10
               `}
+            onClick={handleLogout}
             >
               <LogOut className="w-5 h-5 shrink-0" />
 
-              {/* Logout text - يظهر فقط عند التوسيع */}
               <AnimatePresence>
                 {!isCollapsed && (
                   <motion.span
@@ -310,7 +300,6 @@ const handleLogout = async () => {
                 )}
               </AnimatePresence>
 
-              {/* Tooltip for collapsed state */}
               {isCollapsed && (
                 <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
                   Logout
@@ -321,7 +310,6 @@ const handleLogout = async () => {
         </div>
       </motion.div>
 
-      {/* Main Content Spacer - يخلق مساحة للـ Sidebar */}
       <div
         className={`transition-all duration-300 ${isCollapsed ? "w-20" : "w-52"}`}
       />

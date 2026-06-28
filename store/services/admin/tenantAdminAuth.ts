@@ -6,6 +6,7 @@ import {
   TenantAdminUser,
 } from '../../types/tenantAdminAuth.types';
 import { API_ENDPOINTS_ADMIN } from '@/store/endpoints';
+import { clearAllSessions } from '@/utils/auth';
 
 
 api.interceptors.request.use(
@@ -22,6 +23,8 @@ api.interceptors.request.use(
 export async function login(
   credentials: TenantAdminLoginCredentials,
 ): Promise<TenantAdminLoginResponse> {
+  clearAllSessions();
+
   const response = await api.post<TenantAdminLoginResponse>(
     `${API_ENDPOINTS_ADMIN.AUTHSUPERADMIN.LOGIN}`,
     credentials,

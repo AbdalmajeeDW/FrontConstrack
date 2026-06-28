@@ -52,7 +52,7 @@ export const superAdminLinks: NavLink[] = [
     id: 6,
     name: "Logout",
     icon: <LogOut size={20} />,
-    url: "/login",
+    url: "/superAdmin/login",
   },
 ];
 

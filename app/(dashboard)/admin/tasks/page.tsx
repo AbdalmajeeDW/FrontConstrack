@@ -19,7 +19,6 @@ import {
   Bus,
   Briefcase,
   Building2,
-  FlagIcon,
   Flame,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -33,7 +32,6 @@ import {
   selectTasks,
 } from "@/store/slices/admin/taskSlice";
 import { Task } from "@/store/types/task.types";
-
 
 const priorityConfig = {
   low: {
@@ -90,12 +88,34 @@ const statusConfig = {
 };
 
 const projects = [
-  "تطوير منصة النادي",
-  "تحسين الأداء",
-  "إصلاح الأخطاء",
-  "تسويق وإعلانات",
-  "تدريب المدربين",
+  "Constructing foundations and concrete structure",
+  "Executing electrical works and plumbing installations",
+  "Finishing facades and flooring",
+  "Installing HVAC and plumbing systems",
+  "Managing quality and safety on site",
 ];
+
+// دالة مساعدة للحصول على إعدادات الأولوية بأمان
+const getPriorityConfig = (priority: string | undefined) => {
+  if (!priority || !priorityConfig[priority as keyof typeof priorityConfig]) {
+    return priorityConfig.medium; // قيمة افتراضية
+  }
+  return priorityConfig[priority as keyof typeof priorityConfig];
+};
+
+// دالة مساعدة للحصول على لون الأولوية
+const getPriorityColor = (priority: string | undefined) => {
+  if (!priority) return "bg-gray-500 text-white";
+  
+  const colors = {
+    urgent: "bg-red-500 text-white",
+    high: "bg-orange-500 text-white",
+    medium: "bg-yellow-500 text-white",
+    low: "bg-green-500 text-white",
+  };
+  
+  return colors[priority as keyof typeof colors] || "bg-gray-500 text-white";
+};
 
 function TaskCard({
   task,
@@ -110,6 +130,8 @@ function TaskCard({
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: Task["status"]) => void;
 }) {
+  console.log(task);
+
   const getGradient = () => {
     const gradients = [
       "from-rose-400 to-orange-400",
@@ -120,6 +142,10 @@ function TaskCard({
     ];
     return gradients[task.id % gradients.length];
   };
+
+  // الحصول على إعدادات الأولوية بأمان
+  const prioritySettings = getPriorityConfig(task.priority);
+  const priorityColor = getPriorityColor(task.priority);
 
   return (
     <motion.div
@@ -146,18 +172,8 @@ function TaskCard({
               </div>
             )}
           </div>
-          <div
-            className={`px-2 py-1 rounded-lg text-xs font-bold  ${
-              task.priority === "urgent"
-                ? "bg-red-500 text-white"
-                : task.priority === "high"
-                  ? "bg-orange-500 text-white"
-                  : task.priority === "medium"
-                    ? "bg-yellow-500 text-white"
-                    : "bg-green-500 text-white"
-            }`}
-          >
-            {priorityConfig[task.priority].label}
+          <div className={`px-2 py-1 rounded-lg text-xs font-bold ${priorityColor}`}>
+            {prioritySettings.label}
           </div>
         </div>
 
@@ -175,10 +191,10 @@ function TaskCard({
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="bg-gray-50 rounded-xl p-2 text-center">
             <div className="text-lg font-bold text-gray-800">
-              {new Date(task.endWork).toLocaleDateString("ar-EG", {
+              {task.endWork ? new Date(task.endWork).toLocaleDateString("ar-EG", {
                 day: "numeric",
                 month: "short",
-              })}
+              }) : "—"}
             </div>
             <div className="text-[10px] text-gray-400">Due Date</div>
           </div>
@@ -186,9 +202,7 @@ function TaskCard({
             <div className="text-lg font-bold text-gray-800">
               {task.work_area ? `${task.work_area}` : "—"}
             </div>
-            <div className="text-[10px] text-gray-400">Area (m²)
-
-</div>
+            <div className="text-[10px] text-gray-400">Area (m²)</div>
           </div>
           {task.city && (
             <div className="bg-gray-50 rounded-xl p-2 text-center col-span-2">
@@ -302,7 +316,7 @@ function AddTaskModal({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (task: any) => void;
+  onAdd: (task: any) => Promise<any>;
 }) {
   const [formData, setFormData] = useState({
     taskName: "",
@@ -323,15 +337,45 @@ function AddTaskModal({
     driver_name: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({
-      ...formData,
-      work_area: formData.work_area
-        ? parseFloat(formData.work_area)
-        : undefined,
-    });
-    onClose();
+    setIsSubmitting(true);
+    try {
+      await onAdd({
+        ...formData,
+        work_area: formData.work_area
+          ? parseFloat(formData.work_area)
+          : undefined,
+      });
+      // فقط نغلق المودال إذا نجحت العملية
+      onClose();
+      // إعادة تعيين الفورم
+      setFormData({
+        taskName: "",
+        projectName: projects[0],
+        taskDescription: "",
+        startWork: new Date().toISOString().split("T")[0],
+        endWork: "",
+        priority: "medium",
+        status: "todo",
+        employeeIds: [],
+        city: "",
+        postal_code: "",
+        house_number: "",
+        worker_arrival_time: "",
+        task_type: "",
+        work_area: "",
+        bus_number: "",
+        driver_name: "",
+      });
+    } catch (error) {
+      // الخطأ يتم التعامل معه في الـ slice
+      console.error("Failed to add task:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -346,7 +390,11 @@ function AddTaskModal({
       >
         <div className="sticky top-0 bg-linear-to-r from-purple-500 to-blue-500 px-6 py-4 flex justify-between items-center">
           <h2 className="text-xl font-bold text-white">Add New Task</h2>
-          <button onClick={onClose} className="text-white/80 hover:text-white">
+          <button
+            onClick={onClose}
+            className="text-white/80 hover:text-white"
+            disabled={isSubmitting}
+          >
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -469,7 +517,7 @@ function AddTaskModal({
           <div className="border-t pt-4">
             <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-             Task Location
+              Task Location
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
@@ -567,14 +615,44 @@ function AddTaskModal({
               type="button"
               onClick={onClose}
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-linear-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 flex items-center gap-2"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-linear-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="w-4 h-4" /> Save Task
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" /> Save Task
+                </>
+              )}
             </button>
           </div>
         </form>
@@ -621,14 +699,14 @@ export default function TasksPage() {
       textColor: "text-red-600",
       description: "Registered companies",
     },
- 
   ];
+
   const filteredTasks = useMemo(() => {
     let filtered = tasks;
     if (search) {
       filtered = filtered.filter(
         (t) =>
-          t.taskName.toLowerCase().includes(search.toLowerCase()) ||
+          t.taskName?.toLowerCase().includes(search.toLowerCase()) ||
           t.taskDescription?.toLowerCase().includes(search.toLowerCase()),
       );
     }
@@ -641,8 +719,15 @@ export default function TasksPage() {
     return filtered;
   }, [tasks, search, filterPriority, filterStatus, filterProject]);
 
-  const handleAddTask = (newTask: any) => {
-    dispatch(createTask(newTask));
+  const handleAddTask = async (newTask: any) => {
+    try {
+      const result = await dispatch(createTask(newTask)).unwrap();
+      await dispatch(fetchTasks()).unwrap();
+      return result;
+    } catch (error) {
+      console.error("Error adding task:", error);
+      throw error;
+    }
   };
 
   const handleStatusChange = (id: number, status: Task["status"]) => {
@@ -655,7 +740,7 @@ export default function TasksPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
-      <div className=" mx-auto px-4 py-6 space-y-6">
+      <div className="mx-auto px-4 py-6 space-y-6">
         {error && (
           <div className="rounded-xl bg-red-50 border border-red-200 text-red-700 p-4">
             {error}
@@ -738,8 +823,7 @@ export default function TasksPage() {
                 <option value="review">Review</option>
                 <option value="done">Done</option>
               </select>
-        
-            
+
               <button
                 onClick={() => setIsAddModalOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 bg-linear-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:opacity-90 transition-all"
@@ -762,16 +846,17 @@ export default function TasksPage() {
           </div>
         ) : viewMode === "list" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onView={(id) => console.log("View", id)}
-                onEdit={(id) => console.log("Edit", id)}
-                onDelete={handleDeleteTask}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
+            {!isLoading &&
+              filteredTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onView={(id) => console.log("View", id)}
+                  onEdit={(id) => console.log("Edit", id)}
+                  onDelete={handleDeleteTask}
+                  onStatusChange={handleStatusChange}
+                />
+              ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -811,12 +896,12 @@ export default function TasksPage() {
                         )}
                         <div className="flex items-center justify-between mt-2">
                           <span
-                            className={`text-xs px-1.5 py-0.5 rounded ${priorityConfig[task.priority].color}`}
+                            className={`text-xs px-1.5 py-0.5 rounded ${getPriorityConfig(task.priority).color}`}
                           >
-                            {priorityConfig[task.priority].label}
+                            {getPriorityConfig(task.priority).label}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {new Date(task.endWork).toLocaleDateString()}
+                            {task.endWork ? new Date(task.endWork).toLocaleDateString() : "—"}
                           </span>
                         </div>
                       </div>

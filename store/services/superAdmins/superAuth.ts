@@ -1,5 +1,6 @@
 import { API_ENDPOINTS_SUPER_ADMIN } from '@/store/endpoints';
 import api from '../../superApi';
+import { clearAllSessions } from '@/utils/auth';
 
 export interface User {
   id: string;
@@ -27,6 +28,8 @@ export interface LoginCredentials {
 
 
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
+    clearAllSessions();
+  
   const response = await api.post<LoginResponse>(
     `${API_ENDPOINTS_SUPER_ADMIN.AUTHSUPERADMIN.LOGIN}`,
     credentials
