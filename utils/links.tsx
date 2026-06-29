@@ -2,6 +2,7 @@ import { ChartArea, Users, Home, Settings, FileText, ClipboardList, User, LogOut
 import { BrickWall } from "lucide-react";
 import { ReactNode } from "react";
 import { FolderOpenDot } from 'lucide-react';
+import { CalendarCheck } from 'lucide-react';
 
 export interface NavLink {
   id: number;
@@ -92,7 +93,7 @@ export const adminLinks: NavLink[] = [
     {
     id: 5,
     name: "Tasks",
-    icon: <ClipboardList size={20} />,
+    icon: <CalendarCheck size={20} />,
     url: "/admin/tasks",
     title: "Tasks",
     description: "View and manage company tasks",
@@ -101,7 +102,7 @@ export const adminLinks: NavLink[] = [
     id: 6,
     name: "Logout",
     icon: <LogOut size={20} />,
-    url: "/admin/login",
+    url: "/login",
   },
 ];
 
@@ -117,7 +118,7 @@ export const employeeLinks: NavLink[] = [
   {
     id: 2,
     name: "My Tasks",
-    icon: <ClipboardList size={20} />,
+    icon: <CalendarCheck size={20} />,
     url: "/employee/tasks",
     title: "My Tasks",
     description: "View your assigned tasks",

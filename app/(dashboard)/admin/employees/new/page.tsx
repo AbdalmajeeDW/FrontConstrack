@@ -34,6 +34,8 @@ import {
 } from "@/store/slices/admin/employeeSlice";
 import Select from "@/components/superAdmin/Select";
 import { employee } from "@/store/services/admin/employee";
+import { useRouter } from "next/navigation";
+
 
 interface AddEmployeeForm {
   name: string;
@@ -41,7 +43,6 @@ interface AddEmployeeForm {
   password: string;
   phone: string;
   role: "admin" | "employee";
-  // الحقول الجديدة
   salary: string;
   address: string;
   birth_date: string;
@@ -54,6 +55,7 @@ export default function AddEmployeePage() {
   const isLoading = useAppSelector(selectEmployeeLoading);
   const error = useAppSelector(selectEmployeeError);
   const [successMessage, setSuccessMessage] = useState("");
+  const router = useRouter();
 
   const [formData, setFormData] = useState<employee>({
     name: "",
@@ -113,6 +115,7 @@ export default function AddEmployeePage() {
           driving_license: false,
           specialization: "",
         });
+        router.back()
       }
     } catch (err) {
       console.error(err);
@@ -129,10 +132,7 @@ export default function AddEmployeePage() {
 
   const cardClass = "rounded-3xl border border-slate-200 bg-white shadow-sm";
 
-  const roleOptions = [
-    { value: "employee", label: "Employee" },
-    { value: "admin", label: "Admin" },
-  ];
+ 
 
   const specializationOptions = [
     { value: "", label: "Select Specialization" },
@@ -274,16 +274,7 @@ export default function AddEmployeePage() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className={labelClass}>Role *</label>
-                    <Select
-                      name="role"
-                      value={formData.role}
-                      onChange={handleChange}
-                      options={roleOptions}
-                      className={inputClass}
-                    />
-                  </div>
+               
 
                   <div>
                     <label className={labelClass}>Specialization</label>

@@ -32,6 +32,7 @@ import {
   selectTasks,
 } from "@/store/slices/admin/taskSlice";
 import { Task } from "@/store/types/task.types";
+import { fetchEmployees, selectEmployees } from "@/store/slices/admin/employeeSlice";
 
 const priorityConfig = {
   low: {
@@ -318,6 +319,8 @@ function AddTaskModal({
   onClose: () => void;
   onAdd: (task: any) => Promise<any>;
 }) {
+  const dispatch = useAppDispatch();
+  const employees = useAppSelector(selectEmployees);
   const [formData, setFormData] = useState({
     taskName: "",
     projectName: projects[0],
@@ -339,6 +342,25 @@ function AddTaskModal({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, [dispatch]);
+
+  const handleEmployeeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOptions = Array.from(e.target.selectedOptions, (option) =>
+      Number(option.value)
+    );
+    setFormData({ ...formData, employeeIds: selectedOptions });
+  };
+
+  // دالة لإزالة موظف من المختارين
+  const removeEmployee = (id: number) => {
+    setFormData({
+      ...formData,
+      employeeIds: formData.employeeIds.filter((empId) => empId !== id),
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -349,9 +371,7 @@ function AddTaskModal({
           ? parseFloat(formData.work_area)
           : undefined,
       });
-      // فقط نغلق المودال إذا نجحت العملية
       onClose();
-      // إعادة تعيين الفورم
       setFormData({
         taskName: "",
         projectName: projects[0],
@@ -371,7 +391,6 @@ function AddTaskModal({
         driver_name: "",
       });
     } catch (error) {
-      // الخطأ يتم التعامل معه في الـ slice
       console.error("Failed to add task:", error);
     } finally {
       setIsSubmitting(false);
@@ -515,7 +534,7 @@ function AddTaskModal({
           </div>
 
           <div className="border-t pt-4">
-            <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               Task Location
             </h3>
@@ -552,7 +571,7 @@ function AddTaskModal({
 
           {/* تفاصيل العمل*/}
           <div className="border-t pt-4">
-            <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <Briefcase className="w-4 h-4" />
               Task Details
             </h3>
@@ -582,9 +601,8 @@ function AddTaskModal({
             </div>
           </div>
 
-          {/* وسيلة النقل*/}
           <div className="border-t pt-4">
-            <h3 className="text-md font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <Bus className="w-4 h-4" />
               Transportation
             </h3>
@@ -608,6 +626,69 @@ function AddTaskModal({
                 placeholder="Driver Name"
               />
             </div>
+          </div>
+
+          {/* ===== حقل تعيين الموظفين ===== */}
+          <div className="border-t pt-4">
+            <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Assign Employees
+            </h3>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-500 mb-1">
+                Select Employees (Hold Ctrl/Cmd for multiple)
+              </label>
+
+              <select
+                multiple
+                value={formData.employeeIds.map(String)}
+                onChange={handleEmployeeChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 min-h-[120px]"
+              >
+                {employees.map((emp) => (
+                  <option key={emp.id} value={emp.id}>
+                    {emp.name} - {emp.email}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-gray-400 mt-1">
+                Hold Ctrl (Windows) or Cmd (Mac) to select multiple employees
+              </p>
+            </div>
+
+            {/* عرض الموظفين المختارين */}
+            {formData.employeeIds.length > 0 && (
+              <div className="mt-3">
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  Selected ({formData.employeeIds.length}):
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {formData.employeeIds.map((id) => {
+                    const emp = employees.find((e) => e.id === id);
+                    return emp ? (
+                      <span
+                        key={id}
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
+                      >
+                        {emp.name}
+                        <button
+                          type="button"
+                          onClick={() => removeEmployee(id)}
+                          className="hover:text-purple-900 ml-1 text-purple-500"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ) : null;
+                  })}
+                </div>
+              </div>
+            )}
+
+            {formData.employeeIds.length === 0 && (
+              <p className="text-xs text-gray-400 mt-2">No employees selected</p>
+            )}
           </div>
 
           <div className="pt-4 flex justify-end gap-3">
@@ -697,6 +778,16 @@ export default function TasksPage() {
       linear: "from-red-500 to-blue-500",
       bgColor: "bg-red-100",
       textColor: "text-red-600",
+      description: "Registered companies",
+    },
+     {
+      title: "Completed Tasks",
+      value: 0,
+      change: "+12%",
+      icon: Flame,
+      linear: "from-green-500 to-green-500",
+      bgColor: "bg-green-100",
+      textColor: "text-green-600",
       description: "Registered companies",
     },
   ];

@@ -20,17 +20,17 @@ const TenantAdminLoginForm: React.FC = () => {
 
   const validateForm = () => {
     if (!name.trim()) {
-      setAlertMessage('اسم الشركة مطلوب');
+      setAlertMessage('Company name is required');
       setShowAlert(true);
       return false;
     }
     if (!email.trim()) {
-      setAlertMessage('اسم المستخدم مطلوب');
+      setAlertMessage('email is required.');
       setShowAlert(true);
       return false;
     }
     if (!password.trim()) {
-      setAlertMessage('كلمة المرور مطلوبة');
+      setAlertMessage('Password is required.');
       setShowAlert(true);
       return false;
     }
@@ -65,17 +65,16 @@ const TenantAdminLoginForm: React.FC = () => {
             <div>
               <h1 className="text-4xl font-bold">Tenant Admin</h1>
               <p className="mt-3 text-sm text-slate-200 leading-relaxed">
-                سجل دخولك كأدمن للداش بورد الخاصة بالتينانت باستخدام رقم التينانت، الاسم، وكلمة المرور.
-              </p>
+Log in as an admin to your dashboard using your company name, email, and password              </p>
             </div>
           </div>
 
           <div className="p-10">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-4">تسجيل دخول الأدمن</h2>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">Admin Login</h2>
 
             {(showAlert || error) && (
               <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-4 text-red-700">
-                {alertMessage || error || 'حدث خطأ أثناء تسجيل الدخول.'}
+                {alertMessage || error || 'A login error occurred..'}
               </div>
             )}
 
@@ -125,7 +124,7 @@ const TenantAdminLoginForm: React.FC = () => {
                 disabled={isLoading}
                 className="w-full rounded-2xl bg-violet-600 px-5 py-3 text-white font-semibold transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+                {isLoading ? 'Logging in, please wait...' : 'Login'}
               </button>
             </form>
           </div>

@@ -39,7 +39,7 @@ export default function UsersPage() {
   }, [dispatch]);
 
   const stats = {
-    totalUsers: 156,
+    totalUsers: superAdmins.length,
     activeUsers: 128,
     inactiveUsers: 25,
     pendingUsers: 3,
