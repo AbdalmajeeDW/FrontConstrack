@@ -353,7 +353,7 @@ export default function UsersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex  items-center justify-center gap-3 ">
-                          <Link href={`/superAdmin/users/${user.id}`}>
+                          <Link href={`/admin/employees/`}>
                             <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
                               <Eye className="w-4 h-4 text-slate-500" />
                             </button>
