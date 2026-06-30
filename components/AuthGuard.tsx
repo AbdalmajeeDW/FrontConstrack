@@ -20,10 +20,15 @@ export default function AuthGuard({ children }: Props) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const isSuperAdminAuthPage = pathname === "/superAdmin/login" || pathname === "/register";
-    const isTenantAuthPage = pathname === "/tenant/auth/login" || pathname === "/admin/login";
+    const isSuperAdminAuthPage =
+      pathname === "/superAdmin/login" || pathname === "/register";
+    const isTenantAuthPage =
+      pathname === "/" || pathname === "/login";
     const isSuperAdminRoute = pathname.startsWith("/superAdmin");
-    const isTenantAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+    const isTenantAdminRoute =
+      pathname === "/admin" || pathname.startsWith("/admin/");
+    const isTenantEmployeeRoute =
+      pathname === "/employee" || pathname.startsWith("/employee/");
 
     if (isSuperAdminAuthPage || isTenantAuthPage) {
       const authToken = localStorage.getItem("auth-token");
@@ -45,9 +50,6 @@ export default function AuthGuard({ children }: Props) {
 
     if (isSuperAdminRoute) {
       const token = localStorage.getItem("auth-token");
-      const authToken = localStorage.getItem("auth-token");
-
-
       if (!token) {
         router.push("/superAdmin/login");
         return;
@@ -56,11 +58,13 @@ export default function AuthGuard({ children }: Props) {
       setChecked(true);
       return;
     }
-
+    if (isTenantEmployeeRoute) {
+      return;
+    }
     if (isTenantAdminRoute) {
       const tenantToken = localStorage.getItem("tenant-admin-token");
       if (!tenantToken) {
-        router.push("/admin/login");
+        router.push("/login");
         return;
       }
       setChecked(true);

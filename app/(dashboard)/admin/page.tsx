@@ -21,6 +21,7 @@ import {
   Mail,
   Settings,
   Bell,
+  Euro,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -81,20 +82,20 @@ export default function AdminPage() {
     },
   ];
 
-  // مشاريع حديثة
-  const recentProjects = [
-    { name: "Al-Rayan Tower", progress: 62, status: "In Progress", team: 45 },
-    { name: "Al-Noor School", progress: 85, status: "In Progress", team: 30 },
-    { name: "Seaside Resort", progress: 4, status: "Planning", team: 0 },
-    { name: "Industrial Zone", progress: 56, status: "In Progress", team: 65 },
-  ];
+ // مشاريع حديثة
+const recentProjects = [
+  { name: "Zuidas Toren", progress: 62, status: "In Progress", team: 45 },
+  { name: "Scholencomplex De Meer", progress: 85, status: "In Progress", team: 30 },
+  { name: "Noordzee Resort", progress: 4, status: "Planning", team: 0 },
+  { name: "Rotterdamse Haven Uitbreiding", progress: 56, status: "In Progress", team: 65 },
+];
 
-  // أنشطة حديثة
-  const activities = [
-    { user: "Ahmed Al-Mansoori", action: "completed task", project: "Al-Rayan Tower", time: "2 min ago" },
-    { user: "Fatima Al-Hassan", action: "updated budget", project: "Al-Noor School", time: "15 min ago" },
-    { user: "Mohammed Al-Hamadi", action: "created new project", project: "Seaside Resort", time: "1 hour ago" },
-  ];
+// أنشطة حديثة
+const activities = [
+  { user: "Jan de Vries", action: "completed task", project: "Zuidas Toren", time: "2 min ago" },
+  { user: "Emma Jansen", action: "updated budget", project: "Scholencomplex De Meer", time: "15 min ago" },
+  { user: "Pieter van der Meer", action: "created new project", project: "Noordzee Resort", time: "1 hour ago" },
+];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6">
@@ -177,7 +178,7 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/admin/projects/new">
+              <Link href="/admin/projects/">
                 <button className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg hover:shadow-md transition-all text-sm border border-gray-200">
                   <Building2 className="w-4 h-4" />
                   New Project
@@ -295,10 +296,10 @@ export default function AdminPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <DollarSign className="w-4 h-4 text-emerald-500" />
+              <Euro className="w-4 h-4 text-emerald-500" />
               Total Budget
             </div>
-            <p className="text-xl font-bold text-gray-900 mt-1">$4.25M</p>
+            <p className="text-xl font-bold text-gray-900 mt-1">4.25M</p>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center gap-2 text-sm text-gray-500">

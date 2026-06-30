@@ -64,7 +64,7 @@ export default function AddTenantPage() {
     subscriptionEndDate: "",
     discount: 0,
     industry: "",
-    maxEmployees: 100,
+    maxEmployees: 10,
     kvkNumber: "",
     btwNumber: "",
     status: "active",
@@ -123,7 +123,7 @@ export default function AddTenantPage() {
           subscriptionEndDate: "",
           discount: 0,
           industry: "",
-          maxEmployees: 100,
+          maxEmployees: 10,
           kvkNumber: "",
           btwNumber: "",
           status: "active",
@@ -217,13 +217,13 @@ export default function AddTenantPage() {
                         value={formData.phone}
                         onChange={handleChange}
                         className={`${inputClass} pl-11`}
-                        placeholder="+966 50 123 4567"
+                        placeholder="+31"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className={labelClass}>Max Employees</label>
+                    <label className={labelClass}>Number of Employees</label>
 
                     <div className="relative">
                       <Users className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />

@@ -58,7 +58,7 @@ const handleLogout = async () => {
     router.replace(
       pathname.startsWith("/superAdmin")
         ? "/superAdmin/login"
-        : "/admin/login"
+        : "/login"
     );
   }
 };

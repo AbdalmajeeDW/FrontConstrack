@@ -22,6 +22,7 @@ import {
   DollarSign,
   HardDriveIcon,
   HardDrive,
+  Euro,
 } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -70,7 +71,6 @@ export default function UsersPage() {
     visible: { opacity: 1, y: 0 },
   };
 
-  // Stats cards for users
   const statCards = [
     {
       title: "Total Users",
@@ -319,8 +319,8 @@ export default function UsersPage() {
                             <td className="px-4 py-3 max-w-50">
                         <div className="space-y-1">
                           <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <DollarSign className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="truncate block max-w-full">{user.salary}</span>
+                            <Euro className="w-3 h-3 text-slate-400 shrink-0" />
+                            <span className="truncate block max-w-full">{user.salary||0}</span>
                           </div>
                        
                         </div>
@@ -328,7 +328,7 @@ export default function UsersPage() {
                             <td className="px-4 py-3 max-w-50">
                         <div className="space-y-1">
                           <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <DollarSign className="w-3 h-3 text-slate-400 shrink-0" />
+                            <Euro className="w-3 h-3 text-slate-400 shrink-0" />
                             <span className="truncate block max-w-full">{user.birth_date}</span>
                           </div>
                        

@@ -25,6 +25,7 @@ import {
   TrendingUp,
   Filter,
   ArrowUpRight,
+  Euro,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -50,8 +51,8 @@ interface Project {
 const mockProjects: Project[] = [
   {
     id: 1,
-    name: "Al-Rayan Tower",
-    location: "Dubai Marina",
+    name: "Zuidas Toren",
+    location: "Amsterdam",
     status: "active",
     priority: "high",
     startDate: "Jan 2025",
@@ -59,14 +60,14 @@ const mockProjects: Project[] = [
     budget: 45000000,
     spent: 28000000,
     progress: 62,
-    manager: "Ahmed Al-Mansoori",
+    manager: "Jan de Vries",
     teamSize: 45,
     area: 35000,
   },
   {
     id: 2,
-    name: "Al-Noor School Complex",
-    location: "Abu Dhabi",
+    name: "Scholencomplex De Meer",
+    location: "Utrecht",
     status: "active",
     priority: "medium",
     startDate: "Sep 2024",
@@ -74,14 +75,14 @@ const mockProjects: Project[] = [
     budget: 28000000,
     spent: 24000000,
     progress: 85,
-    manager: "Fatima Al-Hassan",
+    manager: "Emma Jansen",
     teamSize: 30,
     area: 22000,
   },
   {
     id: 3,
-    name: "Seaside Resort",
-    location: "Ras Al Khaimah",
+    name: "Noordzee Resort",
+    location: "Zandvoort",
     status: "pending",
     priority: "medium",
     startDate: "Jan 2026",
@@ -89,14 +90,14 @@ const mockProjects: Project[] = [
     budget: 120000000,
     spent: 5000000,
     progress: 4,
-    manager: "Mohammed Al-Hamadi",
+    manager: "Pieter van der Meer",
     teamSize: 0,
     area: 85000,
   },
   {
     id: 4,
-    name: "Industrial Zone Infrastructure",
-    location: "Sharjah",
+    name: "Rotterdamse Haven Uitbreiding",
+    location: "Rotterdam",
     status: "active",
     priority: "high",
     startDate: "Mar 2025",
@@ -104,14 +105,14 @@ const mockProjects: Project[] = [
     budget: 75000000,
     spent: 42000000,
     progress: 56,
-    manager: "Saeed Al-Kaabi",
+    manager: "Sophie Bakker",
     teamSize: 65,
     area: 120000,
   },
   {
     id: 5,
-    name: "Al-Waha Community",
-    location: "Ajman",
+    name: "Groene Woonwijk",
+    location: "Eindhoven",
     status: "completed",
     priority: "low",
     startDate: "Jun 2023",
@@ -119,14 +120,14 @@ const mockProjects: Project[] = [
     budget: 38000000,
     spent: 38000000,
     progress: 100,
-    manager: "Nadia Al-Shamsi",
+    manager: "Lars van den Berg",
     teamSize: 0,
     area: 40000,
   },
   {
     id: 6,
-    name: "Healthcare Center",
-    location: "Fujairah",
+    name: "Zorgcentrum De Meern",
+    location: "Groningen",
     status: "on_hold",
     priority: "high",
     startDate: "Jul 2025",
@@ -134,7 +135,7 @@ const mockProjects: Project[] = [
     budget: 18000000,
     spent: 8000000,
     progress: 44,
-    manager: "Khalid Al-Mazrouei",
+    manager: "Fenna de Boer",
     teamSize: 20,
     area: 15000,
   },
@@ -217,12 +218,12 @@ export default function ProjectsPage() {
 
   const formatCurrency = (amount: number) => {
     if (amount >= 1000000) {
-      return `$${(amount / 1000000).toFixed(1)}M`;
+      return `${(amount / 1000000).toFixed(1)}M`;
     }
     if (amount >= 1000) {
-      return `$${(amount / 1000).toFixed(0)}K`;
+      return `${(amount / 1000).toFixed(0)}K`;
     }
-    return `$${amount}`;
+    return `${amount}`;
   };
 
   const getProgressColor = (progress: number) => {
@@ -278,7 +279,7 @@ export default function ProjectsPage() {
       title: "Total Budget",
       value: formatCurrency(stats.totalBudget),
       change: "+5%",
-      icon: DollarSign,
+      icon: Euro,
       gradient: "from-amber-500 to-orange-500",
       bgColor: "bg-amber-100",
       textColor: "text-amber-600",
@@ -528,7 +529,7 @@ export default function ProjectsPage() {
                         </td>
                         <td className="hidden sm:table-cell text-center">
                           <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <DollarSign className="w-3 h-3 text-slate-400 shrink-0" />
+                            <Euro className="w-3 h-3 text-slate-400 shrink-0" />
                             <span className="truncate block max-w-full">
                               {formatCurrency(project.budget)}
                             </span>
@@ -620,10 +621,10 @@ export default function ProjectsPage() {
                 <p className="text-sm text-gray-500 mb-1">
                   Most Active Location
                 </p>
-                <p className="text-xl font-bold text-purple-500">Dubai</p>
+                <p className="text-xl font-bold text-purple-500">Amsterdam</p>
                 <p className="text-xs text-gray-400 mt-1">
                   {
-                    mockProjects.filter((p) => p.location.includes("Dubai"))
+                    mockProjects.filter((p) => p.location.includes("Amsterdam"))
                       .length
                   }{" "}
                   projects

@@ -11,7 +11,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/admin/login";
+  const isAuthPage = pathname === "/login";
 
   return (
     <>

@@ -63,25 +63,25 @@ const priorityConfig = {
 
 const statusConfig = {
   todo: {
-    label: "قيد الانتظار",
+    label: "Pending",
     color: "bg-gray-100 text-gray-600",
     icon: Circle,
     order: 1,
   },
   in_progress: {
-    label: "قيد التنفيذ",
+    label: "In progress",
     color: "bg-blue-100 text-blue-700",
     icon: Clock,
     order: 2,
   },
   review: {
-    label: "مراجعة",
+    label: "Review",
     color: "bg-purple-100 text-purple-700",
     icon: Eye,
     order: 3,
   },
   done: {
-    label: "مكتملة",
+    label: "Completed",
     color: "bg-green-100 text-green-700",
     icon: CheckCircle,
     order: 4,
@@ -96,7 +96,6 @@ const projects = [
   "Managing quality and safety on site",
 ];
 
-// دالة مساعدة للحصول على إعدادات الأولوية بأمان
 const getPriorityConfig = (priority: string | undefined) => {
   if (!priority || !priorityConfig[priority as keyof typeof priorityConfig]) {
     return priorityConfig.medium; // قيمة افتراضية
@@ -104,7 +103,6 @@ const getPriorityConfig = (priority: string | undefined) => {
   return priorityConfig[priority as keyof typeof priorityConfig];
 };
 
-// دالة مساعدة للحصول على لون الأولوية
 const getPriorityColor = (priority: string | undefined) => {
   if (!priority) return "bg-gray-500 text-white";
   
@@ -144,7 +142,6 @@ function TaskCard({
     return gradients[task.id % gradients.length];
   };
 
-  // الحصول على إعدادات الأولوية بأمان
   const prioritySettings = getPriorityConfig(task.priority);
   const priorityColor = getPriorityColor(task.priority);
 
@@ -158,12 +155,9 @@ function TaskCard({
         boxShadow: "0 20px 35px -10px rgba(0,0,0,0.1)",
       }}
     >
-      {/* شريط علوي ملون */}
       <div className={`h-2 bg-linear-to-r ${getGradient()}`} />
 
-      {/* محتوى البطاقة */}
       <div className="p-5">
-        {/* رقم المهمة ونوعها */}
         <div className="flex justify-between items-start mb-3">
           <div className="space-y-1">
             <div className="text-xs font-mono text-gray-400">#{task.id}</div>
@@ -178,21 +172,18 @@ function TaskCard({
           </div>
         </div>
 
-        {/* عنوان المهمة */}
         <h3 className="text-lg font-black text-gray-900 mb-2 leading-tight">
           {task.taskName}
         </h3>
 
-        {/* وصف المهمة - خط صغير وأنيق */}
         <p className="text-xs text-gray-500 mb-4 line-clamp-2 ">
           {task.taskDescription}
         </p>
 
-        {/* لوحة المعلومات - تصميم بطاقات صغيرة */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="bg-gray-50 rounded-xl p-2 text-center">
             <div className="text-lg font-bold text-gray-800">
-              {task.endWork ? new Date(task.endWork).toLocaleDateString("ar-EG", {
+              {task.endWork ? new Date(task.endWork).toLocaleDateString("en-EG", {
                 day: "numeric",
                 month: "short",
               }) : "—"}
@@ -244,7 +235,6 @@ function TaskCard({
           </div>
         )}
 
-        {/* الفريق */}
         {task.employees && task.employees.length > 0 && (
           <div className="flex items-center gap-2 mb-4 p-2 bg-gray-50 rounded-xl">
             <Users className="w-4 h-4 text-gray-400" />
@@ -258,53 +248,52 @@ function TaskCard({
 
         <div className="flex justify-around gap-1 pt-2">
           <button
-            onClick={() => onStatusChange(task.id, "todo")}
+           
             className={`bg-gray-600 w-full rounded-full flex items-center justify-center transition-all ${
               task.status === "todo"
                 ? "bg-gray-500 text-white"
                 : "bg-gray-100 text-gray-400 hover:bg-gray-200"
             }`}
-            title="قيد الانتظار"
+            title="Pending"
           >
             <Circle className="w-4 h-4" />
           </button>
           <button
-            onClick={() => onStatusChange(task.id, "in_progress")}
+           
             className={`bg-gray-600 w-full rounded-full flex items-center justify-center transition-all ${
               task.status === "in_progress"
                 ? "bg-blue-500 text-white"
                 : "bg-blue-100 text-blue-400 hover:bg-blue-200"
             }`}
-            title="قيد التنفيذ"
+            title="In Progress"
           >
             <Clock className="w-4 h-4" />
           </button>
           <button
-            onClick={() => onStatusChange(task.id, "review")}
+           
             className={`bg-gray-600 w-full rounded-full flex items-center justify-center transition-all ${
               task.status === "review"
                 ? "bg-purple-500 text-white"
                 : "bg-purple-100 text-purple-400 hover:bg-purple-200"
             }`}
-            title="مراجعة"
+            title="Review"
           >
             <Eye className="w-4 h-4" />
           </button>
           <button
-            onClick={() => onStatusChange(task.id, "done")}
+           
             className={`bg-gray-600 w-full p-2 rounded-full flex items-center justify-center transition-all ${
               task.status === "done"
                 ? "bg-green-500 text-white"
                 : "bg-green-100 text-green-400 hover:bg-green-200"
             }`}
-            title="مكتملة"
+            title="Completed"
           >
             <CheckCircle className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* ظل زائف */}
       <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/20" />
     </motion.div>
   );
@@ -353,7 +342,6 @@ function AddTaskModal({
     setFormData({ ...formData, employeeIds: selectedOptions });
   };
 
-  // دالة لإزالة موظف من المختارين
   const removeEmployee = (id: number) => {
     setFormData({
       ...formData,
@@ -529,6 +517,7 @@ function AddTaskModal({
                 }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 placeholder="Example: Concrete Pouring, Electrical Installation..."
+                required
               />
             </div>
           </div>
@@ -556,6 +545,7 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="Postal Code"
+                required
               />
               <input
                 type="text"
@@ -565,11 +555,11 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="House Number/Building"
+                required
               />
             </div>
           </div>
 
-          {/* تفاصيل العمل*/}
           <div className="border-t pt-4">
             <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <Briefcase className="w-4 h-4" />
@@ -587,6 +577,7 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="Worker Arrival Time"
+                required
               />
               <input
                 type="number"
@@ -597,6 +588,7 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="Work Area (m²)"
+                required
               />
             </div>
           </div>
@@ -615,6 +607,7 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="Bus Number"
+                required
               />
               <input
                 type="text"
@@ -624,11 +617,11 @@ function AddTaskModal({
                 }
                 className="px-4 py-2 border rounded-lg"
                 placeholder="Driver Name"
+                required
               />
             </div>
           </div>
 
-          {/* ===== حقل تعيين الموظفين ===== */}
           <div className="border-t pt-4">
             <h3 className="text-md font-semibold text-gray-500 mb-3 flex items-center gap-2">
               <Users className="w-4 h-4" />
@@ -657,7 +650,6 @@ function AddTaskModal({
               </p>
             </div>
 
-            {/* عرض الموظفين المختارين */}
             {formData.employeeIds.length > 0 && (
               <div className="mt-3">
                 <p className="text-sm font-medium text-gray-700 mb-2">
@@ -839,7 +831,7 @@ export default function TasksPage() {
         )}
         {isLoading && (
           <div className="rounded-xl bg-slate-50 border border-slate-200 text-slate-600 p-4">
-            جاري تحميل المهام...
+            Loading tasks...
           </div>
         )}
         <motion.div
@@ -926,13 +918,12 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Tasks List */}
         {filteredTasks.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
             <ListTodo className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">لا توجد مهام</p>
+            <p className="text-gray-500 text-lg">No tasks available</p>
             <p className="text-gray-400 text-sm mt-1">
-              قم بإضافة مهمة جديدة للبدء
+              Add a new task to start.
             </p>
           </div>
         ) : viewMode === "list" ? (

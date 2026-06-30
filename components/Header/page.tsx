@@ -54,14 +54,9 @@ function Page() {
   const pageDescription = currentlinke?.description || "Welcome to CONSTRACK";
 
   const notifications = [ 
-    { id: 1, title: "New player joined", time: "5 min ago", read: false },
+    { id: 1, title: "New Employee joined", time: "5 min ago", read: false },
     { id: 2, title: "Subscription expired", time: "1 hour ago", read: false },
-    {
-      id: 3,
-      title: "Training session scheduled",
-      time: "2 hours ago",
-      read: true,
-    },
+
   ];
 
   const unreadCount = notifications.filter((n) => !n.read).length;

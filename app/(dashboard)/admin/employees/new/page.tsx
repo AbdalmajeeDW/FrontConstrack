@@ -25,6 +25,7 @@ import {
   Wrench,
   Home,
   Calendar,
+  Euro,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -255,7 +256,8 @@ export default function AddEmployeePage() {
                         value={formData.phone}
                         onChange={handleChange}
                         className={`${inputClass} pl-11`}
-                        placeholder="+966 50 123 4567"
+                                                placeholder="+31"
+
                       />
                     </div>
                   </div>
@@ -306,7 +308,7 @@ export default function AddEmployeePage() {
               >
                 <div className="p-6 border-b border-slate-100 flex items-center gap-3">
                   <div className="w-11 h-11 rounded-2xl bg-emerald-100 flex items-center justify-center">
-                    <DollarSign className="w-5 h-5 text-emerald-600" />
+                    <Euro className="w-5 h-5 text-emerald-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-slate-800">
@@ -322,7 +324,7 @@ export default function AddEmployeePage() {
                   <div>
                     <label className={labelClass}>Monthly Salary</label>
                     <div className="relative">
-                      <DollarSign className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                      <Euro className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
                       <input
                         type="number"
                         step="0.01"
@@ -526,20 +528,7 @@ export default function AddEmployeePage() {
                     )}
                   </div>
 
-                  <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                    <div className="flex items-start gap-2">
-                      <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                        <Shield className="w-4 h-4 text-amber-600" />
-                      </div>
-                      <div className="text-xs text-amber-700">
-                        <p className="font-medium mb-1">Important Note:</p>
-                        <p>
-                          The employee will receive a welcome email with login
-                          instructions.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+             
                 </div>
               </motion.div>
 

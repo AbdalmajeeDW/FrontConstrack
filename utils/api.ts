@@ -24,7 +24,6 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   if (response.status === 401) {
     localStorage.removeItem("auth-token");
     localStorage.removeItem("user");
-    window.location.href = "/superAdmin/login";
     throw new Error("Session expired");
   }
 

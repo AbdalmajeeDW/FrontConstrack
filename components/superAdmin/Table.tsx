@@ -16,6 +16,7 @@ import {
   MoreVertical,
   ChevronLeft,
   ChevronRight,
+  Euro,
 } from "lucide-react";
 import { Tenant } from "@/store/services/superAdmins/tenantService";
 
@@ -153,7 +154,7 @@ export default function TenantsTable({
           <span
             className={`inline-flex px-2.5 py-1 text-xs font-medium rounded-full ${planClass}`}
           >
-            {tenant.plan}
+            {tenant.plan ||'basic'}
           </span>
         );
 
@@ -184,9 +185,9 @@ export default function TenantsTable({
       case "revenue":
         return (
           <div className="flex items-center gap-1">
-            <DollarSign className="w-3 h-3 text-slate-400" />
+            <Euro className="w-3 h-3 text-slate-400" />
             <span className="text-sm font-semibold text-slate-700">
-              {tenant.revenue}
+              {tenant.revenue||0}
             </span>
           </div>
         );
@@ -195,13 +196,13 @@ export default function TenantsTable({
         return (
           <div className="flex items-center gap-1">
             <Link
-              href={`/superadmin/tenants/${tenant.id}`}
+              href={`/superAdmin/tenants`}
               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
             >
               <Eye className="w-4 h-4 text-slate-500" />
             </Link>
             <Link
-              href={`/superadmin/tenants/${tenant.id}`}
+              href={`/superAdmin/tenants`}
               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
             >
               <Edit className="w-4 h-4 text-slate-500" />
