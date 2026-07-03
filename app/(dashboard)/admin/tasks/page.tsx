@@ -250,7 +250,7 @@ function TaskCard({
           <button
            
             className={`bg-gray-600 w-full rounded-full flex items-center justify-center transition-all ${
-              task.status === "todo"
+              task.status === "in_progress"
                 ? "bg-gray-500 text-white"
                 : "bg-gray-100 text-gray-400 hover:bg-gray-200"
             }`}
@@ -367,7 +367,7 @@ function AddTaskModal({
         startWork: new Date().toISOString().split("T")[0],
         endWork: "",
         priority: "medium",
-        status: "todo",
+        status: "in_progress",
         employeeIds: [],
         city: "",
         postal_code: "",
