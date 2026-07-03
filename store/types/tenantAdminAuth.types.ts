@@ -8,8 +8,17 @@ export interface TenantAdminUser {
   phone?: string;
   createdAt?: string;
 }
-
-export interface TenantAdminLoginCredentials {
+export interface TenantEmployee {
+  id: string;
+  tenantId: string;
+  name: string;
+  role: 'tenant_employee' | 'user' | string;
+  email?: string;
+  avatar?: string;
+  phone?: string;
+  createdAt?: string;
+}
+export interface TenantLoginCredentials {
   name: string;
   email: string;
   password: string;

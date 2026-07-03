@@ -35,7 +35,7 @@ export default function AdminPage() {
   const [tenantAdmin, setTenantAdmin] = useState<TenantAdminUser | null>(null);
 
   useEffect(() => {
-    const tenantAdminToken = localStorage.getItem("tenant-admin-user");
+    const tenantAdminToken = localStorage.getItem("tenant-user");
     if (tenantAdminToken) {
       setTenantAdmin(JSON.parse(tenantAdminToken));
     }

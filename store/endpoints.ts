@@ -42,6 +42,7 @@ export const API_ENDPOINTS_ADMIN = {
     BASE: tenantApi,
     GET_ALL: "/tasks/",
     GET_BY_ID: (id: number) => `/tasks/${id}`,
+    GET_BY_EMPLOYEE_ID: (employeeId: string | number) => `/tasks/employee/${employeeId}`,
     GET_TASK_EMPLOYEE: (id: number) => `/tasks/${id}/employees`,
     CREATE: "/tasks",
     UPDATE: (id: number) => `/tasks/${id}`,

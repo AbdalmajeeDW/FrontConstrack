@@ -47,7 +47,7 @@ const router = useRouter();
 
 const handleLogout = async () => {
   try {
-    if (pathname.startsWith("/admin")) {
+    if (pathname.startsWith("/admin") || pathname.startsWith("/employee")) {
       return tenantLogout();
     }
 

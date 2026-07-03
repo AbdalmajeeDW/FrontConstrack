@@ -4,7 +4,7 @@ import {
   logout as logoutApi,
 } from '../../services/admin/tenantAdminAuth';
 import {
-  TenantAdminLoginCredentials,
+  TenantLoginCredentials,
   TenantAdminUser,
 } from '../../types/tenantAdminAuth.types';
 
@@ -28,7 +28,7 @@ const initialState: TenantAdminAuthState = {
 
 export const tenantAdminLogin = createAsyncThunk(
   'tenantAdminAuth/login',
-  async (credentials: TenantAdminLoginCredentials, { rejectWithValue }) => {
+  async (credentials: TenantLoginCredentials, { rejectWithValue }) => {
     try {
       const response = await loginApi(credentials);
       return response;
@@ -52,16 +52,36 @@ export const tenantAdminLogout = createAsyncThunk(
 export const tenantAdminInitialize = createAsyncThunk(
   'tenantAdminAuth/initialize',
   async () => {
-    const token = localStorage.getItem('tenant-admin-token');
-    const userStr = localStorage.getItem('tenant-admin-user');
+    // Support both tenant-admin and employee stored sessions
+    const tenantToken = localStorage.getItem('tenant-token');
+    const tenantUserStr = localStorage.getItem('tenant-user');
 
-    if (token && userStr) {
+    const employeeToken = localStorage.getItem('employee-token');
+    const employeeUserStr = localStorage.getItem('employee-user');
+
+    if (tenantToken && tenantUserStr) {
       try {
-        const user = JSON.parse(userStr) as TenantAdminUser;
-
+        const user = JSON.parse(tenantUserStr) as TenantAdminUser;
         return {
           user,
-          token,
+          token: tenantToken,
+          isAuthenticated: true,
+        };
+      } catch {
+        return {
+          user: null,
+          token: null,
+          isAuthenticated: false,
+        };
+      }
+    }
+
+    if (employeeToken && employeeUserStr) {
+      try {
+        const user = JSON.parse(employeeUserStr) as TenantAdminUser;
+        return {
+          user,
+          token: employeeToken,
           isAuthenticated: true,
         };
       } catch {

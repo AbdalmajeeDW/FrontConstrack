@@ -1,6 +1,6 @@
 import api from '../../tenantApi';
 import {
-  TenantAdminLoginCredentials,
+  TenantLoginCredentials,
   TenantAdminLoginResponse,
   TenantAdminUser,
 } from '../../types/tenantAdminAuth.types';
@@ -20,7 +20,7 @@ api.interceptors.request.use(
 );
 
 export async function login(
-  credentials: TenantAdminLoginCredentials,
+  credentials: TenantLoginCredentials,
 ): Promise<TenantAdminLoginResponse> {
   clearAllSessions();
 
@@ -31,11 +31,11 @@ export async function login(
 
   const { access_token, refreshToken, user } = response.data;
 
-  localStorage.setItem('tenant-admin-token', access_token);
+  localStorage.setItem('tenant-token', access_token);
   if (refreshToken) {
-    localStorage.setItem('tenant-admin-refreshToken', refreshToken);
+    localStorage.setItem('tenant-refreshToken', refreshToken);
   }
-  localStorage.setItem('tenant-admin-user', JSON.stringify(user));
+  localStorage.setItem('tenant-user', JSON.stringify(user));
 
   return response.data;
 }
@@ -47,9 +47,9 @@ export async function logout(): Promise<void> {
         console.warn("Backend logout failed, forcing local logout");
 
   } finally {
-    localStorage.removeItem('tenant-admin-token');
-    localStorage.removeItem('tenant-admin-refreshToken');
-    localStorage.removeItem('tenant-admin-user');
+    localStorage.removeItem('tenant-token');
+    localStorage.removeItem('tenant-refreshToken');
+    localStorage.removeItem('tenant-user');
   }
 }
 

@@ -42,7 +42,7 @@ export default function HomePage() {
       router.replace("/superAdmin");
     } else if (tenantAdmin.role === "tenant_admin") {
       router.replace("/admin");
-    } else if (tenantAdmin.role === "employee") {
+    } else if (tenantAdmin.role === "employee" || tenantAdmin.role === "tenant_employee") {
       router.replace("/employee");
     } else {
       router.replace("/login");

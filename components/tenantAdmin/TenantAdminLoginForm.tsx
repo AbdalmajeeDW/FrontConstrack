@@ -5,6 +5,7 @@ import { Eye, EyeClosed, BrickWall } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { tenantAdminLogin } from '@/store/slices/admin/tenantAdminAuthSlice';
 import { useRouter } from 'next/navigation';
+import { decodeJWT } from '../AuthGuard';
 
 const TenantAdminLoginForm: React.FC = () => {
   const [name, setName] = useState('');
@@ -48,9 +49,16 @@ const TenantAdminLoginForm: React.FC = () => {
     const result = await dispatch(
       tenantAdminLogin({ name, email, password }),
     );
+    const token = localStorage.getItem('tenant-token');
+    const decodedRole = token ? decodeJWT(token)?.role : null;
 
     if (tenantAdminLogin.fulfilled.match(result)) {
-      router.push('/admin');
+        if (decodedRole === 'tenant_admin') {
+        router.push('/admin');
+      }else if ( decodedRole === 'tenant_employee') {
+        router.push('/employee');
+      }
+    
     }
   };
 

@@ -4,8 +4,9 @@ import tenantSlice from "./slices/superAdmin/tenantSlice";
 import tenantAdminAuthSlice from "./slices/admin/tenantAdminAuthSlice";
 import superAdminSlice from "./slices/superAdmin/superAdminSlice";
 import taskSlice from "./slices/admin/taskSlice";
-import taskEmployeeSlice from "./slices/admin/employeeSlice";
+import employeeTaskSlice from "./slices/employee/taskSlice";
 import employeeSlice from "./slices/admin/employeeSlice";
+import profileSlice from "./slices/employee/profileSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,8 @@ export const store = configureStore({
     tenant: tenantSlice,
     tenantAdminAuth: tenantAdminAuthSlice,
     task: taskSlice,
+    employeeTask: employeeTaskSlice,
+    employeeProfile: profileSlice,
     employee: employeeSlice,
   },
 });

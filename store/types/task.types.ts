@@ -12,7 +12,7 @@ export interface Task {
   taskDescription?: string;
   projectName: string;
   priority: "low" | "medium" | "high" | "urgent";
-  status: "todo" | "in_progress" | "review" | "done"|"high";
+  status:  "in_progress" | "review" | "done"|"high";
   startWork: string;       
   endWork: string;         
   assigned_at?: string;

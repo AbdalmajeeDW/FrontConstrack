@@ -6,7 +6,9 @@ const tenantApi = axios.create({
 
 tenantApi.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('tenant-admin-token');
+  
+    const tenantToken = localStorage.getItem('tenant-token');
+    const token = tenantToken;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -18,9 +20,12 @@ tenantApi.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('tenant-admin-token');
-      localStorage.removeItem('tenant-admin-refreshToken');
-      localStorage.removeItem('tenant-admin-user');
+      localStorage.removeItem('tenant-token');
+      localStorage.removeItem('tenant-refreshToken');
+      localStorage.removeItem('tenant-user');
+      localStorage.removeItem('tenant-token');
+      localStorage.removeItem('tenant-refreshToken');
+      localStorage.removeItem('tenant-user');
     }
 
     return Promise.reject(error);

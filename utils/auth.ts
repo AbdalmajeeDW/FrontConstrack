@@ -5,12 +5,12 @@ export const clearAllSessions = () => {
   localStorage.removeItem("user");
 
   // Tenant Admin
-  localStorage.removeItem("tenant-admin-token");
-  localStorage.removeItem("tenant-admin-refreshToken");
-  localStorage.removeItem("tenant-admin-user");
+  localStorage.removeItem("tenant-token");
+  localStorage.removeItem("tenant-refreshToken");
+  localStorage.removeItem("tenant-user");
 
   // Employee
-  localStorage.removeItem("employee-token");
-  localStorage.removeItem("employee-refreshToken");
-  localStorage.removeItem("employee-user");
+  localStorage.removeItem("tenant-token");
+  localStorage.removeItem("tenant-refreshToken");
+  localStorage.removeItem("tenant-user");
 };

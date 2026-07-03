@@ -135,7 +135,7 @@ export const employeeLinks: NavLink[] = [
     id: 4,
     name: "Logout",
     icon: <LogOut size={20} />,
-    url: "/employee/login",
+    url: "/login",
   },
 ];
 
