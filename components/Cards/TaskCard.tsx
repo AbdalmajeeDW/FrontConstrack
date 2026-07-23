@@ -355,7 +355,7 @@ export default function TaskCard({
               </button>
               <div className="relative bg-black/20 rounded-xl overflow-hidden">
                 <Image
-                  src={`http://http://187.124.0.42:3007${selectedImage}`}
+                  src={`http://187.124.0.42:3007${selectedImage}`}
                   alt="Selected image"
                   width={1200}
                   height={800}
