@@ -36,8 +36,7 @@ export default function Page() {
 
   const currentUser = user || tenantAdmin;
 
-  const tenantName = pathname.split("/")[1];
-
+const tenantName = pathname.split("/")[1] || "";
   const currentRoleLabel = pathname.startsWith("/superAdmin")
     ? user?.name
     : pathname.includes("/admin")
@@ -78,27 +77,27 @@ export default function Page() {
 
     return linkUrl;
   };
-  const handleLogout = async () => {
-    try {
-      if (pathname.includes("/admin") || pathname.includes("/employee")) {
-        await tenantLogout();
+const handleLogout = async () => {
+  try {
+    if (pathname.includes("/admin") || pathname.includes("/employee")) {
+      await tenantLogout();
 
-        router.replace(`/${tenantName}/login`);
-
-        return;
-      }
-
-      if (pathname.startsWith("/superAdmin")) {
-        await superLogout();
-
-        router.replace("/superAdmin/login");
-
-        return;
-      }
-    } catch (error) {
-      console.log(error);
+      router.replace(`/${tenantName}/login`);
+      return;
     }
-  };
+
+    if (pathname.startsWith("/superAdmin")) {
+      await superLogout();
+
+      router.replace("/superAdmin/login");
+      return;
+    }
+
+    router.replace("/login");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const menuItems = getMenuItems();
 
@@ -212,10 +211,7 @@ export default function Page() {
               >
                 <div className="relative shrink-0">
                   <div className="absolute inset-0 bg-linear-to-r from-purple-500 to-blue-500 rounded-full blur-sm opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                  <div className="relative w-12 h-12 rounded-full bg-linear-to-r from-purple-500 to-blue-500 flex items-center justify-center shadow-lg">
-                  
-              
-                  </div>
+                  <div className="relative w-12 h-12 rounded-full bg-linear-to-r from-purple-500 to-blue-500 flex items-center justify-center shadow-lg"></div>
                 </div>
 
                 <AnimatePresence>
@@ -246,14 +242,14 @@ export default function Page() {
           <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-3 min-h-0">
             <ul className="space-y-1">
               {menuItems.map((link, index) => {
-                  const parts = pathname.split('/');
+                const parts = pathname.split("/");
 
-console.log(pathname);
+                console.log(pathname);
 
                 const isActive =
-                  parts[3] === link.url||pathname===link.url ||
+                  parts[3] === link.url ||
+                  pathname === link.url ||
                   link.subLinks?.some((sub) => pathname === sub.url);
-
 
                 return (
                   <motion.li
@@ -321,12 +317,12 @@ console.log(pathname);
             <Link
               href={logoutItem?.url || "/login"}
               className={`
-                flex items-center 
-                ${isCollapsed ? "justify-center" : "gap-3"} 
-                px-3 py-3 rounded-xl
-                transition-all duration-300 group
-                text-red-300 hover:text-red-400 hover:bg-red-500/10
-              `}
+    flex items-center 
+    ${isCollapsed ? "justify-center" : "gap-3"} 
+    px-3 py-3 rounded-xl
+    transition-all duration-300 group
+    text-red-300 hover:text-red-400 hover:bg-red-500/10
+  `}
               onClick={handleLogout}
             >
               <LogOut className="w-5 h-5 shrink-0" />
