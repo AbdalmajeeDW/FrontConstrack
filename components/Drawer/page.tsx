@@ -78,10 +78,11 @@ const tenantName = pathname.split("/")[1] || "";
     return linkUrl;
   };
 const handleLogout = async () => {
-  console.log("CURRENT PATH:", pathname);
-  console.log("TENANT NAME:", tenantName);
   try {
-    if (pathname.includes("/admin") || pathname.includes("/employee")) {
+    console.log("PATH:", pathname);
+    console.log("TENANT:", tenantName);
+
+    if (tenantName && tenantName !== "superAdmin") {
       await tenantLogout();
 
       router.replace(`/${tenantName}/login`);
@@ -96,6 +97,7 @@ const handleLogout = async () => {
     }
 
     router.replace("/login");
+
   } catch (error) {
     console.log(error);
   }
