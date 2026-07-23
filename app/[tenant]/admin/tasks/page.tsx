@@ -70,7 +70,7 @@ export default function TasksPage() {
     },
     {
       title: "Completed Tasks",
-      value: 0,
+      value: tasks.filter((t) => t.status === "done").length,
       icon: <Flame className="w-6 h-6 text-green-600" />,
       linear: "from-green-500 to-green-500",
       bgColor: "bg-green-100",
