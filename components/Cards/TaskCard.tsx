@@ -304,7 +304,7 @@ export default function TaskCard({
                         onClick={() => setSelectedImage(image)}
                       >
                         <Image
-                          src={`http://localhost:3000${image}`}
+                          src={`http://187.124.0.42:3007${image}`}
                           alt={`Task image ${index + 1}`}
                           fill
                           sizes="(max-width: 768px) 50vw, 25vw"
@@ -355,7 +355,7 @@ export default function TaskCard({
               </button>
               <div className="relative bg-black/20 rounded-xl overflow-hidden">
                 <Image
-                  src={`http://localhost:3000${selectedImage}`}
+                  src={`http://http://187.124.0.42:3007${selectedImage}`}
                   alt="Selected image"
                   width={1200}
                   height={800}

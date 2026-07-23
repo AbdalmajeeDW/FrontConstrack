@@ -893,7 +893,7 @@ export default function AddTaskModal({
                       >
                         <div className="relative h-24 w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
                           <Image
-                            src={`${entry.isExisting ? `http://localhost:3000${preview}` : preview}`}
+                            src={`${entry.isExisting ? `http://187.124.0.42:3007${preview}` : preview}`}
                             alt={`Preview ${index + 1}`}
                             fill
                             sizes="(max-width: 640px) 100vw, 25vw"
