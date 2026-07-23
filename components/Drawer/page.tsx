@@ -36,7 +36,7 @@ export default function Page() {
 
   const currentUser = user || tenantAdmin;
 
-const tenantName = pathname.split("/")[1] || "";
+  const tenantName = pathname.split("/")[1] || "";
   const currentRoleLabel = pathname.startsWith("/superAdmin")
     ? user?.name
     : pathname.includes("/admin")
@@ -77,31 +77,30 @@ const tenantName = pathname.split("/")[1] || "";
 
     return linkUrl;
   };
-const handleLogout = async () => {
-  try {
-    console.log("PATH:", pathname);
-    console.log("TENANT:", tenantName);
+  const handleLogout = async () => {
+    try {
+      console.log("PATH:", pathname);
+      console.log("TENANT:", tenantName);
 
-    if (tenantName && tenantName !== "superAdmin") {
-      await tenantLogout();
+      if (tenantName && tenantName !== "superAdmin") {
+        await tenantLogout();
 
-      router.replace(`/${tenantName}/login`);
-      return;
+        router.replace(`/${tenantName}/login`);
+        return;
+      }
+
+      if (pathname.startsWith("/superAdmin")) {
+        await superLogout();
+
+        router.replace("/superAdmin/login");
+        return;
+      }
+
+      router.replace("/login");
+    } catch (error) {
+      console.log(error);
     }
-
-    if (pathname.startsWith("/superAdmin")) {
-      await superLogout();
-
-      router.replace("/superAdmin/login");
-      return;
-    }
-
-    router.replace("/login");
-
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   const menuItems = getMenuItems();
 
@@ -318,16 +317,15 @@ const handleLogout = async () => {
             </ul>
           </nav>
           <div className="p-3 mt-auto border-t border-gray-700/50 shrink-0">
-            <Link
-              href={logoutItem?.url || "/login"}
+            <button
+              onClick={handleLogout}
               className={`
-    flex items-center 
+    w-full flex items-center 
     ${isCollapsed ? "justify-center" : "gap-3"} 
     px-3 py-3 rounded-xl
     transition-all duration-300 group
     text-red-300 hover:text-red-400 hover:bg-red-500/10
   `}
-              onClick={handleLogout}
             >
               <LogOut className="w-5 h-5 shrink-0" />
 
@@ -349,7 +347,7 @@ const handleLogout = async () => {
                   Logout
                 </div>
               )}
-            </Link>
+            </button>
           </div>
         </div>
       </motion.div>
