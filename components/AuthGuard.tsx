@@ -3,88 +3,101 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-type Props = { children: React.ReactNode };
+type Props = {
+  children: React.ReactNode;
+};
 
-
-export function decodeJWT(token: any): any | null {
+export function decodeJWT(token: string | null) {
   try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(""),
+    if (!token) return null;
+
+    const payload = token.split(".")[1];
+
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+
+    return JSON.parse(
+      decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join(""),
+      ),
     );
-    return JSON.parse(jsonPayload);
-  } catch (error) {
+  } catch {
     return null;
   }
 }
+
 export default function AuthGuard({ children }: Props) {
   const router = useRouter();
+
   const pathname = usePathname();
+
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const isSuperAdminAuthPage =
-      pathname === "/superAdmin/login" || pathname === "/register";
-    const isTenantAuthPage = pathname === "/" || pathname === "/login";
-    const isSuperAdminRoute = pathname.startsWith("/superAdmin");
-    const isTenantAdminRoute =
-      pathname === "/admin" || pathname.startsWith("/admin/");
-    const isTenantEmployeeRoute =
-      pathname === "/employee" || pathname.startsWith("/employee/");
-    const token = localStorage.getItem("tenant-token");
-    if (token) {
-      const decoded = decodeJWT(token);
-      console.log(decoded, "eddd");
-    }
-    if (isSuperAdminAuthPage || isTenantAuthPage) {
-      const authToken = localStorage.getItem("auth-token");
-      const tenantToken = localStorage.getItem("tenant-token");
+    const parts = pathname.split("/").filter(Boolean);
+    const tenantName = parts[0];
 
-      if (isSuperAdminAuthPage && authToken) {
-        router.push("/superAdmin");
+    const section = parts[1];
+
+    const superToken = localStorage.getItem("auth-token");
+
+    const tenantToken = localStorage.getItem("tenant-token");
+
+    const tenantUser = decodeJWT(tenantToken);
+
+    if (pathname.startsWith("/superAdmin")) {
+      if (pathname === "/superAdmin/login") {
+        setChecked(true);
         return;
       }
 
-      if (tenantToken) {
-        router.push("/admin");
+      if (!superToken) {
+        router.replace("/superAdmin/login");
+
         return;
       }
 
       setChecked(true);
+
       return;
     }
 
-    if (isSuperAdminRoute) {
-      const token = localStorage.getItem("auth-token");
-      if (!token) {
-        router.push("/superAdmin/login");
+    if (section === "login") {
+      setChecked(true);
+
+      return;
+    }
+
+    if (section === "admin") {
+      if (!tenantToken || tenantUser?.role !== "tenant_admin") {
+        router.replace(`/${tenantName}/login`);
+
         return;
       }
 
       setChecked(true);
+
       return;
     }
- 
-    if (isTenantAdminRoute) {
-      const tenantToken = localStorage.getItem("tenant-token");
-      if (!tenantToken|| decodeJWT(localStorage.getItem("tenant-token"))?.role !== "tenant_admin") {
-        router.push("/login");
+
+    if (section === "employee") {
+      if (!tenantToken || tenantUser?.role !== "tenant_employee") {
+        router.replace(`/${tenantName}/login`);
+
         return;
       }
+
       setChecked(true);
+
       return;
     }
 
     setChecked(true);
   }, [pathname, router]);
 
-  if (!checked) {
-    return null;
-  }
+  if (!checked) return null;
 
   return <>{children}</>;
 }

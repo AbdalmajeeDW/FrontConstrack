@@ -10,7 +10,6 @@ import {
   Users,
   Calendar,
   Activity,
-  DollarSign,
   Eye,
   Edit,
   MoreVertical,
@@ -187,7 +186,6 @@ export default function TenantsTable({
           <div className="flex items-center gap-1">
             <Euro className="w-3 h-3 text-slate-400" />
             <span className="text-sm font-semibold text-slate-700">
-              {tenant.revenue||0}
             </span>
           </div>
         );
@@ -202,7 +200,7 @@ export default function TenantsTable({
               <Eye className="w-4 h-4 text-slate-500" />
             </Link>
             <Link
-              href={`/superAdmin/tenants`}
+              href={`/superAdmin/tenants/${tenant.id}`}
               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
             >
               <Edit className="w-4 h-4 text-slate-500" />

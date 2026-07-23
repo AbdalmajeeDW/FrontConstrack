@@ -18,12 +18,17 @@ export async function getTaskEmployees(id: number): Promise<TaskEmployee[]> {
 }
 
 export async function createTask(taskData: Partial<Task>) {
+
   const response = await tenantApi.post<Task>(`${API_ENDPOINTS_ADMIN.TASKS.CREATE}`, taskData);
   return response.data;
 }
 
 export async function updateTask(id: number, taskData: Partial<Task>) {
-  const response = await tenantApi.patch<Task>(`${API_ENDPOINTS_ADMIN.TASKS.UPDATE(id)}`, taskData);
+    console.log(taskData instanceof FormData);
+  console.log(taskData,'ddd');
+  const response = await tenantApi.patch<Task>(`${API_ENDPOINTS_ADMIN.TASKS.UPDATE(id)}`, taskData, {
+    
+    });
   return response.data;
 }
 

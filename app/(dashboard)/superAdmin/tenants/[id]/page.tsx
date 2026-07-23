@@ -12,7 +12,7 @@ import { ArrowLeft, Building2, CalendarDays, Check, Mail, Phone, Shield, Users }
 
 export default function EditTenantPage() {
   const params = useParams() as { id?: string };
-  const tenantId = Number(params.id);
+  const tenantId = params.id ? Number(params.id) : 1;
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectTenantLoading);
   const error = useAppSelector(selectTenantError);
@@ -22,12 +22,19 @@ export default function EditTenantPage() {
     name: "",
     address: "",
     phone: "",
-    adminEmail: "",
     plan: "Basic",
-    status: "active",
-    maxEmployees: 0,
+    adminName: "",
+    adminEmail: "",
+    adminPassword: "",
+    databaseName: "",
     subscriptionStartDate: "",
     subscriptionEndDate: "",
+    discount: 0,
+    industry: "",
+    maxEmployees: 10,
+    kvkNumber: "",
+    btwNumber: "",
+    status: "pending",
   });
   const [loadingTenant, setLoadingTenant] = useState(true);
   const [successMessage, setSuccessMessage] = useState("");
@@ -44,12 +51,18 @@ export default function EditTenantPage() {
           name: data.name,
           address: data.address,
           phone: data.phone,
-          adminEmail: data.adminEmail,
           plan: data.plan,
-          status: data.status,
+          adminName: data.adminName,
+          adminEmail: data.adminEmail,
+          adminPassword: data.adminPassword,
+
+          databaseName: data.databaseName,
           maxEmployees: data.maxEmployees,
           subscriptionStartDate: data.subscriptionStartDate,
           subscriptionEndDate: data.subscriptionEndDate,
+          kvkNumber: data.kvkNumber,
+          btwNumber: data.btwNumber,
+          status: data.status,
         });
       } catch (err) {
         console.error("Failed to load tenant:", err);
@@ -57,7 +70,6 @@ export default function EditTenantPage() {
         setLoadingTenant(false);
       }
     };
-
     loadTenant();
   }, [tenantId]);
 
@@ -70,26 +82,34 @@ export default function EditTenantPage() {
       [e.target.name]: value,
     }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccessMessage("");
 
     if (!tenantId) return;
 
-    const payload: Partial<Tenant> = {
-      name: formData.name,
-      address: formData.address,
-      phone: formData.phone,
-      adminEmail: formData.adminEmail,
-      plan: formData.plan as Tenant["plan"],
-      status: formData.status as Tenant["status"],
-      maxEmployees: Number(formData.maxEmployees || 0),
-      subscriptionStartDate: formData.subscriptionStartDate,
-      subscriptionEndDate: formData.subscriptionEndDate,
-    };
+const payload = {
+  name: formData.name,
+  address: formData.address,
+  phone: formData.phone,
+  plan: formData.plan,
+  adminName: formData.adminName,
+  adminEmail: formData.adminEmail,
+  adminPassword: formData.adminPassword,
+  databaseName: formData.databaseName,
+  subscriptionStartDate: formData.subscriptionStartDate,
+  subscriptionEndDate: formData.subscriptionEndDate,
+  discount: formData.discount,
+  industry: formData.industry,
+  maxEmployees: Number(formData.maxEmployees) || 0,
+  kvkNumber: formData.kvkNumber,
+  btwNumber: formData.btwNumber,
+  status: formData.status,
+};
+
 
     try {
+      
       const resultAction = await dispatch(updateTenant({ id: tenantId, data: payload }));
       if (updateTenant.fulfilled.match(resultAction)) {
         setSuccessMessage("تم تحديث بيانات التيننت بنجاح.");
@@ -289,25 +309,7 @@ export default function EditTenantPage() {
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
-              <h3 className="text-base font-semibold text-slate-900 mb-3">Tenant Details</h3>
-              <div className="space-y-3 text-sm text-slate-600">
-                <p>
-                  <span className="font-medium text-slate-800">Tenant ID:</span> {tenant.id}
-                </p>
-                <p>
-                  <span className="font-medium text-slate-800">Joined:</span> {tenant.joinedDate}
-                </p>
-                <p>
-                  <span className="font-medium text-slate-800">Last Active:</span> {tenant.lastActive}
-                </p>
-                <p>
-                  <span className="font-medium text-slate-800">Revenue:</span> {tenant.revenue}
-                </p>
-              </div>
-            </div>
-          </div>
+      
         </form>
       </div>
     </div>

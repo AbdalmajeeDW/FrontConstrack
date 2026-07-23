@@ -4,14 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Building2,
-  CalendarDays,
   Check,
   Database,
-  Globe2,
-  Mail,
-  Phone,
   Shield,
-  Users,
   BadgePercent,
   FileText,
 } from "lucide-react";
@@ -24,25 +19,16 @@ import {
 import Select from "@/components/superAdmin/Select";
 import { planOptions, statusOptions } from "@/config/statusConfig";
 import { useRouter } from "next/navigation";
-
-interface AddTenantForm {
-  name: string;
-  address: string;
-  phone: string;
-  adminName: string;
-  adminEmail: string;
-  adminPassword: string;
-  databaseName: string;
-  subscriptionStartDate: string;
-  subscriptionEndDate: string;
-  discount: number;
-  industry: string;
-  plan: string;
-  maxEmployees: number;
-  kvkNumber: string;
-  btwNumber: string;
-  status: "active" | "pending" | "suspended" | "expired";
-}
+import {
+  getInputClassName,
+  validateFieldForTenants,
+} from "@/utils/validators/validate";
+import { toast } from "sonner";
+import {
+  getInitialTenantForm,
+  Tenant,
+} from "@/store/services/superAdmins/tenantService";
+import { tenantFormFields } from "@/config/tenantFormConfig";
 
 export default function AddTenantPage() {
   const dispatch = useAppDispatch();
@@ -50,87 +36,92 @@ export default function AddTenantPage() {
   const error = useAppSelector(selectTenantError);
   const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [formData, setFormData] = useState<AddTenantForm>({
-    name: "",
-    address: "",
-    phone: "",
-    plan: "",
-    adminName: "",
-    adminEmail: "",
-    adminPassword: "",
-    databaseName: "",
-    subscriptionStartDate: "",
-    subscriptionEndDate: "",
-    discount: 0,
-    industry: "",
-    maxEmployees: 10,
-    kvkNumber: "",
-    btwNumber: "",
-    status: "active",
-  });
-
+  const [formData, setFormData] = useState<Tenant>(getInitialTenantForm());
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
+    const { name, value, type } = e.target;
+    const errorMsg = validateFieldForTenants(name, value);
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    if (errorMsg) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: errorMsg }));
+    } else {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[e.target.name];
+        return newErrors;
+      });
+    }
   };
-
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setSuccessMessage("");
-
+    const fieldsToValidate = [
+      "name",
+      "adminEmail",
+      "adminPassword",
+      "phone",
+      "adminName",
+      "maxEmployees",
+      "address",
+      "industry",
+      "kvkNumber",
+      "btwNumber",
+      "databaseName",
+    ];
+    const newErrors: Record<string, string> = {};
+    let hasError = false;
+    fieldsToValidate.forEach((field) => {
+      const value = formData[field as keyof typeof formData];
+      const msg = validateFieldForTenants(field, value);
+      if (msg) {
+        newErrors[field] = msg;
+        hasError = true;
+      }
+    });
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
     const payload = {
       name: formData.name,
       address: formData.address,
       phone: formData.phone,
-      status: formData.status,
-
       plan: formData.plan,
-      maxEmployees: Number(formData.maxEmployees),
+      adminName: formData.adminName,
+      adminEmail: formData.adminEmail,
+      adminPassword: formData.adminPassword,
+      databaseName: formData.databaseName,
       subscriptionStartDate: formData.subscriptionStartDate,
       subscriptionEndDate: formData.subscriptionEndDate,
       discount: formData.discount,
       industry: formData.industry,
-      databaseName: formData.databaseName,
+      maxEmployees: Number(formData.maxEmployees),
       kvkNumber: formData.kvkNumber,
       btwNumber: formData.btwNumber,
-      adminName: formData.adminName,
-      adminEmail: formData.adminEmail,
-      adminPassword: formData.adminPassword,
+      status: formData.status,
     };
 
     try {
       const resultAction = await dispatch(addTenant(payload as any));
       if (addTenant.fulfilled.match(resultAction)) {
-        setSuccessMessage("تم إنشاء التيننت بنجاح.");
-        router.push('/superAdmin/tenants')
-        setFormData({
-          name: "",
-          address: "",
-          phone: "",
-          plan: "",
-          adminName: "",
-          adminEmail: "",
-          adminPassword: "",
-          databaseName: "",
-          subscriptionStartDate: "",
-          subscriptionEndDate: "",
-          discount: 0,
-          industry: "",
-          maxEmployees: 10,
-          kvkNumber: "",
-          btwNumber: "",
-          status: "active",
-        });
+        toast.success("Created Tenants Successfly.");
+        router.push("/superAdmin/tenants");
+        setFormData(getInitialTenantForm());
+      }else{
+
+        toast.error(error);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      console.log(err);
     }
   };
 
@@ -140,20 +131,10 @@ export default function AddTenantPage() {
   const labelClass = "mb-2 block text-sm font-medium text-slate-700";
 
   const cardClass = "rounded-3xl border border-slate-200 bg-white shadow-sm";
-
+  const tenantFields = tenantFormFields(formData);
   return (
     <div className="min-h-screen bg-[#f5f7fb]">
       <div className="mx-auto px-6 lg:px-8  pb-10 relative z-20">
-        {error ? (
-          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">
-            حدث خطأ أثناء إنشاء التيننت: {error}
-          </div>
-        ) : null}
-        {successMessage ? (
-          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-700">
-            {successMessage}
-          </div>
-        ) : null}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="xl:col-span-2 space-y-6">
@@ -179,75 +160,31 @@ export default function AddTenantPage() {
                 </div>
 
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelClass}>Company Name</label>
-
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="United Contracting Co"
-                    />
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Industry</label>
-
-                    <input
-                      type="text"
-                      name="industry"
-                      value={formData.industry}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="Construction"
-                    />
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Phone Number</label>
-
-                    <div className="relative">
-                      <Phone className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="text"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                        placeholder="+31"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Number of Employees</label>
-
-                    <div className="relative">
-                      <Users className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="number"
-                        name="maxEmployees"
-                        value={formData.maxEmployees}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className={labelClass}>Address</label>
-                    <input
-                      name="address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-11`}
-                      placeholder="Company address..."
-                    />
-                  </div>
+                  {tenantFields.map((e, i) => {
+                    if (e.id <= 5) {
+                      return (
+                        <div key={i}>
+                          <label className={labelClass}>{e.label}</label>
+                          <input
+                            type={e.type}
+                            name={e.name}
+                            value={e.value}
+                            onChange={handleChange}
+                            className={getInputClassName(e.name, errors)}
+                            placeholder={e.placeHolder}
+                            onInvalid={(e) => {
+                              e.preventDefault();
+                            }}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               </motion.div>
 
@@ -274,48 +211,35 @@ export default function AddTenantPage() {
                 </div>
 
                 <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div>
-                    <label className={labelClass}>Admin Name</label>
-
-                    <input
-                      type="text"
-                      name="adminName"
-                      value={formData.adminName}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Admin Email</label>
-
-                    <div className="relative">
-                      <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="email"
-                        name="adminEmail"
-                        value={formData.adminEmail}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                        placeholder="admin@company.com"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Admin Password</label>
-
-                    <input
-                      type="password"
-                      name="adminPassword"
-                      value={formData.adminPassword}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="********"
-                    />
-                  </div>
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 5 && e.id <= 8) {
+                      return (
+                        <div>
+                          <label className={labelClass}>{e.label}</label>
+                          <input
+                            type={e.type}
+                            name={e.name}
+                            value={e.value}
+                            onChange={handleChange}
+                            className={getInputClassName(e.name, errors)}
+                            placeholder={e.placeHolder}
+                            autoComplete="new-password"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                            onInvalid={(e) => {
+                              e.preventDefault();
+                            }}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               </motion.div>
 
@@ -342,39 +266,29 @@ export default function AddTenantPage() {
                 </div>
 
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label className={labelClass}>KVK Number</label>
-
-                    <div className="relative">
-                      <Globe2 className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="text"
-                        name="kvkNumber"
-                        value={formData.kvkNumber}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                        placeholder="KVK Number"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>BTW Number</label>
-
-                    <div className="relative">
-                      <Globe2 className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="text"
-                        name="btwNumber"
-                        value={formData.btwNumber}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                        placeholder="BTW Number"
-                      />
-                    </div>
-                  </div>
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 8 && e.id <= 10) {
+                      return (
+                        <div>
+                          <label className={labelClass}>{e.label}</label>
+                          <input
+                            type={e.type}
+                            name={e.name}
+                            value={e.value}
+                            onChange={handleChange}
+                            className={getInputClassName(e.name, errors)}
+                            placeholder={e.placeHolder}
+                            autoComplete={`new-${e.type}`}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               </motion.div>
             </div>
@@ -402,71 +316,30 @@ export default function AddTenantPage() {
                 </div>
 
                 <div className="p-6 space-y-5">
-                  <div>
-                    <label className={labelClass}>Database Name</label>
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 10) {
+                      return (
+                        <div key={i}>
+                          <label className={labelClass}>{e.label}</label>
+                          <input
+                            type={e.type}
+                            name={e.name}
+                            value={e.value}
+                            onChange={handleChange}
+                            className={getInputClassName(e.name, errors)}
+                            placeholder={e.placeHolder}
+                            autoComplete={`new-${e.type}`}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
 
-                    <div className="relative">
-                      <Database className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="text"
-                        name="databaseName"
-                        value={formData.databaseName}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                        placeholder="tenant_database"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Subscription Start</label>
-
-                    <div className="relative">
-                      <CalendarDays className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="date"
-                        name="subscriptionStartDate"
-                        value={formData.subscriptionStartDate}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Subscription End</label>
-
-                    <div className="relative">
-                      <CalendarDays className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="date"
-                        name="subscriptionEndDate"
-                        value={formData.subscriptionEndDate}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className={labelClass}>Discount %</label>
-
-                    <div className="relative">
-                      <BadgePercent className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-
-                      <input
-                        type="number"
-                        step="0.01"
-                        name="discount"
-                        value={formData.discount}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-11`}
-                      />
-                    </div>
-                  </div>
                   <Select
                     name="plan"
                     value={formData.plan}

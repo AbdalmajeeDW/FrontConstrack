@@ -12,6 +12,7 @@ import {
   Ban,
   AlertTriangle,
   Zap,
+  Loader,
 } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -22,6 +23,7 @@ import {
   selectTenantError,
 } from "@/store/slices/superAdmin/tenantSlice";
 import TenantsTable from "@/components/superAdmin/Table";
+import StatsCard from "@/components/Cards/StatsCard";
 
 export default function TenantsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,9 +46,7 @@ export default function TenantsPage() {
         .length,
       pendingTenants: tenants.filter((tenant) => tenant.status == "pending")
         .length,
-      suspendedTenants: tenants.filter(
-        (tenant) => tenant.status === "suspended",
-      ).length,
+
       expiredTenants: tenants.filter((tenant) => tenant.status === "expired")
         .length,
       totalUsers: tenants.reduce(
@@ -85,30 +85,30 @@ export default function TenantsPage() {
     {
       title: "Total Companies",
       value: stats.totalTenants,
-      change: "+12%",
-      icon: Building2,
+     
+      icon: <Building2 className="w-6 h-6 text-purple-600"/>,
       linear: "from-purple-500 to-blue-500",
-      bgColor: "bg-purple-100",
+      bgColor: "bg-purple-200",
       textColor: "text-purple-600",
       description: "Registered companies",
     },
     {
       title: "Active Companies",
       value: stats.activeTenants,
-      change: "+8%",
-      icon: CheckCircle,
+   
+      icon: <CheckCircle className="w-6 h-6 text-green-600"/>,
       linear: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-100",
+      bgColor: "bg-green-200",
       textColor: "text-green-600",
       description: "Currently active",
     },
     {
       title: "Total Users",
       value: stats.totalUsers,
-      change: "+15%",
-      icon: Users,
+      
+      icon: <Users className="w-6 h-6 text-blue-600"/>,
       linear: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-100",
+      bgColor: "bg-blue-200",
       textColor: "text-blue-600",
       description: "Across all companies",
     },
@@ -121,12 +121,7 @@ export default function TenantsPage() {
       icon: Clock,
       color: "from-amber-500 to-orange-500",
     },
-    {
-      label: "Suspended",
-      value: stats.suspendedTenants,
-      icon: Ban,
-      color: "from-rose-500 to-red-500",
-    },
+  
     {
       label: "Expired",
       value: stats.expiredTenants,
@@ -134,7 +129,13 @@ export default function TenantsPage() {
       color: "from-slate-500 to-gray-500",
     },
   ];
-
+  if (loadingMessage) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="w-12 h-12 text-purple-600 animate-spin mx-auto" />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full filter blur-3xl opacity-20 -z-10"></div>
@@ -158,36 +159,10 @@ export default function TenantsPage() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {statCards.map((card, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="relative group"
-            >
-              <div className="absolute inset-0 bg-linear-to-r from-purple-500 to-blue-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-              <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                <div
-                  className={`absolute top-0 right-0 w-32 h-32 bg-linear-to-br ${card.linear} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`}
-                ></div>
-                <div className="relative p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-xl ${card.bgColor}`}>
-                      <card.icon className={`w-6 h-6 ${card.textColor}`} />
-                    </div>
-                    <span className="text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                      {card.change}
-                    </span>
-                  </div>
-                  <h3 className="text-gray-500 text-sm font-medium mb-1">
-                    {card.title}
-                  </h3>
-                  <p className="text-2xl font-bold text-gray-800 mb-1">
-                    {card.value}
-                  </p>
-                  <p className="text-xs text-gray-400">{card.description}</p>
-                </div>
-              </div>
-            </motion.div>
+          <StatsCard
+                       key={index}
+                      {...card}
+                     />
           ))}
         </motion.div>
 

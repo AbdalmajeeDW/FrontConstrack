@@ -8,6 +8,7 @@ import { BrickWall } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { login } from "@/store/slices/superAdmin/superAuthSlice";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -48,12 +49,16 @@ const LoginForm: React.FC = () => {
       }),
     );
 
+    
     if (login.fulfilled.match(result)) {
       const { user } = result.payload;
-
+      
       if (user.role === "super_admin") {
         router.push("/superAdmin");
       }
+    }else{
+  
+      console.log(error);
     }
   };
   return (

@@ -1,6 +1,12 @@
 "use client";
+
 import { usePathname, useRouter } from "next/navigation";
-import { adminLinks, employeeLinks, links, superAdminLinks } from "../../utils/links";
+import {
+  adminLinks,
+  employeeLinks,
+  links,
+  superAdminLinks,
+} from "../../utils/navigation/links";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -8,76 +14,127 @@ import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { BrickWall } from "lucide-react";
 import { initializeAuth } from "@/store/slices/superAdmin/superAuthSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { tenantAdminInitialize, tenantAdminLogout } from "@/store/slices/admin/tenantAdminAuthSlice";
+import { tenantAdminInitialize } from "@/store/slices/admin/tenantAdminAuthSlice";
 import { logout as tenantLogout } from "../../store/services/admin/tenantAdminAuth";
 import { logout as superLogout } from "../../store/services/superAdmins/superAdmin";
+
 export default function Page() {
   const pathname = usePathname();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [isCollapsed, setIsCollapsed] = useState(true);
+
   useEffect(() => {
     dispatch(initializeAuth());
     dispatch(tenantAdminInitialize());
   }, [dispatch]);
 
   const { user } = useAppSelector((state) => state.superAuth);
+
   const { tenantAdmin } = useAppSelector((state) => state.tenantAdminAuth);
+
   const currentUser = user || tenantAdmin;
 
+  const tenantName = pathname.split("/")[1];
+
   const currentRoleLabel = pathname.startsWith("/superAdmin")
-    ? user?.name    : pathname.startsWith("/admin")
-    ? tenantAdmin?.name
-    : pathname.startsWith("/employee")
-    ? "Employee"
-    : "Guest";
+    ? user?.name
+    : pathname.includes("/admin")
+      ? tenantAdmin?.name
+      : pathname.includes("/employee")
+        ? "Employee"
+        : "Guest";
 
   const displayName = currentUser?.name || "Guest";
+
   const displayRole = currentUser?.role
     ? currentUser.role.replace(/_/g, " ")
     : currentRoleLabel;
 
   const getMenuItems = () => {
-    if (pathname.startsWith("/superAdmin")) return superAdminLinks;
-    if (pathname.startsWith("/admin")) return adminLinks;
-    if (pathname.startsWith("/employee")) return employeeLinks;
-    return superAdminLinks;
-  };
-const router = useRouter();
-
-const handleLogout = async () => {
-  try {
-    if (pathname.startsWith("/admin") || pathname.startsWith("/employee")) {
-      return tenantLogout();
-    }
-
     if (pathname.startsWith("/superAdmin")) {
-      return superLogout();
+      return superAdminLinks;
     }
-  } finally {
-    router.replace(
-      pathname.startsWith("/superAdmin")
-        ? "/superAdmin/login"
-        : "/login"
-    );
-  }
-};
+
+    if (pathname.includes("/admin")) {
+      return adminLinks;
+    }
+
+    if (pathname.includes("/employee")) {
+      return employeeLinks;
+    }
+
+    return [];
+  };
+  const buildLink = (linkUrl: string) => {
+    if (pathname.includes("/admin")) {
+      return `/${tenantName}/admin${linkUrl ? "/" + linkUrl : ""}`;
+    }
+
+    if (pathname.includes("/employee")) {
+      return `/${tenantName}/employee${linkUrl ? "/" + linkUrl : ""}`;
+    }
+
+    return linkUrl;
+  };
+  const handleLogout = async () => {
+    try {
+      if (pathname.includes("/admin") || pathname.includes("/employee")) {
+        await tenantLogout();
+
+        router.replace(`/${tenantName}/login`);
+
+        return;
+      }
+
+      if (pathname.startsWith("/superAdmin")) {
+        await superLogout();
+
+        router.replace("/superAdmin/login");
+
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const menuItems = getMenuItems();
-  const logoutItem = menuItems.find((link) => link.name === "Logout") || links.find((link) => link.name === "Logout");
+
+  const logoutItem =
+    menuItems.find((link) => link.name === "Logout") ||
+    links.find((link) => link.name === "Logout");
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   const sidebarVariants = {
-    expanded: { width: "208px" },
-    collapsed: { width: "80px" },
+    expanded: {
+      width: "208px",
+    },
+
+    collapsed: {
+      width: "80px",
+    },
   };
 
   const linkVariants = {
-    initial: { opacity: 0, x: -20 },
-    animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -20 },
+    initial: {
+      opacity: 0,
+      x: -20,
+    },
+
+    animate: {
+      opacity: 1,
+      x: 0,
+    },
+
+    exit: {
+      opacity: 0,
+      x: -20,
+    },
   };
 
   return (
@@ -91,7 +148,6 @@ const handleLogout = async () => {
           bg-linear-to-b from-gray-900 via-gray-800 to-gray-900
           shadow-2xl overflow-hidden"
       >
-
         <div className="relative h-full flex flex-col overflow-y-auto overflow-x-hidden">
           <style jsx>{`
             .overflow-y-auto::-webkit-scrollbar {
@@ -147,7 +203,6 @@ const handleLogout = async () => {
             </div>
           </div>
           <div className="h-0.5 bg-linear-to-r from-transparent via-purple-800 to-transparent mx-4 "></div>{" "}
-          {/* User Profile Section */}
           <div
             className={`px-4 py-6 shrink-0 ${isCollapsed ? "px-2" : "px-4"}`}
           >
@@ -158,19 +213,8 @@ const handleLogout = async () => {
                 <div className="relative shrink-0">
                   <div className="absolute inset-0 bg-linear-to-r from-purple-500 to-blue-500 rounded-full blur-sm opacity-50 group-hover:opacity-75 transition-opacity"></div>
                   <div className="relative w-12 h-12 rounded-full bg-linear-to-r from-purple-500 to-blue-500 flex items-center justify-center shadow-lg">
-                    {/* {user?.profileImage ? ( */}
-                    {/* <Image
-                        width={48}
-                        height={48}
-                        className="w-full h-full rounded-full object-cover"
-                        src={user.profileImage}
-                        alt=""
-                      /> */}
-                    {/* ) : ( */}
-                    <span className="text-white font-bold text-lg">
-                      {/* {getUserInitials()} */}
-                    </span>
-                    {/* )} */}
+                  
+              
                   </div>
                 </div>
 
@@ -202,9 +246,14 @@ const handleLogout = async () => {
           <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 px-3 min-h-0">
             <ul className="space-y-1">
               {menuItems.map((link, index) => {
+                  const parts = pathname.split('/');
+
+console.log(pathname);
+
                 const isActive =
-                  pathname === link.url ||
+                  parts[3] === link.url||pathname===link.url ||
                   link.subLinks?.some((sub) => pathname === sub.url);
+
 
                 return (
                   <motion.li
@@ -214,10 +263,10 @@ const handleLogout = async () => {
                     variants={linkVariants}
                     transition={{ delay: index * 0.05 }}
                   >
-                    {
-                      !link.name.includes('Logout') &&  <Link
-                      href={link.url}
-                      className={`
+                    {!link.name.includes("Logout") && (
+                      <Link
+                        href={buildLink(link.url)}
+                        className={`
                         relative flex items-center 
                         ${isCollapsed ? "justify-center" : "gap-3"} 
                         px-3 py-3 rounded-xl
@@ -228,51 +277,46 @@ const handleLogout = async () => {
                             : "text-gray-300 hover:text-white hover:bg-white/10"
                         }
                       `}
-                    >
-                      {/* Active Indicator */}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeIndicator"
-                          className="absolute left-0 w-1 h-8 bg-linear-to-b from-purple-400 to-blue-400 rounded-r-full"
-                        />
-                      )}
-
-                      {/* Icon */}
-                      <span
-                        className={`relative z-10 shrink-0 ${isActive ? "text-purple-400" : "text-gray-400 group-hover:text-purple-400"}`}
                       >
-                        {link.icon}
-                      </span>
-
-                      {/* Label - يظهر فقط عند التوسيع */}
-                      <AnimatePresence>
-                        {!isCollapsed && (
-                          <motion.span
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: "auto" }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="relative z-10 font-medium text-sm whitespace-nowrap"
-                          >
-                            {link.name}
-                          </motion.span>
+                        {isActive && (
+                          <motion.div
+                            layoutId="activeIndicator"
+                            className="absolute left-0 w-1 h-8 bg-linear-to-b from-purple-400 to-blue-400 rounded-r-full"
+                          />
                         )}
-                      </AnimatePresence>
 
-                      {/* Tooltip for collapsed state */}
-                      {isCollapsed && (
-                        <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
-                          {link.name}
-                        </div>
-                      )}
-                    </Link>
-                    }
-           
+                        <span
+                          className={`relative z-10 shrink-0 ${isActive ? "text-purple-400" : "text-gray-400 group-hover:text-purple-400"}`}
+                        >
+                          {link.icon}
+                        </span>
+
+                        <AnimatePresence>
+                          {!isCollapsed && (
+                            <motion.span
+                              initial={{ opacity: 0, width: 0 }}
+                              animate={{ opacity: 1, width: "auto" }}
+                              exit={{ opacity: 0, width: 0 }}
+                              className="relative z-10 font-medium text-sm whitespace-nowrap"
+                            >
+                              {link.name}
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
+
+                        {/* Tooltip for collapsed state */}
+                        {isCollapsed && (
+                          <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
+                            {link.name}
+                          </div>
+                        )}
+                      </Link>
+                    )}
                   </motion.li>
                 );
               })}
             </ul>
           </nav>
-
           <div className="p-3 mt-auto border-t border-gray-700/50 shrink-0">
             <Link
               href={logoutItem?.url || "/login"}
@@ -283,7 +327,7 @@ const handleLogout = async () => {
                 transition-all duration-300 group
                 text-red-300 hover:text-red-400 hover:bg-red-500/10
               `}
-            onClick={handleLogout}
+              onClick={handleLogout}
             >
               <LogOut className="w-5 h-5 shrink-0" />
 

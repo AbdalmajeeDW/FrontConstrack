@@ -24,8 +24,8 @@ export interface Task {
   
   worker_arrival_time?: string;
   task_type?: string;
-  work_area?: number;
-  
+  work_area?:                  number;
+  images:[]
   bus_number?: string;
   driver_name?: string;
   

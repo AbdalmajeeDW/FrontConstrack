@@ -1,37 +1,33 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Eye, EyeClosed, BrickWall } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { tenantAdminLogin } from '@/store/slices/admin/tenantAdminAuthSlice';
-import { useRouter } from 'next/navigation';
-import { decodeJWT } from '../AuthGuard';
+import React, { useState } from "react";
+import { Eye, EyeClosed, BrickWall } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { tenantAdminLogin } from "@/store/slices/admin/tenantAdminAuthSlice";
+import { useRouter } from "next/navigation";
+import { decodeJWT } from "../AuthGuard";
 
-const TenantAdminLoginForm: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
+  tenantName,
+}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
 
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLoading, error } = useAppSelector((state) => state.tenantAdminAuth);
 
   const validateForm = () => {
-    if (!name.trim()) {
-      setAlertMessage('Company name is required');
-      setShowAlert(true);
-      return false;
-    }
     if (!email.trim()) {
-      setAlertMessage('email is required.');
+      setAlertMessage("Email is required.");
       setShowAlert(true);
       return false;
     }
     if (!password.trim()) {
-      setAlertMessage('Password is required.');
+      setAlertMessage("Password is required.");
       setShowAlert(true);
       return false;
     }
@@ -47,18 +43,17 @@ const TenantAdminLoginForm: React.FC = () => {
     }
 
     const result = await dispatch(
-      tenantAdminLogin({ name, email, password }),
+      tenantAdminLogin({ name: tenantName, email, password }),
     );
-    const token = localStorage.getItem('tenant-token');
+    const token = localStorage.getItem("tenant-token");
     const decodedRole = token ? decodeJWT(token)?.role : null;
 
     if (tenantAdminLogin.fulfilled.match(result)) {
-        if (decodedRole === 'tenant_admin') {
-        router.push('/admin');
-      }else if ( decodedRole === 'tenant_employee') {
-        router.push('/employee');
+      if (decodedRole === "tenant_admin") {
+        router.push(`/${tenantName}/admin`);
+      } else if (decodedRole === "tenant_employee") {
+        router.push(`/${tenantName}/employee`);
       }
-    
     }
   };
 
@@ -73,32 +68,28 @@ const TenantAdminLoginForm: React.FC = () => {
             <div>
               <h1 className="text-4xl font-bold">Tenant Admin</h1>
               <p className="mt-3 text-sm text-slate-200 leading-relaxed">
-Log in as an admin to your dashboard using your company name, email, and password              </p>
+                Log in as an admin to your dashboard using your email and
+                password{" "}
+              </p>
             </div>
           </div>
 
           <div className="p-10">
-            <h2 className="text-2xl font-semibold text-slate-900 mb-4">Admin Login</h2>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+              Admin Login
+            </h2>
 
             {(showAlert || error) && (
               <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-4 text-red-700">
-                {alertMessage || error || 'A login error occurred..'}
+                {alertMessage || error || "A login error occurred.."}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Company Name</label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
-                  placeholder="Enter company name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Email
+                </label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -108,10 +99,12 @@ Log in as an admin to your dashboard using your company name, email, and passwor
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Password
+                </label>
                 <div className="relative">
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-12 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
@@ -132,7 +125,7 @@ Log in as an admin to your dashboard using your company name, email, and passwor
                 disabled={isLoading}
                 className="w-full rounded-2xl bg-violet-600 px-5 py-3 text-white font-semibold transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? 'Logging in, please wait...' : 'Login'}
+                {isLoading ? "Logging in, please wait..." : "Login"}
               </button>
             </form>
           </div>

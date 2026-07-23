@@ -60,6 +60,8 @@ export const updateTask = createAsyncThunk<
   { id: number; data: Partial<Task> },
   { rejectValue: string }
 >('task/updateTask', async ({ id, data }, { rejectWithValue }) => {
+  console.log(id,data,'targ');
+  
   try {
     return await updateTaskService(id, data);
   } catch (error: any) {

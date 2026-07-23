@@ -17,6 +17,7 @@ export const API_ENDPOINTS_SUPER_ADMIN = {
     BASE: superApi,
     GET_ALL: "/tenants/",
     GET_BY_ID: (id: number) => `/tenants/${id}`,
+    ACTIVATE: (id: number) => `/tenants/${id}/activate`,
     CREATE: "/tenants",
     UPDATE: (id: number) => `/tenants/${id}`,
     DELETE: (id: number) => `/tenants/${id}`,

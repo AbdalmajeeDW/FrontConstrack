@@ -1,0 +1,15 @@
+  export const specializationOptions = [
+    { value: "", label: "Select Specialization" },
+    { value: "Concrete Worker", label: "Concrete Worker" },
+    { value: "Electrician", label: "Electrician" },
+    { value: "Plumber", label: "Plumber" },
+    { value: "Carpenter", label: "Carpenter" },
+    { value: "Steel Fixer", label: "Steel Fixer" },
+    { value: "Painter", label: "Painter" },
+    { value: "Tiler", label: "Tiler" },
+    { value: "Welder", label: "Welder" },
+    { value: "Driver", label: "Driver" },
+    { value: "Safety Officer", label: "Safety Officer" },
+    { value: "Site Supervisor", label: "Site Supervisor" },
+    { value: "Foreman", label: "Foreman" },
+  ];

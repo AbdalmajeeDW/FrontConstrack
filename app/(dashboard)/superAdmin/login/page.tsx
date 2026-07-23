@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import LoginForm from "@/components/superAdmin/LoginForm";
-// import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginClient() {
-  // const { isAuthenticated, isLoading } = useAuth();
 
   const [returnUrl, setReturnUrl] = useState<string | null>(null);
 
@@ -16,19 +14,7 @@ export default function LoginClient() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (isAuthenticated() ) {
-  //     window.location.href = "/";
-  //   }
-  // }, [isAuthenticated, isLoading]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="max-h-screen flex items-center justify-center">
-  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-  //     </div>
-  //   );
-  // }
+ 
 
   return (
     <div className="bg-gray-50 ">

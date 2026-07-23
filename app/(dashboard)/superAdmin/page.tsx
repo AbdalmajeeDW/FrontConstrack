@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import BarChart from "../../../components/superAdmin/Chartbar";
 import Chartline from "../../../components/superAdmin/Chartline";
 import {
   Users,
   Calendar,
-  DollarSign,
   TrendingUp,
   Activity,
   BarChart3,
@@ -23,7 +21,17 @@ import {
   Settings,
   LogOut,
   ChevronDown,
+  BarChart as BarChartIcon,
 } from "lucide-react";
+import StatsCard from "@/components/Cards/StatsCard";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { BarChart, Bar, CartesianGrid, XAxis } from "recharts";
 
 export default function AnalyticsDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,7 +45,24 @@ export default function AnalyticsDashboard() {
     newCompaniesThisMonth: 4,
     totalUsers: 156,
   });
-
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "#3b82f6",
+    },
+    mobile: {
+      label: "Mobile",
+      color: "#22c55e",
+    },
+    subscribers: {
+      label: "Subscribers",
+      color: "#ef4444",
+    },
+    active: {
+      label: "Active",
+      color: "#f59e0b",
+    },
+  };
   const monthlySubscriptionsData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
@@ -57,7 +82,15 @@ export default function AnalyticsDashboard() {
       },
     ],
   };
-
+  // ✅ الشكل الصحيح مباشرة
+  const monthly = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+  ];
   const playerData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
@@ -92,8 +125,7 @@ export default function AnalyticsDashboard() {
     {
       title: "Total companies",
       value: stats.totalCompanies,
-      change: "+12%",
-      icon: Users,
+      icon: <Users className="w-6 h-6 text-purple-600" />,
       gradient: "from-purple-500 to-blue-500",
       bgColor: "bg-purple-100",
       textColor: "text-purple-600",
@@ -102,8 +134,7 @@ export default function AnalyticsDashboard() {
     {
       title: "Active companies",
       value: stats.activeCompanies,
-      change: "+8%",
-      icon: Calendar,
+      icon: <Calendar className="w-6 h-6 text-green-600" />,
       gradient: "from-green-500 to-emerald-500",
       bgColor: "bg-green-100",
       textColor: "text-green-600",
@@ -112,8 +143,7 @@ export default function AnalyticsDashboard() {
     {
       title: "Retention rate",
       value: `${stats.retentionRate}%`,
-      change: "+5%",
-      icon: TrendingUp,
+      icon: <TrendingUp className="w-6 h-6 text-red-600" />,
       gradient: "from-red-500 to-pink-500",
       bgColor: "bg-red-100",
       textColor: "text-red-600",
@@ -180,38 +210,7 @@ export default function AnalyticsDashboard() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
             {statCards.map((card, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -5 }}
-                className="relative group"
-              >
-                <div className="absolute inset-0 bg-linear-to-r from-purple-500 to-blue-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                <div className="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <div
-                    className={`absolute top-0 right-0 w-32 h-32 bg-linear-to-br ${card.gradient} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`}
-                  ></div>
-                  <div className="relative p-4 md:p-6">
-                    <div className="flex items-center justify-between mb-3 md:mb-4">
-                      <div className={`p-2 md:p-3 rounded-xl ${card.bgColor}`}>
-                        <card.icon
-                          className={`w-5 h-5 md:w-6 md:h-6 ${card.textColor}`}
-                        />
-                      </div>
-                      <span className="text-xs md:text-sm font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
-                        {card.change}
-                      </span>
-                    </div>
-                    <h3 className="text-slate-500 text-xs md:text-sm font-medium mb-1">
-                      {card.title}
-                    </h3>
-                    <p className="text-xl md:text-2xl font-bold text-slate-800 mb-1">
-                      {card.value}
-                    </p>
-                    <p className="text-xs text-slate-400">{card.description}</p>
-                  </div>
-                </div>
-              </motion.div>
+              <StatsCard key={index} {...card} />
             ))}
           </motion.div>
 
@@ -262,7 +261,39 @@ export default function AnalyticsDashboard() {
                 </div>
               </div>
               <div className="p-4 md:p-6 flex-1">
-                <Chartline data={playerData} />
+                <ChartContainer 
+                  config={chartConfig}
+                  className="h-full w-full"
+                >
+                  
+                  <BarChart
+                    accessibilityLayer
+                    data={monthly}
+                    
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) => value.slice(0, 3)}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <ChartLegend content={<ChartLegendContent />} />
+                    <Bar
+                      dataKey="desktop"
+                      fill="var(--color-desktop)"
+                      radius={4}
+                    />
+                    <Bar
+                      dataKey="mobile"
+                      fill="var(--color-mobile)"
+                      radius={4}
+                    />
+                  </BarChart>
+                </ChartContainer>
               </div>
             </motion.div>
 
@@ -286,13 +317,7 @@ export default function AnalyticsDashboard() {
                   </span>
                 </div>
               </div>
-              <div className="p-4 md:p-6 flex-1 ">
-                <BarChart
-                  data={monthlySubscriptionsData}
-                  title=""
-                  type="vertical"
-                />
-              </div>
+              <div className="p-4 md:p-6 flex-1 "></div>
             </motion.div>
           </div>
 

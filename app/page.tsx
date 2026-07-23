@@ -1,6 +1,7 @@
 "use client";
+
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { Loader, Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { tenantAdminInitialize } from "@/store/slices/admin/tenantAdminAuthSlice";
@@ -11,7 +12,6 @@ export default function HomePage() {
 
   const { tenantAdmin, isLoading, error, isAuthenticated, isInitialized } =
     useAppSelector((state) => state.tenantAdminAuth);
-  console.log(tenantAdmin);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -29,32 +29,75 @@ export default function HomePage() {
     }
 
     if (error) {
-      router.replace("/login");
+      router.replace("/");
+
       return;
     }
 
     if (!isAuthenticated || !tenantAdmin) {
-      router.replace("/login");
+      router.replace("/");
+
       return;
     }
 
-    if (tenantAdmin.role === "super_admin") {
-      router.replace("/superAdmin");
-    } else if (tenantAdmin.role === "tenant_admin") {
-      router.replace("/admin");
-    } else if (tenantAdmin.role === "employee" || tenantAdmin.role === "tenant_employee") {
-      router.replace("/employee");
-    } else {
-      router.replace("/login");
+    const tenantName = tenantAdmin.name;
+
+    if (!tenantName) {
+      console.error("Tenant name missing from token");
+
+      router.replace("/");
+
+      return;
     }
+
+    if (tenantAdmin.role === "tenant_admin") {
+      router.replace(`/${tenantName}/`);
+
+      return;
+    }
+
+    if (
+      tenantAdmin.role === "tenant_employee" ||
+      tenantAdmin.role === "employee"
+    ) {
+      router.replace(`/${tenantName}/employee`);
+
+      return;
+    }
+
+    router.replace("/");
   }, [tenantAdmin, isLoading, error, isAuthenticated, isInitialized, router]);
 
-  // عرض شاشة تحميل
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+    <div
+      className="
+      min-h-screen 
+      flex 
+      items-center 
+      justify-center 
+      bg-linear-to-br 
+      from-gray-50 
+      to-gray-100
+    "
+    >
       <div className="text-center">
-        <Loader className="w-12 h-12 text-purple-600 animate-spin mx-auto" />
-        <p className="mt-4 text-gray-600 font-medium">
+        <Loader
+          className="
+            w-12 
+            h-12 
+            text-purple-600 
+            animate-spin 
+            mx-auto
+          "
+        />
+
+        <p
+          className="
+          mt-4 
+          text-gray-600 
+          font-medium
+        "
+        >
           {!isInitialized
             ? "Initializing..."
             : isLoading

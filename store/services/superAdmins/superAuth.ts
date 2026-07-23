@@ -41,8 +41,9 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
   if (refreshToken) {
     localStorage.setItem('refreshToken', refreshToken);
   }
+  if (typeof window !== 'undefined') {
   localStorage.setItem('user', JSON.stringify(user));
-  
+}
   return response.data;
 }
 

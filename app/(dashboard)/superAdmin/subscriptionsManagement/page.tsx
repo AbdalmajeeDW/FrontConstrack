@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import {
   Search,
   Calendar,
-  DollarSign,
   Users,
   Wallet,
   Filter,
@@ -298,17 +297,11 @@ export default function SubscriptionsPage() {
           {statsCards.map((card, i) => (
             <StatsCard
               key={i}
-              title={{ text: card.title }}
-              value={{ text: card.value }}
-              icon={card.icon}
-              bgColor={card.bgColor}
-              gradient={card.gradient}
-              description={card.description}
+             {...card}
             />
           ))}
         </motion.div>
 
-        {/* Subscription Type Cards - Basic vs Premium */}
         <div>
           <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
             <Star className="w-5 h-5 text-purple-500" />

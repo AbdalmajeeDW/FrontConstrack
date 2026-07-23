@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { createTenant, getTenants, Tenant, updateTenant as updateTenantService } from '../../services/superAdmins/tenantService';
+import { activateTenant, createTenant, getTenants, Tenant, updateTenant as updateTenantService } from '../../services/superAdmins/tenantService';
 
 interface TenantState {
   tenants: Tenant[];
@@ -52,7 +52,18 @@ export const updateTenant = createAsyncThunk<
     return rejectWithValue(error.response?.data?.message || 'Failed to update tenant');
   }
 });
-
+export const activateTenantById = createAsyncThunk<
+  Tenant,
+  number,
+  { rejectValue: string }
+>('tenant/activateTenant', async (id, { rejectWithValue }) => {
+  try {
+    const tenant = await activateTenant(id);
+    return tenant;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to activate tenant');
+  }
+});
 const tenantSlice = createSlice({
   name: 'tenant',
   initialState,
@@ -103,6 +114,20 @@ const tenantSlice = createSlice({
       .addCase(updateTenant.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Unable to update tenant';
+      })
+      .addCase(activateTenantById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(activateTenantById.fulfilled, (state, action) => {
+        state.tenants = state.tenants.map((tenant) =>
+          tenant.id === action.payload.id ? action.payload : tenant,
+        );
+        state.isLoading = false;
+      })
+      .addCase(activateTenantById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || 'Unable to activate tenant';
       });
   },
 });
