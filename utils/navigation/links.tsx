@@ -112,7 +112,7 @@ export const employeeLinks: NavLink[] = [
     id: 1,
     name: "Home",
     icon: <Home size={20} />,
-    url: "employee",
+    url: "",
     title: "Employee Dashboard",
     description: "Welcome to your employee workspace",
   },
