@@ -78,6 +78,8 @@ const tenantName = pathname.split("/")[1] || "";
     return linkUrl;
   };
 const handleLogout = async () => {
+  console.log("CURRENT PATH:", pathname);
+  console.log("TENANT NAME:", tenantName);
   try {
     if (pathname.includes("/admin") || pathname.includes("/employee")) {
       await tenantLogout();
