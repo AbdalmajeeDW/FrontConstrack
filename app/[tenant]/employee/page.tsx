@@ -190,7 +190,7 @@ function formatDate(isoString:string) {
                 <CheckCircle className="w-5 h-5 text-indigo-500" />
                 My Current Tasks
               </h3>
-              <Link href="/employee/tasks">
+              <Link href="./tasks">
                 <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1">
                   View All <ArrowUpRight className="w-4 h-4" />
                 </button>

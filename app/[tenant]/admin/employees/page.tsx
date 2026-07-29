@@ -202,7 +202,7 @@ export default function UsersPage() {
               </div>
               <div className="flex flex-row gap-3 sm:items-end">
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-4 w-full min-w-0">
-             <Link href="employees/new">
+             <Link href="../employees/new">
                 <button className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-linear-to-r from-purple-500 to-blue-500 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all shadow-md whitespace-nowrap">
                   <PlusCircle className="w-4 h-4" />
                   <span className="hidden sm:inline">New Employee</span>
@@ -324,7 +324,7 @@ export default function UsersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex  items-center justify-center gap-3 ">
-                          <Link href={`/employees/`}>
+                          <Link href=".">
                             <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
                               <Eye className="w-4 h-4 text-slate-500" />
                             </button>

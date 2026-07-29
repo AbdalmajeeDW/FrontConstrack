@@ -176,6 +176,22 @@ export const validateFieldForTask = (name: string, value: any): string => {
       return "";
   }
 };
+export const fieldsToValidateForTask = [
+      "taskName",
+      "taskDescription",
+      "startWork",
+      "endWork",
+      "priority",
+      "status",
+      "city",
+      "postal_code",
+      "house_number",
+      "worker_arrival_time",
+      "task_type",
+      "work_area",
+      "bus_number",
+      "driver_name",
+    ];
 
 export const validateFieldForTenants = (name: string, value: any): string => {
   switch (name) {
@@ -255,4 +271,56 @@ export const getInputClassName = (
     : "border border-gray-400 focus:ring-2 focus:ring-violet-500";
 
   return `${baseClass} ${errorClass}`;
+};
+export const validateFieldForProject = (name: string, value: any): string => {
+  switch (name) {
+    case "name":
+      if (!value || value.trim() === "") return "Project name is required";
+      if (value.trim().length < 3)
+        return "Task name must be at least 3 characters";
+      return "";
+    case "city":
+      if (!value || value.trim() === "") return "City is required";
+
+      if (value && value.length > 100) {
+        return "City name must be less than 100 characters";
+      }
+      if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
+        return "City name can only contain letters, spaces, hyphens, and apostrophes";
+      }
+      return "";
+
+    case "postal_code":
+      if (!value || value.trim() === "") return "Postal code is required";
+
+      if (value && !/^[0-9]{4,10}$/.test(value)&&!/[A-Z]/.test(value)) {
+        return "Invalid postal code format (must be 4-10 digits)";
+      }
+      return "";
+ 
+    case "location":
+      if (!value || value.trim() === "") return "Location is required";
+      return "";
+
+    case "client_name":
+      if (!value || value.trim() === "") return "Client name is required";
+
+      return "";
+
+   case "client_phone": {
+      if (!value) return "Phone number is required";
+      const cleanPhone = value.replace(/[\s\-\(\)\+]/g, "");
+      if (!/^\d+$/.test(cleanPhone)) {
+        return "Phone number must contain only digits";
+      }
+      if (cleanPhone.length < 8 || cleanPhone.length > 15) {
+        return "Phone number must be between 8 and 15 digits";
+      }
+
+      return "";
+    }
+
+    default:
+      return "";
+  }
 };

@@ -481,7 +481,7 @@ export default function EmployeeTasksPage() {
                           {task.taskName}
                         </h4>
                         <p className="text-xs text-gray-500 mt-1">
-                          {task.projectName}
+                          {task.project_id}
                         </p>
                         {task.city && (
                           <p className="text-xs text-gray-400 mt-1">

@@ -7,6 +7,7 @@ import taskSlice from "./slices/admin/taskSlice";
 import employeeTaskSlice from "./slices/employee/taskSlice";
 import employeeSlice from "./slices/admin/employeeSlice";
 import profileSlice from "./slices/employee/profileSlice";
+import projectsSlice from "./slices/admin/projectsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     employeeTask: employeeTaskSlice,
     employeeProfile: profileSlice,
     employee: employeeSlice,
+    projects: projectsSlice,
   },
 });
 

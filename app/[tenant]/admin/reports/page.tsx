@@ -315,9 +315,9 @@ const StatCard = [
                   <PlusCircle className="w-4 h-4" />
                   Generate Report
                 </button>
-              </Link>
+                </Link>
+              </div>
             </div>
-          </div>
 
           {/* Metrics Cards */}
           <motion.div

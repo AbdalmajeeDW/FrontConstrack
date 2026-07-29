@@ -18,6 +18,7 @@ export const formatDateOnly = (date?: string | null) => {
   return new Intl.DateTimeFormat("en-EG", {
     day: "numeric",
     month: "short",
+    year:"numeric"
   }).format(parsedDate);
 };
 export const getTodayDate = () => {

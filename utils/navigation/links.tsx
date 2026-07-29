@@ -1,4 +1,4 @@
-import { ChartArea, Users, Home, Settings, FileText, ClipboardList, User, LogOut, Projector } from "lucide-react";
+import { ChartArea, Users, Home, Settings, FileText, ClipboardList, User, LogOut, Projector, Building2 } from "lucide-react";
 import { BrickWall } from "lucide-react";
 import { ReactNode } from "react";
 import { FolderOpenDot } from 'lucide-react';
@@ -63,7 +63,7 @@ export const adminLinks: NavLink[] = [
     id: 1,
     name: "Home",
     icon: <Home size={20} />,
-    url: "/",
+    url: "",
     title: "Tenant Admin Dashboard",
     description: "Overview of your company and operations",
   },
@@ -78,7 +78,7 @@ export const adminLinks: NavLink[] = [
    {
     id: 3,
     name: "Projects",
-    icon: <FolderOpenDot size={20} />,
+    icon: <Building2 size={20} />,
     url: "projects",
     title: "Projects",
     description: "View all projects in the company",

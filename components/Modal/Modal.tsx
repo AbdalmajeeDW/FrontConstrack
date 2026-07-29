@@ -4,7 +4,11 @@ import {
   selectEmployees,
 } from "@/store/slices/admin/employeeSlice";
 import { Task } from "@/store/types/task.types";
-import { getInputClassName, validateFieldForTask } from "@/utils/validators/validate";
+import {
+  fieldsToValidateForTask,
+  getInputClassName,
+  validateFieldForTask,
+} from "@/utils/validators/validate";
 import {
   Briefcase,
   Bus,
@@ -16,12 +20,18 @@ import {
   Trash2,
   Pencil,
   ImageDown,
+  Building2,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, number } from "framer-motion";
 import { toast } from "sonner";
 import Image from "next/image";
 import { getTodayDate } from "@/utils/constants/formatDate";
+import { fetchProjects } from "@/store/slices/admin/projectsSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { FormField } from "../Field/FormField";
+import { taskFields } from "@/config/taskFormConfig";
 
 export default function AddTaskModal({
   isOpen,
@@ -43,6 +53,11 @@ export default function AddTaskModal({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageEntries, setImageEntries] = useState<ImageEntry[]>([]);
+  const imageEntriesRef = useRef<ImageEntry[]>([]);
+  const projectsForTasks = useSelector(
+    (state: RootState) => state.projects.projects,
+  );
 
   type ImageEntry = {
     id: string;
@@ -50,43 +65,20 @@ export default function AddTaskModal({
     file?: File;
     isExisting: boolean;
   };
-
-  const [imageEntries, setImageEntries] = useState<ImageEntry[]>([]);
-  const [projectOptions, setProjectOptions] = useState<string[]>([]);
-  const imageEntriesRef = useRef<ImageEntry[]>([]);
-
   const createImageEntryId = () =>
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    crypto.randomUUID?.() ??
+    `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
   const imageFiles = imageEntries
-    .filter((entry) => !entry.isExisting && entry.file)
-    .map((entry) => entry.file as File);
-  const imagePreviews = imageEntries.map((entry) => entry.url);
-
-  const projects = [
-    "Constructing foundations and concrete structure",
-    "Executing electrical works and plumbing installations",
-    "Finishing facades and flooring",
-    "Installing HVAC and plumbing systems",
-    "Managing quality and safety on site",
-  ];
+    .filter((e) => !e.isExisting && e.file)
+    .map((e) => e.file!);
+  const imagePreviews = imageEntries.map((e) => e.url);
 
   const normalizeDateValue = (value?: string | null) => {
-    if (!value) return "";
-
-    const trimmed = String(value).trim();
-
-    if (!trimmed) return "";
-
-    const match = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})/);
-
-    if (match) {
-      return `${match[1]}-${match[2]}-${match[3]}`;
-    }
-
-    return "";
+    const match = String(value ?? "")
+      .trim()
+      .match(/^(\d{4}-\d{2}-\d{2})/);
+    return match?.[1] || "";
   };
 
   const normalizeTimeValue = (value?: string | null) => {
@@ -114,7 +106,7 @@ export default function AddTaskModal({
 
   const getInitialFormData = () => ({
     taskName: "",
-    projectName: projects[0],
+    project_id: 0,
     taskDescription: "",
     startWork: getTodayDate(),
     endWork: "",
@@ -133,15 +125,6 @@ export default function AddTaskModal({
 
   const [formData, setFormData] = useState(getInitialFormData);
 
-  useEffect(() => {
-    setProjectOptions(() => {
-      const nextProjects = [
-        ...new Set([...(projects || []), formData.projectName].filter(Boolean)),
-      ];
-      return nextProjects as string[];
-    });
-  }, [formData.projectName]);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!editingTask;
 
@@ -152,11 +135,14 @@ export default function AddTaskModal({
       }
     });
   };
+  const tasksFields = taskFields(formData, projectsForTasks);
 
   useEffect(() => {
     imageEntriesRef.current = imageEntries;
   }, [imageEntries]);
-
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
   useEffect(() => {
     if (!isOpen) {
       revokeBlobImages();
@@ -164,12 +150,11 @@ export default function AddTaskModal({
       setImagesToDelete([]);
       setErrors({});
       setFormData(getInitialFormData());
-      setProjectOptions(projects);
       return;
     }
 
     if (editingTask) {
-      const nextProjectName = editingTask.projectName || projects[0];
+      const nextProjectName = editingTask.project_id || projectsForTasks[0];
       const nextStartWork = normalizeDateValue(
         editingTask.startWork?.toString(),
       );
@@ -180,7 +165,7 @@ export default function AddTaskModal({
 
       setFormData({
         taskName: editingTask.taskName || "",
-        projectName: nextProjectName,
+        project_id: editingTask.project_id || 0,
         taskDescription: editingTask.taskDescription || "",
         startWork: nextStartWork,
         endWork: nextEndWork,
@@ -218,16 +203,6 @@ export default function AddTaskModal({
         timeInput.value = nextArrivalTime;
       }
 
-      setProjectOptions((prev) => {
-        const nextProjects = [...projects];
-        if (nextProjectName && !nextProjects.includes(nextProjectName)) {
-          nextProjects.unshift(nextProjectName);
-        }
-        return nextProjects.filter(
-          (value, index, self) => self.indexOf(value) === index,
-        );
-      });
-
       if (editingTask.images && Array.isArray(editingTask.images)) {
         setImageEntries(
           editingTask.images.map((imageUrl: string) => ({
@@ -248,7 +223,6 @@ export default function AddTaskModal({
     setImageEntries([]);
     setImagesToDelete([]);
     setErrors({});
-    setProjectOptions(projects);
   }, [editingTask, isOpen]);
 
   useEffect(() => {
@@ -352,28 +326,9 @@ export default function AddTaskModal({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const fieldsToValidate = [
-      "taskName",
-      "taskDescription",
-      "startWork",
-      "endWork",
-      "priority",
-      "status",
-      "city",
-      "postal_code",
-      "house_number",
-      "worker_arrival_time",
-      "task_type",
-      "work_area",
-      "bus_number",
-      "driver_name",
-    ];
-
     const newErrors: Record<string, string> = {};
     let hasError = false;
-
-    fieldsToValidate.forEach((field) => {
+    fieldsToValidateForTask.forEach((field) => {
       const value = formData[field as keyof typeof formData];
       const msg = validateFieldForTask(field, value);
       if (msg) {
@@ -402,7 +357,7 @@ export default function AddTaskModal({
           } else {
             formDataToSend.append("employeeIds[]", "");
           }
-        } else if(!isEmployee){
+        } else if (!isEmployee) {
           formDataToSend.append(
             key,
             String(formData[key as keyof typeof formData] ?? ""),
@@ -494,16 +449,69 @@ export default function AddTaskModal({
       }
     });
   };
+  const fieldGenerate = (n: string) => {
+    return tasksFields.map((e, i) => {
+      if (e.group === n) {
+        if (e.type === "select") {
+          return (
+            <div key={i}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {e.label}
+              </label>
+
+              <select
+                name={e.name}
+                value={e.value}
+                onChange={handleChange}
+                className={getInputClassName(e.name, errors)}
+              >
+                {e.options?.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+
+              {errors[e.name] && (
+                <p className="text-red-500 text-sm mt-1">{errors[e.name]}</p>
+              )}
+            </div>
+          );
+        }
+
+        return (
+          <div key={i}>
+            <FormField
+              type={e.type}
+              label={e.label}
+              name={e.name}
+              value={e.value}
+              className={getInputClassName(e.name, errors)}
+              onChange={handleChange}
+              icon={e.icon}
+              placeholder={e.placeHolder}
+            />
+
+            {errors[e.name] && (
+              <p className="text-red-500 text-sm mt-1">{errors[e.name]}</p>
+            )}
+          </div>
+        );
+      }
+
+      return null;
+    });
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
       >
-        <div className="sticky top-0 bg-linear-to-r from-purple-500 to-blue-500 px-6 py-4 flex justify-between items-center">
+        <div className="sticky top-0 z-20 bg-linear-to-r from-purple-500 to-blue-500 px-6 py-4 flex justify-between items-center">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             {isEditing ? (
               <>
@@ -525,134 +533,7 @@ export default function AddTaskModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Title Task *
-              </label>
-              <input
-                type="text"
-                name="taskName"
-                disabled={isEmployee}
-                value={formData.taskName}
-                onChange={handleChange}
-                className={getInputClassName("taskName", errors)}
-              />
-              {errors.taskName && (
-                <p className="text-red-500 text-sm mt-1">{errors.taskName}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Project Name *
-              </label>
-              <select
-                name="projectName"
-                value={formData.projectName}
-                onChange={handleChange}
-                className={getInputClassName("projectName", errors)}
-                disabled={isEmployee}
-              >
-                {projectOptions.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Task Description
-            </label>
-            <textarea
-              rows={2}
-              name="taskDescription"
-              disabled={isEmployee}
-              value={formData.taskDescription}
-              onChange={handleChange}
-              className={getInputClassName("taskDescription", errors)}
-            />
-            {errors.taskDescription && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.taskDescription}
-              </p>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Start Date *
-              </label>
-              <input
-                type="date"
-                name="startWork"
-                disabled={isEmployee}
-                value={formData.startWork}
-                onChange={handleChange}
-                className={getInputClassName("startWork", errors)}
-              />
-              {errors.startWork && (
-                <p className="text-red-500 text-sm mt-1">{errors.startWork}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                End Date *
-              </label>
-              <input
-                type="date"
-                name="endWork"
-                disabled={isEmployee}
-                value={formData.endWork}
-                onChange={handleChange}
-                className={getInputClassName("endWork", errors)}
-              />
-              {errors.endWork && (
-                <p className="text-red-500 text-sm mt-1">{errors.endWork}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Priority Level
-              </label>
-              <select
-                name="priority"
-                value={formData.priority}
-                disabled={isEmployee}
-                onChange={handleChange}
-                className={getInputClassName("priority", errors)}
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-                <option value="urgent">Urgent</option>
-              </select>
-              {errors.priority && (
-                <p className="text-red-500 text-sm mt-1">{errors.priority}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Task Type
-              </label>
-              <input
-                type="text"
-                value={formData.task_type}
-                name="task_type"
-                disabled={isEmployee}
-                onChange={handleChange}
-                className={getInputClassName("task_type", errors)}
-                placeholder="Example: Concrete Pouring, Electrical Installation..."
-              />
-              {errors.task_type && (
-                <p className="text-red-500 text-sm mt-1">{errors.task_type}</p>
-              )}
-            </div>
+            {fieldGenerate("taskProperties")}
           </div>
 
           <div className="border-t pt-4 text-gray-400">
@@ -661,52 +542,7 @@ export default function AddTaskModal({
               Task Location
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <input
-                  type="text"
-                  value={formData.city}
-                  name="city"
-                  disabled={isEmployee}
-                  onChange={handleChange}
-                  className={getInputClassName("city", errors)}
-                  placeholder="City"
-                />
-                {errors.city && (
-                  <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-                )}
-              </div>
-              <div>
-                <input
-                  type="text"
-                  disabled={isEmployee}
-                  value={formData.postal_code}
-                  name="postal_code"
-                  onChange={handleChange}
-                  className={getInputClassName("postal_code", errors)}
-                  placeholder="Postal Code"
-                />
-                {errors.postal_code && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.postal_code}
-                  </p>
-                )}
-              </div>
-              <div>
-                <input
-                  type="text"
-                  disabled={isEmployee}
-                  value={formData.house_number}
-                  name="house_number"
-                  onChange={handleChange}
-                  className={getInputClassName("house_number", errors)}
-                  placeholder="House Number/Building"
-                />
-                {errors.house_number && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.house_number}
-                  </p>
-                )}
-              </div>
+              {fieldGenerate("taskLocation")}
             </div>
           </div>
 
@@ -716,38 +552,7 @@ export default function AddTaskModal({
               Task Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <input
-                  disabled={isEmployee}
-                  type="time"
-                  value={formData.worker_arrival_time}
-                  name="worker_arrival_time"
-                  onChange={handleChange}
-                  placeholder="Worker Arrival Time"
-                  className={getInputClassName("worker_arrival_time", errors)}
-                />
-                {errors.worker_arrival_time && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.worker_arrival_time}
-                  </p>
-                )}
-              </div>
-              <div>
-                <input
-                  type="number"
-                  disabled={isEmployee}
-                  value={formData.work_area}
-                  name="work_area"
-                  onChange={handleChange}
-                  className={getInputClassName("work_area", errors)}
-                  placeholder="Work Area (m²)"
-                />
-                {errors.work_area && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.work_area}
-                  </p>
-                )}
-              </div>
+              {fieldGenerate("taskDetails")}
             </div>
           </div>
 
@@ -757,38 +562,7 @@ export default function AddTaskModal({
               Transportation
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <input
-                  disabled={isEmployee}
-                  type="text"
-                  value={formData.bus_number}
-                  name="bus_number"
-                  onChange={handleChange}
-                  className={getInputClassName("bus_number", errors)}
-                  placeholder="Bus Number"
-                />
-                {errors.bus_number && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.bus_number}
-                  </p>
-                )}
-              </div>
-              <div>
-                <input
-                  type="text"
-                  value={formData.driver_name}
-                  name="driver_name"
-                  disabled={isEmployee}
-                  onChange={handleChange}
-                  className={getInputClassName("driver_name", errors)}
-                  placeholder="Driver Name"
-                />
-                {errors.driver_name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.driver_name}
-                  </p>
-                )}
-              </div>
+              {fieldGenerate("Transportation")}
             </div>
           </div>
           {!isEmployee && (

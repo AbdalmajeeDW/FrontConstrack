@@ -7,7 +7,6 @@ import {
   Check,
   Database,
   Shield,
-  BadgePercent,
   FileText,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -29,6 +28,7 @@ import {
   Tenant,
 } from "@/store/services/superAdmins/tenantService";
 import { tenantFormFields } from "@/config/tenantFormConfig";
+import { FormField } from "@/components/Field/FormField";
 
 export default function AddTenantPage() {
   const dispatch = useAppDispatch();
@@ -116,8 +116,7 @@ export default function AddTenantPage() {
         toast.success("Created Tenants Successfly.");
         router.push("/superAdmin/tenants");
         setFormData(getInitialTenantForm());
-      }else{
-
+      } else {
         toast.error(error);
       }
     } catch (err: any) {
@@ -164,17 +163,15 @@ export default function AddTenantPage() {
                     if (e.id <= 5) {
                       return (
                         <div key={i}>
-                          <label className={labelClass}>{e.label}</label>
-                          <input
+                          <FormField
                             type={e.type}
+                            label={e.label}
                             name={e.name}
                             value={e.value}
-                            onChange={handleChange}
                             className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
                             placeholder={e.placeHolder}
-                            onInvalid={(e) => {
-                              e.preventDefault();
-                            }}
                           />
                           {errors[e.name] && (
                             <p className="text-red-500 text-sm mt-1">
@@ -214,22 +211,16 @@ export default function AddTenantPage() {
                   {tenantFields.map((e, i) => {
                     if (e.id > 5 && e.id <= 8) {
                       return (
-                        <div>
-                          <label className={labelClass}>{e.label}</label>
-                          <input
+                        <div key={i}>
+                          <FormField
                             type={e.type}
+                            label={e.label}
                             name={e.name}
                             value={e.value}
-                            onChange={handleChange}
                             className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
                             placeholder={e.placeHolder}
-                            autoComplete="new-password"
-                            autoCorrect="off"
-                            autoCapitalize="off"
-                            spellCheck="false"
-                            onInvalid={(e) => {
-                              e.preventDefault();
-                            }}
                           />
                           {errors[e.name] && (
                             <p className="text-red-500 text-sm mt-1">
@@ -269,17 +260,18 @@ export default function AddTenantPage() {
                   {tenantFields.map((e, i) => {
                     if (e.id > 8 && e.id <= 10) {
                       return (
-                        <div>
-                          <label className={labelClass}>{e.label}</label>
-                          <input
+                        <div key={i}>
+                          <FormField
                             type={e.type}
+                            label={e.label}
                             name={e.name}
                             value={e.value}
-                            onChange={handleChange}
                             className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
                             placeholder={e.placeHolder}
-                            autoComplete={`new-${e.type}`}
                           />
+
                           {errors[e.name] && (
                             <p className="text-red-500 text-sm mt-1">
                               {errors[e.name]}
@@ -320,16 +312,17 @@ export default function AddTenantPage() {
                     if (e.id > 10) {
                       return (
                         <div key={i}>
-                          <label className={labelClass}>{e.label}</label>
-                          <input
+                          <FormField
                             type={e.type}
+                            label={e.label}
                             name={e.name}
                             value={e.value}
-                            onChange={handleChange}
                             className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
                             placeholder={e.placeHolder}
-                            autoComplete={`new-${e.type}`}
                           />
+
                           {errors[e.name] && (
                             <p className="text-red-500 text-sm mt-1">
                               {errors[e.name]}

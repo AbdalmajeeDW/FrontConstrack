@@ -8,26 +8,26 @@ export interface TaskEmployee {
 
 export interface Task {
   id: number;
-  taskName: string;        
+  taskName: string;
   taskDescription?: string;
-  projectName: string;
+  project_id: number;
   priority: "low" | "medium" | "high" | "urgent";
-  status:  "in_progress" | "review" | "done"|"high";
-  startWork: string;       
-  endWork: string;         
+  status: "in_progress" | "review" | "done" | "high";
+  startWork: string;
+  endWork: string;
   assigned_at?: string;
   is_active?: boolean;
-  
+
   city?: string;
   postal_code?: string;
   house_number?: string;
-  
+
   worker_arrival_time?: string;
   task_type?: string;
-  work_area?:                  number;
-  images:[]
+  work_area?: number;
+  images: [];
   bus_number?: string;
   driver_name?: string;
-  
+
   employees?: TaskEmployee[];
 }

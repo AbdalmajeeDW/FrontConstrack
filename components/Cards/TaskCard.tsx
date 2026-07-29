@@ -19,6 +19,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
 import { formatDateOnly } from "@/utils/constants/formatDate";
+import { toast } from "sonner";
+import confirmAction from "../Confirm/confirmSystem";
 
 export default function TaskCard({
   task,
@@ -63,14 +65,14 @@ export default function TaskCard({
         initial={{ rotate: -2, scale: 0.95 }}
         animate={{ rotate: 0, scale: 1 }}
         whileHover={{ rotate: 1, scale: 1.02 }}
-        className="relative bg-white rounded-2xl shadow-lg overflow-hidden"
+        className="relative bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full"
         style={{
           boxShadow: "0 20px 35px -10px rgba(0,0,0,0.1)",
         }}
       >
         <div className={`h-2 bg-linear-to-r ${getGradient()}`} />
 
-        <div className="p-5">
+        <div className="p-5 flex flex-col flex-1">
           <div className="flex justify-between items-start mb-3">
             <div className="space-y-1">
               <div className="text-xs font-mono text-gray-400">#{task.id}</div>
@@ -95,32 +97,29 @@ export default function TaskCard({
             {task.taskDescription}
           </p>
 
-            <div className="mb-4">
-              <button
-                type="button"
-                onClick={() => setShowImageModal(true)}
-                className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all group"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <ImageDown className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-semibold text-gray-800">
-                      {images.length} Image{images.length > 1 ? "s" : ""}
-                    </div>
-                    <div className="text-xs text-gray-400">
-                      Click to view all
-                    </div>
-                  </div>
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={() => setShowImageModal(true)}
+              className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <ImageDown className="w-5 h-5 text-blue-600" />
                 </div>
-                <div className="flex items-center gap-2 text-sm text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
-                  <Eye className="w-4 h-4" />
-                  View →
+                <div className="text-left">
+                  <div className="text-sm font-semibold text-gray-800">
+                    {images.length} Image{images.length > 1 ? "s" : ""}
+                  </div>
+                  <div className="text-xs text-gray-400">Click to view all</div>
                 </div>
-              </button>
-            </div>
-  
+              </div>
+              <div className="flex items-center gap-2 text-sm text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
+                <Eye className="w-4 h-4" />
+                View →
+              </div>
+            </button>
+          </div>
 
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div className="bg-gray-50 rounded-xl p-2 text-center">
@@ -146,73 +145,100 @@ export default function TaskCard({
               </div>
             )}
           </div>
-
-          {(task.bus_number || task.driver_name) && (
-            <div className="bg-blue-50 rounded-xl p-2 mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Bus className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  {task.bus_number && (
-                    <div className="text-xs font-bold">
-                      Bus {task.bus_number}
-                    </div>
-                  )}
-                  {task.driver_name && (
-                    <div className="text-[10px] text-gray-500">
-                      Driver: {task.driver_name}
-                    </div>
-                  )}
-                </div>
-              </div>
-              {task.worker_arrival_time && (
-                <div className="text-right">
-                  <div className="text-xs font-bold">
-                    {task.worker_arrival_time}
+          <div>
+            {(task.bus_number || task.driver_name) && (
+              <div className="bg-blue-50 rounded-xl p-2 mb-4 flex  items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Bus className="w-4 h-4 text-blue-600" />
                   </div>
-                  <div className="text-[10px] text-gray-500">Arrival Time</div>
+                  <div>
+                    {task.bus_number && (
+                      <div className="text-xs font-bold">
+                        Bus {task.bus_number}
+                      </div>
+                    )}
+                    {task.driver_name && (
+                      <div className="text-[10px] text-gray-500">
+                        Driver: {task.driver_name}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-          )}
-
-          {task.employees && task.employees.length > 0 && (
-            <div className="flex items-center gap-2 mb-4 p-2 bg-gray-50 rounded-xl">
-              <Users className="w-4 h-4 text-gray-400" />
-              <div className="flex gap-1 text-xs text-gray-600">
-                {task.employees.map((emp, i) => (
-                  <span key={emp.id}>{emp.name}</span>
-                ))}
+                {task.worker_arrival_time && (
+                  <div className="text-right">
+                    <div className="text-xs font-bold">
+                      {task.worker_arrival_time}
+                    </div>
+                    <div className="text-[10px] text-gray-500">
+                      Arrival Time
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          <div className="min-h-[42px]">
+            {task.employees && task.employees.length > 0 && (
+              <div className="flex items-center gap-2 mb-4 p-2 bg-gray-50 rounded-xl">
+                <Users className="w-4 h-4 text-gray-400" />
+                <div className="flex gap-1 text-xs text-gray-600">
+                  {task.employees.map((emp) => (
+                    <span key={emp.id}>{emp.name}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
-          <div className="flex justify-around gap-1 pt-2">
+          <div className="flex  justify-around gap-1 pt-2">
             <button
-              className={`w-full rounded-xl flex items-center justify-center transition-all ${
-                task.status === "high"
-                  ? "bg-gray-500 text-white"
-                  : "bg-gray-100 text-gray-400 hover:bg-gray-200"
-              }`}
-              title="Todo"
-              onClick={() => onStatusChange(task.id, "high")}
-            >
-              <Circle className="w-4 h-4" />
-            </button>
-            <button
-              className={`w-full rounded-xl flex items-center justify-center transition-all ${
+              className={`w-full rounded-xl cursor-pointer flex items-center justify-center transition-all ${
                 task.status === "in_progress"
                   ? "bg-blue-500 text-white"
                   : "bg-blue-100 text-blue-400 hover:bg-blue-200"
               }`}
               title="In Progress"
-              onClick={() => onStatusChange(task.id, "in_progress")}
+              onClick={() => {
+                if (task.status === "in_progress") {
+                  toast.info(
+                    `Task "${task.taskName}" is already in progress `,
+                  );
+                } else {
+                  confirmAction("Change task status to in progress?", () => {
+                    onStatusChange(task.id, "in_progress");
+                  });
+                }
+              }}
             >
               <Clock className="w-4 h-4" />
             </button>
             <button
-              className={`w-full rounded-xl flex items-center justify-center transition-all ${
+              className={`w-full p-4 rounded-xl cursor-pointer flex items-center justify-center transition-all ${
+                task.status === "done"
+                  ? "bg-green-500 text-white"
+                  : "bg-green-100 text-green-400 hover:bg-green-200"
+              }`}
+              title="Completed"
+              onClick={() => {
+                if (task.status === "done") {
+                  toast.info(
+                    `Task "${task.taskName}" is already completed`,
+                  );
+                } else {
+                  confirmAction(
+                    `Move task "${task.taskName}" to Completed?`,
+                    () => {
+                      onStatusChange(task.id, "done");
+                    },
+                  );
+                }
+              }}
+            >
+              <CheckCircle className="w-4 h-4" />
+            </button>
+            <button
+              className={`w-full rounded-xl cursor-pointer flex items-center justify-center transition-all ${
                 task.status === "review"
                   ? "bg-purple-500 text-white"
                   : "bg-purple-100 text-purple-400 hover:bg-purple-200"
@@ -222,20 +248,10 @@ export default function TaskCard({
             >
               <Pencil className="w-3.5 h-3.5" />
             </button>
-            <button
-              className={`w-full p-4 rounded-xl flex items-center justify-center transition-all ${
-                task.status === "done"
-                  ? "bg-green-500 text-white"
-                  : "bg-green-100 text-green-400 hover:bg-green-200"
-              }`}
-              title="Completed"
-              onClick={() => onStatusChange(task.id, "done")}
-            >
-              <CheckCircle className="w-4 h-4" />
-            </button>
+
             {!isEmployees && (
               <button
-                className={`w-full p-2 rounded-xl flex items-center justify-center transition-all 
+                className={`w-full  p-2 rounded-xl cursor-pointer flex items-center justify-center transition-all 
                   bg-red-200 text-red-600 hover:bg-red-600 hover:text-white`}
                 title="Delete"
                 onClick={() => onDelete(task.id)}
@@ -249,7 +265,6 @@ export default function TaskCard({
         <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/20" />
       </motion.div>
 
-      {/* مودال عرض جميع الصور */}
       <AnimatePresence>
         {showImageModal && (
           <motion.div

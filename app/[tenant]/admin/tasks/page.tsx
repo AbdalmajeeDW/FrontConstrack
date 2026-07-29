@@ -17,7 +17,6 @@ import TaskCard from "@/components/Cards/TaskCard";
 import AddTaskModal from "@/components/Modal/Modal";
 import StatsCard from "@/components/Cards/StatsCard";
 import { toast } from "sonner";
-import { DatePickerSimple } from "@/components/ui/DatePickerSimple";
 
 export default function TasksPage() {
   const dispatch = useAppDispatch();
@@ -93,8 +92,8 @@ export default function TasksPage() {
       filtered = filtered.filter((t) => t.priority === filterPriority);
     if (filterStatus !== "all")
       filtered = filtered.filter((t) => t.status === filterStatus);
-    if (filterProject !== "all")
-      filtered = filtered.filter((t) => t.projectName === filterProject);
+    // if (filterProject !== "all")
+    //   filtered = filtered.filter((t) => t.project_id === filterProject);
     return filtered;
   }, [tasks, search, filterPriority, filterStatus, filterProject]);
 

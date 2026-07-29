@@ -67,12 +67,14 @@ export default function Page() {
     return [];
   };
   const buildLink = (linkUrl: string) => {
+    const cleaned = linkUrl.replace(/^\/+/, "");
+
     if (pathname.includes("/admin")) {
-      return `/${tenantName}/admin${linkUrl ? "/" + linkUrl : ""}`;
+      return `/${tenantName}/admin${cleaned ? "/" + cleaned : ""}`;
     }
 
     if (pathname.includes("/employee")) {
-      return `/${tenantName}/employee${linkUrl ? "/" + linkUrl : ""}`;
+      return `/${tenantName}/employee${cleaned ? "/" + cleaned : ""}`;
     }
 
     return linkUrl;
@@ -303,7 +305,6 @@ export default function Page() {
                           )}
                         </AnimatePresence>
 
-                        {/* Tooltip for collapsed state */}
                         {isCollapsed && (
                           <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-50 pointer-events-none">
                             {link.name}
