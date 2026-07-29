@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchEmployees, selectEmployeeError, selectEmployeeLoading } from "@/store/slices/admin/employeeSlice";
 import { selectEmployees } from "@/store/slices/admin/employeeSlice";
 import StatsCard from "@/components/Cards/StatsCard";
+import { usePathname } from "next/navigation";
 
 export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +40,8 @@ export default function UsersPage() {
   const employees = useAppSelector(selectEmployees);
   const isLoading = useAppSelector(selectEmployeeLoading);
   const error = useAppSelector(selectEmployeeError);
-
+  const pathname = usePathname();
+ const tenantName = pathname.split("/")[1] || "";
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
@@ -202,7 +204,7 @@ export default function UsersPage() {
               </div>
               <div className="flex flex-row gap-3 sm:items-end">
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-4 w-full min-w-0">
-             <Link href="../employees/new">
+             <Link href={`/${tenantName}/admin/employees/new`}>
                 <button className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-linear-to-r from-purple-500 to-blue-500 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all shadow-md whitespace-nowrap">
                   <PlusCircle className="w-4 h-4" />
                   <span className="hidden sm:inline">New Employee</span>
