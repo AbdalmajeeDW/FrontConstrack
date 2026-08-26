@@ -109,15 +109,20 @@ export const validateFieldForEmployee = (name: string, value: any): string => {
       }
       return "";
 
-    case "city":
-      if (!value || value.trim() === "") return t("validation.city.required");
-      if (value && value.length > 100) {
-        return t("validation.city.max_length");
-      }
-      if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
-        return t("validation.city.invalid_chars");
-      }
-      return "";
+  case "city":
+  if (!value || value.trim() === "") {
+    return t("validation.city.required");
+  }
+
+  if (value.length > 100) {
+    return t("validation.city.max_length");
+  }
+
+  if (!/^[a-zA-Z\u0600-\u06FF\s\-']+$/.test(value)) {
+    return t("validation.city.invalid_chars");
+  }
+
+  return "";
 
     case "postal_code":
       if (!value || value.trim() === "") {
@@ -298,16 +303,20 @@ export const validateFieldForProject = (name: string, value: any): string => {
         return t("validation.name.project_min_length");
       return "";
 
-    case "city":
-      if (!value || value.trim() === "") return t("validation.city.required");
-      if (value && value.length > 100) {
-        return t("validation.city.max_length");
-      }
-      if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
-        return t("validation.city.invalid_chars");
-      }
-      return "";
+case "city":
+  if (!value || value.trim() === "") {
+    return t("validation.city.required");
+  }
 
+  if (value.length > 100) {
+    return t("validation.city.max_length");
+  }
+
+  if (!/^[a-zA-Z\u0600-\u06FF\s\-']+$/.test(value)) {
+    return t("validation.city.invalid_chars");
+  }
+
+  return "";
     case "postal_code":
       if (!value || value.trim() === "") {
         return t("validation.postal_code.required");
