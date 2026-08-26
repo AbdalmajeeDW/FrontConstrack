@@ -205,7 +205,7 @@ export default function ActivitiesPage() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("tenant-token");
-      let url = `http://localhost:3007/tenant/logs/activities?page=${currentPage}&limit=${itemsPerPage}`;
+      let url = `http://187.124.0.42:3007/tenant/logs/activities?page=${currentPage}&limit=${itemsPerPage}`;
 
       if (filterAction !== "all") {
         url += `&action=${filterAction}`;
@@ -261,11 +261,14 @@ export default function ActivitiesPage() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("tenant-token");
-      const response = await fetch("http://localhost:3007/tenant/logs/stats", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "http://187.124.0.42:3007/tenant/logs/stats",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) throw new Error("Failed to fetch stats");
 

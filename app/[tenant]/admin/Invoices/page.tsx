@@ -64,13 +64,16 @@ export default function InvoicesPage() {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("tenant-token");
-        const response = await fetch("http://localhost:3007/tenant/invoices", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          "http://187.124.0.42:3007/tenant/invoices",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch invoices");
         }
@@ -170,7 +173,7 @@ export default function InvoicesPage() {
 
   const getImageUrls = (images: string[]) => {
     if (images && images.length > 0) {
-      return images.map((img) => `http://localhost:3007${img}`);
+      return images.map((img) => `http://187.124.0.42:3007${img}`);
     }
     return [];
   };
