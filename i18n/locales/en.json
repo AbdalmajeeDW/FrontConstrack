@@ -19,6 +19,8 @@
       "search_placeholder": "Search by invoice number, description, or employee...",
       "date_placeholder": "Filter by date",
       "all_actions": "All Actions",
+"refresh": "Refresh",
+      "refreshing": "Refreshing...",
 
       "all_employees": "All Employees",
       "reset": "Reset"
@@ -502,6 +504,12 @@
       "month_desc": "Activities this month",
       "total": "Total Activities",
       "total_desc": "All time"
+    }, "refresh": {
+      "button": "Refresh",
+      "refreshing": "Refreshing...",
+      "success": "Activities updated successfully!",
+      "error": "Failed to refresh activities",
+      "stats_error": "Failed to refresh stats"
     },
     "filter": {
       "all_actions": "All Actions",

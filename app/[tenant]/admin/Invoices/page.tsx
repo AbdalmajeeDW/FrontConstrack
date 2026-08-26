@@ -12,6 +12,7 @@ import {
   X,
   Image as ImageIcon,
   Users,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,7 @@ export default function InvoicesPage() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
@@ -59,37 +61,40 @@ export default function InvoicesPage() {
 
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      setIsLoading(true);
-      try {
-        const token = localStorage.getItem("tenant-token");
-        const response = await fetch(
-          "http://187.124.0.42:3007/tenant/invoices",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch invoices");
-        }
-        const data = await response.json();
-        setInvoices(data);
-      } catch (error) {
-        console.error("Error fetching invoices:", error);
-        toast.error("Failed to load invoices");
-      } finally {
-        setIsLoading(false);
+  const fetchInvoices = async (showToast = false) => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("tenant-token");
+      const response = await fetch("http://187.124.0.42:3007/tenant/invoices", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch invoices");
       }
-    };
-
-    fetchInvoices();
+      const data = await response.json();
+      setInvoices(data);
+      if (showToast) {
+        toast.success("Invoices updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
+      toast.error("Failed to refresh invoices");
+    } finally {
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+  useEffect(() => {
+    fetchInvoices(false);
   }, []);
-
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchInvoices(true);
+  };
   const employeeList = useMemo(() => {
     const employees = new Map<number, string>();
     invoices.forEach((invoice) => {
@@ -346,6 +351,18 @@ export default function InvoicesPage() {
                   >
                     <X className="w-4 h-4" />
                     {t("invoices.filters.reset") || "Reset"}
+                  </Button>
+                  <Button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing || isLoading}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <RefreshCw
+                      className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+                    />
+                    {isRefreshing
+                      ? t("invoices.filters.refreshing")
+                      : t("invoices.filters.refresh")}
                   </Button>
                 </div>
               </div>

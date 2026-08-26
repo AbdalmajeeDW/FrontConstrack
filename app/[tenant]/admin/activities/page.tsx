@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Eye,
   ListTodo,
+  RefreshCw,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -98,7 +99,7 @@ export default function ActivitiesPage() {
   const router = useRouter();
   const tenantName = pathname.split("/")[1] || "";
 
-  // ✅ تصحيح فلتر الأكشن - استخدام قيم ثابتة وترجمات منفصلة
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const actions = [
     {
       value: "all",
@@ -201,7 +202,7 @@ export default function ActivitiesPage() {
     },
   ];
 
-  const fetchActivities = async () => {
+  const fetchActivities = async (showToast = false) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("tenant-token");
@@ -250,15 +251,24 @@ export default function ActivitiesPage() {
       setActivities(formattedActivities);
       setTotalPages(data.totalPages || 1);
       setTotalItems(Number(data.total) || 0);
+
+      if (showToast) {
+        toast.success(
+          t("activities.refresh.success") || "Activities updated successfully!",
+        );
+      }
     } catch (error) {
       console.error("Error fetching activities:", error);
-      toast.error(t("activities.load_error"));
+      toast.error(
+        t("activities.refresh.error") || "Failed to refresh activities",
+      );
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   };
 
-  const fetchStats = async () => {
+  const fetchStats = async (showToast = false) => {
     try {
       const token = localStorage.getItem("tenant-token");
       const response = await fetch(
@@ -276,16 +286,22 @@ export default function ActivitiesPage() {
       setStats(data);
     } catch (error) {
       console.error("Failed to fetch stats:", error);
+      if (showToast) {
+        toast.error(
+          t("activities.refresh.stats_error") || "Failed to refresh stats",
+        );
+      }
     }
   };
-
-  // ✅ تحديث useEffect ليشمل جميع الفلاتر
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await Promise.all([fetchActivities(true), fetchStats(true)]);
+  };
   useEffect(() => {
-    fetchActivities();
-    fetchStats();
+    fetchActivities(false);
+    fetchStats(false);
   }, [currentPage, filterAction, filterEmployee, filterPeriod, searchTerm]);
 
-  // ✅ إزالة useEffect القديم لإعادة تعيين الصفحة
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, filterEmployee, filterPeriod, filterAction]);
@@ -325,7 +341,6 @@ export default function ActivitiesPage() {
     return name.charAt(0).toUpperCase();
   };
 
-  // ✅ إزالة filteredActivities المحلية (الفلترة تتم في Backend)
   const displayedActivities = activities;
 
   const goToEmployee = (employeeId: number) => {
@@ -471,6 +486,18 @@ export default function ActivitiesPage() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <button
+                    onClick={handleRefresh}
+                    disabled={isRefreshing || isLoading}
+                    className="flex items-center gap-2 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <RefreshCw
+                      className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+                    />
+                    {isRefreshing
+                      ? t("activities.refresh.refreshing")
+                      : t("activities.refresh.button")}
+                  </button>
                 </div>
               </div>
             </div>
