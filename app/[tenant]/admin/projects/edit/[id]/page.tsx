@@ -167,7 +167,7 @@ export default function EditProjectPage() {
           data: form,
         }),
       ).unwrap();
-      toast.success(t("projects.edit_success"));
+      toast.success(t("editProjects.edit_success"));
       router.back();
     } catch (error: any) {
       console.error("Update project error:", error);
