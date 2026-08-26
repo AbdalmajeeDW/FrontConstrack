@@ -6,7 +6,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'super_admin' | 'tenant_admin' | 'user';
+    roleEn?:  string;
+  roleAr?:  string;
   tenantId?: string | null;
   tenantName?: string;
   avatar?: string;

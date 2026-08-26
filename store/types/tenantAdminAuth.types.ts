@@ -2,7 +2,8 @@ export interface TenantAdminUser {
   id: string;
   tenantId: string;
   name: string;
-  role: 'tenant_admin' | 'user' | string;
+  roleEn?:  string;
+  roleAr?:  string;
   email?: string;
   avatar?: string;
   phone?: string;
@@ -12,7 +13,8 @@ export interface TenantEmployee {
   id: string;
   tenantId: string;
   name: string;
-  role: 'tenant_employee' | 'user' | string;
+    roleEn?:  string;
+  roleAr?:  string;
   email?: string;
   avatar?: string;
   phone?: string;

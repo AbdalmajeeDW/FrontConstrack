@@ -6,7 +6,6 @@ import {
 import {
   Bus,
   CheckCircle,
-  Circle,
   Clock,
   Users,
   X,
@@ -21,6 +20,8 @@ import Image from "next/image";
 import { formatDateOnly } from "@/utils/constants/formatDate";
 import { toast } from "sonner";
 import confirmAction from "../Confirm/confirmSystem";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
 
 export default function TaskCard({
   task,
@@ -37,8 +38,10 @@ export default function TaskCard({
   onDelete: (id: number) => void;
   onStatusChange: (id: number, status: Task["status"]) => void;
 }) {
+  const { t } = useTranslation();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showImageModal, setShowImageModal] = useState(false);
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
 
   const getGradient = () => {
     const gradients = [
@@ -59,43 +62,51 @@ export default function TaskCard({
     : [];
   const hasImages = images.length > 0;
 
+  const statusConfig =
+    task.status === "in_progress"
+      ? {
+          label: t("taskCard.status.in_progress"),
+          className: "bg-blue-100 text-blue-700 border-blue-200",
+          icon: Clock,
+        }
+      : {
+          label: t("taskCard.status.completed"),
+          className: "bg-green-100 text-green-700 border-green-200",
+          icon: CheckCircle,
+        };
+
+  const StatusIcon = statusConfig.icon;
+
   return (
     <>
       <motion.div
-        initial={{ rotate: -2, scale: 0.95 }}
-        animate={{ rotate: 0, scale: 1 }}
-        whileHover={{ rotate: 1, scale: 1.02 }}
         className="relative bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full"
         style={{
           boxShadow: "0 20px 35px -10px rgba(0,0,0,0.1)",
         }}
       >
         <div className={`h-2 bg-linear-to-r ${getGradient()}`} />
-
+        <h3 className="text-lg mt-5 font-black text-gray-900 mb-2 flex justify-center leading-tight">
+          {task.taskName}
+        </h3>
         <div className="p-5 flex flex-col flex-1">
           <div className="flex justify-between items-start mb-3">
             <div className="space-y-1">
-              <div className="text-xs font-mono text-gray-400">#{task.id}</div>
-              {task.task_type && (
-                <div className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-black/5 text-gray-700">
-                  {task.task_type}
+              <div className="text-xs font-mono text-gray-400">
+                <div
+                  className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold border ${statusConfig.className}`}
+                >
+                  <StatusIcon className="w-3.5 h-3.5" />
+                  {statusConfig.label}
                 </div>
-              )}
+              </div>
             </div>
             <div
               className={`px-2 py-1 rounded-lg text-xs font-bold ${priorityColor}`}
             >
-              {prioritySettings.label}
+              {t(prioritySettings.labelKey)}
             </div>
           </div>
-
-          <h3 className="text-lg font-black text-gray-900 mb-2 leading-tight">
-            {task.taskName}
-          </h3>
-
-          <p className="text-xs text-gray-500 mb-4 line-clamp-2">
-            {task.taskDescription}
-          </p>
 
           <div className="mb-4">
             <button
@@ -109,14 +120,17 @@ export default function TaskCard({
                 </div>
                 <div className="text-left">
                   <div className="text-sm font-semibold text-gray-800">
-                    {images.length} Image{images.length > 1 ? "s" : ""}
+                    {images.length}{" "}
+                    {t("taskCard.images", { count: images.length })}
                   </div>
-                  <div className="text-xs text-gray-400">Click to view all</div>
+                  <div className="text-xs text-gray-400">
+                    {t("taskCard.click_to_view")}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
                 <Eye className="w-4 h-4" />
-                View →
+                {t("taskCard.view")} →
               </div>
             </button>
           </div>
@@ -124,15 +138,19 @@ export default function TaskCard({
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div className="bg-gray-50 rounded-xl p-2 text-center">
               <div className="text-lg font-bold text-gray-800">
-                {formatDateOnly(task.endWork)}
+                {formatDateOnly(task.endWork, locale)}
               </div>
-              <div className="text-[10px] text-gray-400">Due Date</div>
+              <div className="text-[10px] text-gray-400">
+                {t("taskCard.due_date")}
+              </div>
             </div>
             <div className="bg-gray-50 rounded-xl p-2 text-center">
               <div className="text-lg font-bold text-gray-800">
                 {task.work_area ? `${task.work_area}` : "—"}
               </div>
-              <div className="text-[10px] text-gray-400">Area (m²)</div>
+              <div className="text-[10px] text-gray-400">
+                {t("taskCard.area")}
+              </div>
             </div>
             {task.city && (
               <div className="bg-gray-50 rounded-xl p-2 text-center col-span-2">
@@ -140,14 +158,15 @@ export default function TaskCard({
                   {task.city}
                 </div>
                 <div className="text-[10px] text-gray-400">
-                  📍 Work Location
+                  📍 {t("taskCard.location")}
                 </div>
               </div>
             )}
           </div>
+
           <div>
             {(task.bus_number || task.driver_name) && (
-              <div className="bg-blue-50 rounded-xl p-2 mb-4 flex  items-center justify-between">
+              <div className="bg-blue-50 rounded-xl p-2 mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                     <Bus className="w-4 h-4 text-blue-600" />
@@ -155,12 +174,12 @@ export default function TaskCard({
                   <div>
                     {task.bus_number && (
                       <div className="text-xs font-bold">
-                        Bus {task.bus_number}
+                        {t("taskCard.bus")} {task.bus_number}
                       </div>
                     )}
                     {task.driver_name && (
                       <div className="text-[10px] text-gray-500">
-                        Driver: {task.driver_name}
+                        {t("taskCard.driver")}: {task.driver_name}
                       </div>
                     )}
                   </div>
@@ -171,14 +190,15 @@ export default function TaskCard({
                       {task.worker_arrival_time}
                     </div>
                     <div className="text-[10px] text-gray-500">
-                      Arrival Time
+                      {t("taskCard.arrival_time")}
                     </div>
                   </div>
                 )}
               </div>
             )}
           </div>
-          <div className="min-h-[42px]">
+
+          <div className="min-h-10.5">
             {task.employees && task.employees.length > 0 && (
               <div className="flex items-center gap-2 mb-4 p-2 bg-gray-50 rounded-xl">
                 <Users className="w-4 h-4 text-gray-400" />
@@ -191,69 +211,69 @@ export default function TaskCard({
             )}
           </div>
 
-          <div className="flex  justify-around gap-1 pt-2">
+          <div className="flex justify-around gap-1 pt-2">
+            {!isEmployees && (
+              <button
+                className={`w-full rounded-xl p-4 cursor-pointer flex items-center justify-center transition-all ${
+                  task.status === "in_progress"
+                    ? "bg-blue-500 text-white"
+                    : "bg-blue-100 text-blue-400 hover:bg-blue-200"
+                }`}
+                title={t("taskCard.in_progress_title")}
+                onClick={() => {
+                  if (task.status === "in_progress") {
+                    toast.info(
+                      t("taskCard.already_in_progress", {
+                        name: task.taskName,
+                      }),
+                    );
+                  } else {
+                    confirmAction(t("taskCard.confirm_in_progress"), () => {
+                      onStatusChange(task.id, "in_progress");
+                    });
+                  }
+                }}
+              >
+                <Clock className="w-4 h-4" />
+              </button>
+            )}
+            {!isEmployees && (
+              <button
+                className={`w-full p-4 rounded-xl cursor-pointer flex items-center justify-center transition-all ${
+                  task.status === "done"
+                    ? "bg-green-500 text-white"
+                    : "bg-green-100 text-green-400 hover:bg-green-200"
+                }`}
+                title={t("taskCard.completed_title")}
+                onClick={() => {
+                  if (task.status === "done") {
+                    toast.info(
+                      t("taskCard.already_completed", { name: task.taskName }),
+                    );
+                  } else {
+                    confirmAction(
+                      t("taskCard.confirm_completed", { name: task.taskName }),
+                      () => {
+                        onStatusChange(task.id, "done");
+                      },
+                    );
+                  }
+                }}
+              >
+                <CheckCircle className="w-4 h-4" />
+              </button>
+            )}
             <button
-              className={`w-full rounded-xl cursor-pointer flex items-center justify-center transition-all ${
-                task.status === "in_progress"
-                  ? "bg-blue-500 text-white"
-                  : "bg-blue-100 text-blue-400 hover:bg-blue-200"
-              }`}
-              title="In Progress"
-              onClick={() => {
-                if (task.status === "in_progress") {
-                  toast.info(
-                    `Task "${task.taskName}" is already in progress `,
-                  );
-                } else {
-                  confirmAction("Change task status to in progress?", () => {
-                    onStatusChange(task.id, "in_progress");
-                  });
-                }
-              }}
-            >
-              <Clock className="w-4 h-4" />
-            </button>
-            <button
-              className={`w-full p-4 rounded-xl cursor-pointer flex items-center justify-center transition-all ${
-                task.status === "done"
-                  ? "bg-green-500 text-white"
-                  : "bg-green-100 text-green-400 hover:bg-green-200"
-              }`}
-              title="Completed"
-              onClick={() => {
-                if (task.status === "done") {
-                  toast.info(
-                    `Task "${task.taskName}" is already completed`,
-                  );
-                } else {
-                  confirmAction(
-                    `Move task "${task.taskName}" to Completed?`,
-                    () => {
-                      onStatusChange(task.id, "done");
-                    },
-                  );
-                }
-              }}
-            >
-              <CheckCircle className="w-4 h-4" />
-            </button>
-            <button
-              className={`w-full rounded-xl cursor-pointer flex items-center justify-center transition-all ${
-                task.status === "review"
-                  ? "bg-purple-500 text-white"
-                  : "bg-purple-100 text-purple-400 hover:bg-purple-200"
-              }`}
-              title="Edit"
+              className={`w-full p-4 rounded-xl cursor-pointer flex items-center justify-center transition-all bg-purple-100 text-purple-400 hover:bg-purple-200`}
+              title={t("taskCard.edit_title")}
               onClick={() => onEdit(task.id)}
             >
               <Pencil className="w-3.5 h-3.5" />
             </button>
-
             {!isEmployees && (
               <button
-                className={`w-full  p-2 rounded-xl cursor-pointer flex items-center justify-center transition-all 
-                  bg-red-200 text-red-600 hover:bg-red-600 hover:text-white`}
-                title="Delete"
+                className={`w-full p-2 rounded-xl cursor-pointer flex items-center justify-center transition-all bg-red-200 text-red-600 hover:bg-red-600 hover:text-white`}
+                title={t("taskCard.delete_title")}
                 onClick={() => onDelete(task.id)}
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -281,15 +301,13 @@ export default function TaskCard({
               className="relative max-w-5xl max-h-[90vh] w-full bg-white rounded-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
-                    Task Images
+                    {t("taskCard.images_title")}
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {task.taskName} - {images.length} image
-                    {images.length > 1 ? "s" : ""}
+                    {task.taskName} - {images.length}{" "}
                   </p>
                 </div>
                 <button
@@ -300,12 +318,11 @@ export default function TaskCard({
                 </button>
               </div>
 
-              {/* Images Grid */}
               <div className="p-4 overflow-y-auto max-h-[calc(90vh-80px)]">
                 {images.length === 0 ? (
                   <div className="text-center py-12 text-gray-400">
                     <ImageDown className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                    <p>No images available</p>
+                    <p>{t("taskCard.no_images")}</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -351,7 +368,7 @@ export default function TaskCard({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4"
+            className="fixed inset-0 z-60 bg-black/90 flex items-center justify-center p-4"
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
@@ -366,7 +383,7 @@ export default function TaskCard({
                 className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors flex items-center gap-2"
               >
                 <X className="w-6 h-6" />
-                <span className="text-sm">Close</span>
+                <span className="text-sm">{t("taskCard.close")}</span>
               </button>
               <div className="relative bg-black/20 rounded-xl overflow-hidden">
                 <Image
@@ -379,7 +396,7 @@ export default function TaskCard({
                 />
               </div>
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white text-xs px-3 py-1 rounded-full">
-                Click anywhere to close
+                {t("taskCard.click_to_close")}
               </div>
             </motion.div>
           </motion.div>

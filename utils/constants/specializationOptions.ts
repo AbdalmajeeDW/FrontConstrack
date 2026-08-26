@@ -1,15 +1,24 @@
-  export const specializationOptions = [
-    { value: "", label: "Select Specialization" },
-    { value: "Concrete Worker", label: "Concrete Worker" },
-    { value: "Electrician", label: "Electrician" },
-    { value: "Plumber", label: "Plumber" },
-    { value: "Carpenter", label: "Carpenter" },
-    { value: "Steel Fixer", label: "Steel Fixer" },
-    { value: "Painter", label: "Painter" },
-    { value: "Tiler", label: "Tiler" },
-    { value: "Welder", label: "Welder" },
-    { value: "Driver", label: "Driver" },
-    { value: "Safety Officer", label: "Safety Officer" },
-    { value: "Site Supervisor", label: "Site Supervisor" },
-    { value: "Foreman", label: "Foreman" },
-  ];
+export const specializationOptions = [
+  { value: "", labelKey: "specializations.select" },
+  { value: "Concrete Worker", labelKey: "specializations.concrete_worker" },
+  { value: "Electrician", labelKey: "specializations.electrician" },
+  { value: "Plumber", labelKey: "specializations.plumber" },
+  { value: "Carpenter", labelKey: "specializations.carpenter" },
+  { value: "Steel Fixer", labelKey: "specializations.steel_fixer" },
+  { value: "Painter", labelKey: "specializations.painter" },
+  { value: "Tiler", labelKey: "specializations.tiler" },
+  { value: "Welder", labelKey: "specializations.welder" },
+  { value: "Driver", labelKey: "specializations.driver" },
+  { value: "Safety Officer", labelKey: "specializations.safety_officer" },
+  { value: "Site Supervisor", labelKey: "specializations.site_supervisor" },
+  { value: "Foreman", labelKey: "specializations.foreman" },
+];
+
+export const getSpecializationLabel = (value: string, t: any) => {
+  if (!value || value === "") {
+    return t("specializations.not_specified") || "-";
+  }
+  
+  const option = specializationOptions.find((opt) => opt.value === value);
+  return option ? t(option.labelKey) : value;
+};

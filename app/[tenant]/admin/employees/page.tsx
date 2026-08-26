@@ -1,64 +1,135 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Users,
-  Building2,
   Search,
   PlusCircle,
   Eye,
   Edit,
-  MoreVertical,
-  Clock,
   Mail,
   ChevronLeft,
   ChevronRight,
   Zap,
-  UserCheck,
   UserX,
-  Shield,
-  Briefcase,
-
   HardDrive,
   Euro,
   Loader,
+  Trash2,
+  Filter,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchEmployees, selectEmployeeError, selectEmployeeLoading } from "@/store/slices/admin/employeeSlice";
+import {
+  deleteEmployeeById,
+  fetchEmployees,
+  selectEmployeeError,
+  selectEmployeeLoading,
+} from "@/store/slices/admin/employeeSlice";
 import { selectEmployees } from "@/store/slices/admin/employeeSlice";
 import StatsCard from "@/components/Cards/StatsCard";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { DeleteConfirmModal } from "@/components/Modal/DeleteConfirmModal";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
+import { statsEmployees } from "@/config/statsConfig";
+import { EmployeeTable } from "@/components/tenantAdmin/Table/EmployeeTable";
+import { InsightsGrid } from "@/components/tenantAdmin/InsightsGrid.tsx/Insights";
+import { getEmployeesInsights } from "@/config/Insights";
 
 export default function UsersPage() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "inactive" | "license"
+  >("all");
+
+  const [specializationFilter, setSpecializationFilter] =
+    useState<string>("all");
+  const [showFilters, setShowFilters] = useState(false);
 
   const dispatch = useAppDispatch();
   const employees = useAppSelector(selectEmployees);
   const isLoading = useAppSelector(selectEmployeeLoading);
   const error = useAppSelector(selectEmployeeError);
   const pathname = usePathname();
- const tenantName = pathname.split("/")[1] || "";
+  const tenantName = pathname.split("/")[1] || "";
+  const [deleteModal, setDeleteModal] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  const stats = {
-    totalUsers: employees.length,
-    activeUsers: 128,
-    inactiveUsers: 25,
-    pendingUsers: 3,
-    adminUsers: 24,
-    projectManagers: 48,
-    regularUsers: 84,
-    totalCompanies: 24,
+  const { stats, statCards } = statsEmployees(employees, t);
+  const specializations = Array.from(
+    new Set(employees.map((e) => e.specialization).filter(Boolean)),
+  );
+
+  const filteredEmployees = employees.filter((employee) => {
+    if (statusFilter === "active" && !employee.is_active) {
+      return false;
+    }
+    if (statusFilter === "inactive" && employee.is_active) {
+      return false;
+    }
+    if (statusFilter === "license" && !employee.driving_license) {
+      return false;
+    }
+
+    if (
+      specializationFilter !== "all" &&
+      employee.specialization !== specializationFilter
+    ) {
+      return false;
+    }
+
+    if (searchTerm.trim()) {
+      const search = searchTerm.toLowerCase();
+      return (
+        employee.name?.toLowerCase().includes(search) ||
+        employee.email?.toLowerCase().includes(search) ||
+        employee.address?.toLowerCase().includes(search) ||
+        employee.specialization?.toLowerCase().includes(search)
+      );
+    }
+
+    return true;
+  });
+  const insights = getEmployeesInsights(stats, t);
+
+  const resetFilters = () => {
+    setStatusFilter("all");
+    setSpecializationFilter("all");
+    setSearchTerm("");
+    setCurrentPage(1);
   };
 
-  const totalPages = Math.ceil(employees.length / itemsPerPage);
-  const paginatedUsers = employees.slice(
+  const handleDelete = async (id: number) => {
+    setIsDeleting(true);
+    try {
+      await dispatch(deleteEmployeeById(id)).unwrap();
+      toast.success(t("employees.delete_success"));
+      setDeleteModal(null);
+    } catch (err: any) {
+      toast.error(err || t("employees.delete_error"));
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+
+  const paginatedUsers = filteredEmployees.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
@@ -70,75 +141,6 @@ export default function UsersPage() {
     },
   };
 
-  const itemVariants = {
-    visible: { opacity: 1, y: 0 },
-  };
-
-  const statCards = [
-    {
-      title: "Total Users",
-      value: stats.totalUsers,
-      icon: <Users className="w-6 h-6 text-purple-600" />,
-      gradient: "from-purple-500 to-blue-500",
-      bgColor: "bg-purple-200",
-      textColor: "text-purple-600",
-      description: "Platform users",
-    },
-    {
-      title: "Active Users",
-      value: stats.activeUsers,
-      icon: <UserCheck className="w-6 h-6 text-green-600" />,
-      gradient: "from-green-500 to-emerald-500",
-      bgColor: "bg-green-200",
-      textColor: "text-green-600",
-      description: "Currently active",
-    },
-    {
-      title: "Admin Users",
-      value: stats.adminUsers,
-      icon: <Shield className="w-6 h-6 text-indigo-500" />,
-      gradient: "from-indigo-500 to-purple-500",
-      bgColor: "bg-indigo-200",
-      textColor: "text-indigo-600",
-      description: "Company admins",
-    },
-    {
-      title: "Project Managers",
-      value: stats.projectManagers,
-      icon: <Briefcase className="w-6 h-6 text-blue-500" />,
-      gradient: "from-blue-500 to-cyan-500",
-      bgColor: "bg-blue-200",
-      textColor: "text-blue-600",
-      description: "Across companies",
-    },
-  ];
-
-  const additionalStats = [
-    {
-      label: "Regular Users",
-      value: stats.regularUsers,
-      icon: Users,
-      color: "from-slate-500 to-gray-500",
-    },
-    {
-      label: "Pending Approval",
-      value: stats.pendingUsers,
-      icon: Clock,
-      color: "from-amber-500 to-orange-500",
-    },
-    {
-      label: "Inactive",
-      value: stats.inactiveUsers,
-      icon: UserX,
-      color: "from-rose-500 to-red-500",
-    },
-    {
-      label: "Companies",
-      value: stats.totalCompanies,
-      icon: Building2,
-      color: "from-emerald-500 to-teal-500",
-    },
-  ];
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -146,271 +148,243 @@ export default function UsersPage() {
       </div>
     );
   }
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
+    <div className="bg-linear-to-br from-gray-50 via-white to-gray-100">
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full filter blur-3xl opacity-20 -z-10"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full filter blur-3xl opacity-20 -z-10"></div>
- <div className="lg:ml-0">
-      <div className=" mx-auto p-6 md:p-6 lg:p-8 space-y-6 md:space-y-8">
-        <motion.div
-          variants={containerVariants}
-          animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {statCards.map((card, index) => (
-       <StatsCard key={index} {...card} />
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-        >
-          {additionalStats.map((stat, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 group"
-            >
-              <div
-                className={`inline-flex p-2 rounded-lg bg-linear-to-r ${stat.color} text-white mb-3 group-hover:scale-110 transition-transform`}
-              >
-                <stat.icon className="w-4 h-4" />
-              </div>
-              <p className="text-gray-500 text-xs mb-1">{stat.label}</p>
-              <p className="text-xl font-bold text-gray-800">{stat.value}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl shadow-lg"
-        >
-          <div className="p-4 border-b border-slate-200 bg-white">
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-              <div className="relative min-w-0">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search by name, email or company..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full min-w-0 pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-              <div className="flex flex-row gap-3 sm:items-end">
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-4 w-full min-w-0">
-             <Link href={`/${tenantName}/admin/employees/new`}>
-                <button className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-linear-to-r from-purple-500 to-blue-500 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all shadow-md whitespace-nowrap">
-                  <PlusCircle className="w-4 h-4" />
-                  <span className="hidden sm:inline">New Employee</span>
-                  <span className="sm:hidden">Add</span>
-                </button>
-             </Link>
-
+      <div className="lg:ml-0">
+        <div className="mx-auto p-6 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+          <motion.div
+            variants={containerVariants}
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {statCards.map((card, index) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={index}
+                  onClick={() => {
+                    setStatusFilter(card.filter);
+                    setCurrentPage(1);
+                  }}
+                  className={`relative group cursor-pointer rounded-2xl transition-all hover:scale-105 ${
+                    statusFilter === card.filter
+                      ? `ring-2 ${card.ringColor}`
+                      : ""
+                  }`}
+                >
+                  <StatsCard
+                    title={card.title}
+                    value={card.value}
+                    icon={<Icon className="w-6 h-6" />}
+                    gradient={card.gradient}
+                    bgColor={card.bgColor}
+                    textColor={card.textColor}
+                    description={card.description}
+                  />
+                  {statusFilter === card.filter && (
+                    <span className="absolute top-2 right-2 text-xs bg-purple-500 text-white px-2 py-0.5 rounded-full">
+                      ✓
+                    </span>
+                  )}
                 </div>
+              );
+            })}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-2xl shadow-lg"
+          >
+            <div className="p-4 border-b border-slate-200 bg-white">
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="relative flex-1 min-w-[200px]">
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Input
+                      type="text"
+                      placeholder={t("employees.search_placeholder")}
+                      value={searchTerm}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(1);
+                      }}
+                      className="w-full pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowFilters(!showFilters)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm border border-slate-200 rounded-lg hover:bg-slate-50"
+                    >
+                      <Filter className="w-4 h-4" />
+                      <span className="hidden sm:inline">
+                        {t("employees.filter")}
+                      </span>
+                      {(statusFilter !== "all" ||
+                        specializationFilter !== "all") && (
+                        <span className="ml-1 px-1.5 py-0.5 text-xs bg-purple-500 text-white rounded-full">
+                          {Number(statusFilter !== "all") +
+                            Number(specializationFilter !== "all")}
+                        </span>
+                      )}
+                    </Button>
+
+                    <Link href={`/${tenantName}/admin/employees/new`}>
+                      <Button className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-linear-to-r from-purple-500 to-blue-500 rounded-lg hover:from-purple-600 hover:to-blue-600 transition-all shadow-md whitespace-nowrap">
+                        <PlusCircle className="w-4 h-4" />
+                        <span className="hidden sm:inline">
+                          {t("employees.new_employee")}
+                        </span>
+                        <span className="sm:hidden">{t("employees.add")}</span>
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                {showFilters && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-100"
+                  >
+                    {specializations.length > 0 && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 font-medium">
+                          {t("employees.table.specialization")}:
+                        </span>
+                        <select
+                          value={specializationFilter}
+                          onChange={(e) => {
+                            setSpecializationFilter(e.target.value);
+                            setCurrentPage(1);
+                          }}
+                          className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                        >
+                          <option value="all">
+                            {t("employees.filter_all_specializations") ||
+                              "جميع التخصصات"}
+                          </option>
+                          {specializations.map((spec) => (
+                            <option key={spec} value={spec}>
+                              {spec}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-500 font-medium">
+                        {t("employees.table.status") || "الحالة"}:
+                      </span>
+                      <select
+                        value={statusFilter}
+                        onChange={(e) => {
+                          setStatusFilter(e.target.value as any);
+                          setCurrentPage(1);
+                        }}
+                        className="px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                      >
+                        <option value="all">
+                          {t("employees.filter_all_status") || "جميع الحالات"}
+                        </option>
+                        <option value="active">
+                          {t("employees.stats.active") || "نشط"}
+                        </option>
+                        <option value="inactive">
+                          {t("employees.stats.inactive") || "غير نشط"}
+                        </option>
+                        <option value="license">
+                          {t("employees.stats.license") || "لديه رخصة"}
+                        </option>
+                      </select>
+                    </div>
+
+                    <button
+                      onClick={resetFilters}
+                      className="flex items-center gap-1 px-3 py-1.5 text-xs text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                      {t("employees.reset_filters") || "إعادة تعيين"}
+                    </button>
+                  </motion.div>
+                )}
               </div>
             </div>
-          </div>
-
-          <div className="overflow-x-auto overflow-y-hidden rounded-2xl w-full">
-            <table className="table-auto w-full">
-              <thead className="bg-linear-to-r from-purple-500 to-blue-500">
-                <tr>
-                  <th className="text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="hidden sm:table-cell text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Address
-                  </th>
-           
-                    <th className="hidden sm:table-cell text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Salary
-                  </th>
-                    <th className="hidden sm:table-cell text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Birth Date
-                  </th>
-                    <th className="hidden sm:table-cell text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Driving License
-                  </th>
-                     <th className="hidden sm:table-cell text-center px-4 py-4 text-xs font-medium text-white uppercase tracking-wider">
-                    Specialization
-                  </th>
-                  <th className=" px-4 py-4 text-center text-xs font-medium text-white uppercase tracking-wider">ACTION</th>
-               
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {paginatedUsers.map((user, idx) => {
-
-                  return (
-                    <motion.tr
-                      key={user.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="hover:bg-slate-50 transition-colors group"
-                    >
-                      <td className="px-4 py-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
-                              <span className="text-purple-600 font-medium text-sm uppercase">
-                                {user.name?.charAt(0)}
-                              </span>
-                            </div>
-                            <div className="flex-1 text-center">
-                              <p className="truncate font-medium text-slate-900 group-hover:text-purple-600 transition-colors">
-                                {user.name}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                      <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <Mail className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="truncate block max-w-full">{user.email}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                          <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <span className="truncate block max-w-full">{user.address}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                            <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <Euro className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="truncate block max-w-full">{user.salary||0}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                            <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <Euro className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="truncate block max-w-full">{user.birth_date}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                               <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <HardDrive className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span className="truncate block max-w-full">{user.driving_license ? 'Yes' : 'No'}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                              <td className="px-4 py-3 max-w-50">
-                        <div className="space-y-1">
-                          <div className="flex items-center justify-center gap-1 text-sm text-slate-600">
-                            <span className="truncate block max-w-full">{user.specialization}</span>
-                          </div>
-                       
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex  items-center justify-center gap-3 ">
-                          <Link href=".">
-                            <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
-                              <Eye className="w-4 h-4 text-slate-500" />
-                            </button>
-                          </Link>
-                          <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
-                            <Edit className="w-4 h-4 text-slate-500" />
-                          </button>
-                          <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
-                            <MoreVertical className="w-4 h-4 text-slate-500" />
-                          </button>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p className="text-sm text-slate-500 text-center sm:text-left">
-              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-              {Math.min(currentPage * itemsPerPage, employees.length)} of{" "}
-              {employees.length} users
-            </p>
-            <div className="flex items-center justify-center gap-2">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="p-2 border border-slate-200 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="text-sm text-slate-600">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
-                disabled={currentPage === totalPages}
-                className="p-2 border border-slate-200 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-linear-to-r from-purple-50 to-blue-50 rounded-2xl p-6 shadow-md"
-        >
-          <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-purple-500" />
-            Quick Insights
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-xl p-4">
-              <p className="text-sm text-gray-500 mb-1">User Growth</p>
-              <p className="text-2xl font-bold text-green-600">+18%</p>
-              <p className="text-xs text-gray-400 mt-1">
-                Compared to last month
+            <EmployeeTable
+              employees={paginatedUsers}
+              tenantName={tenantName}
+              onEdit={(id) =>
+                router.push(`/${tenantName}/admin/employees/edit/${id}`)
+              }
+              onDelete={(id, name) => setDeleteModal({ id, name })}
+              onRowClick={(id) =>
+                router.push(`/${tenantName}/admin/employees/${id}`)
+              }
+              t={t}
+            />
+            <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p className="text-sm text-slate-500 text-center sm:text-left">
+                {t("employees.pagination.showing")}{" "}
+                {filteredEmployees.length > 0
+                  ? (currentPage - 1) * itemsPerPage + 1
+                  : 0}{" "}
+                {t("employees.pagination.to")}{" "}
+                {Math.min(currentPage * itemsPerPage, filteredEmployees.length)}{" "}
+                {t("employees.pagination.of")} {filteredEmployees.length}{" "}
+                {t("employees.pagination.employees")}
               </p>
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="p-2 border border-slate-200 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-sm text-slate-600">
+                  {t("employees.pagination.page")} {currentPage}{" "}
+                  {t("employees.pagination.of")} {totalPages || 1}
+                </span>
+                <button
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages || 1, p + 1))
+                  }
+                  disabled={currentPage === totalPages || totalPages === 0}
+                  className="p-2 border border-slate-200 rounded-lg hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <div className="bg-white rounded-xl p-4">
-              <p className="text-sm text-gray-500 mb-1">Most Common Role</p>
-              <p className="text-xl font-bold text-purple-500">Regular Users</p>
-              <p className="text-xs text-gray-400 mt-1">
-                {stats.regularUsers} users
-              </p>
-            </div>
-            <div className="bg-white rounded-xl p-4">
-              <p className="text-sm text-gray-500 mb-1">Active Rate</p>
-              <p className="text-xl font-bold text-blue-600">
-                {Math.round((stats.activeUsers / stats.totalUsers) * 100)}%
-              </p>
-              <p className="text-xs text-gray-400 mt-1">Users active</p>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
+          <InsightsGrid
+            title={insights.title}
+            items={insights.items}
+            columns={3}
+          />
+          <DeleteConfirmModal
+            isOpen={!!deleteModal}
+            onClose={() => setDeleteModal(null)}
+            onConfirm={() => handleDelete(deleteModal!.id)}
+            title={t("employees.delete_title")}
+            itemType="employee"
+            itemName={deleteModal?.name}
+            confirmText={t("employees.delete_confirm")}
+            isLoading={isDeleting}
+            icon={<UserX className="w-6 h-6 text-red-600" />}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 }

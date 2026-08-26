@@ -1,6 +1,6 @@
-// components/ui/StatsCard.tsx
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import MotionCard from "./MotionCard";
+import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
   title: string;
@@ -9,10 +9,8 @@ interface StatsCardProps {
   bgColor: string;
   gradient?: string;
   description?: string;
-  change?: string; 
-  changeColor?: string; 
+  textColor?: string;
 }
-
 export default function StatsCard({
   title,
   value,
@@ -20,52 +18,27 @@ export default function StatsCard({
   bgColor,
   gradient,
   description,
-  change,
-  changeColor = "text-green-600 bg-green-100",
+  textColor,
 }: StatsCardProps) {
   return (
-    <MotionCard 
-      className="relative group"
-      hoverY={-6}
-      hoverScale={1.02}
-      duration={0.12}
-    >
+    <MotionCard className="relative group">
       <div
         className={`
           absolute top-0 right-0 w-32 h-32 
           bg-linear-to-br ${gradient} 
           opacity-10 rounded-full blur-2xl 
-          transition-all duration-300 ease-out
-          group-hover:opacity-20 group-hover:scale-110
+     
+        
         `}
       />
-
       <div className="relative p-6">
         <div className="flex items-center justify-between mb-4">
-          <div
-            className={`
-              p-3 rounded-xl ${bgColor} 
-              transition-all duration-300 ease-out
-              group-hover:scale-110 group-hover:shadow-lg
-            `}
-          >
+          <div className={` p-3 rounded-xl ${bgColor} ${textColor}`}>
             {icon}
           </div>
-          
+
           <div className="flex items-center gap-3">
-            {change && (
-              <span
-                className={`
-                  text-xs font-medium px-2 py-1 rounded-full
-                  ${changeColor}
-                  transition-all duration-300
-                  group-hover:scale-105
-                `}
-              >
-                {change}
-              </span>
-            )}
-            <span className="text-2xl font-bold text-gray-800 transition-all duration-300 group-hover:scale-105">
+            <span className="text-2xl font-bold text-gray-800 transition-all duration-300 ">
               {value}
             </span>
           </div>

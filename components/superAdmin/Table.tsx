@@ -19,8 +19,6 @@ import {
 } from "lucide-react";
 import { Tenant } from "@/store/services/superAdmins/tenantService";
 
-
-
 type StatusKey = "active" | "suspended" | "pending" | "expired";
 type PlanKey = "basic" | "pro" | "enterprise";
 
@@ -50,12 +48,18 @@ interface TenantsTableProps {
   sortOrder?: "asc" | "desc";
 }
 
-
-
 const statusConfig: Record<StatusKey, StatusConfig> = {
   active: { label: "Active", color: "bg-green-100 text-green-700", icon: "✅" },
-  suspended: { label: "Suspended", color: "bg-red-100 text-red-700", icon: "⛔" },
-  pending: { label: "Pending", color: "bg-yellow-100 text-yellow-700", icon: "⏳" },
+  suspended: {
+    label: "Suspended",
+    color: "bg-red-100 text-red-700",
+    icon: "⛔",
+  },
+  pending: {
+    label: "Pending",
+    color: "bg-yellow-100 text-yellow-700",
+    icon: "⏳",
+  },
   expired: { label: "Expired", color: "bg-gray-100 text-gray-700", icon: "⏰" },
 };
 
@@ -76,16 +80,15 @@ const columns: Column[] = [
   { key: "action", label: "ACTION", sortable: false },
 ];
 
-
-  const getPlanConfig = (plan: string) => {
-    const configs = {
-      Basic: "bg-slate-100 text-slate-700",
-      Professional: "bg-blue-100 text-blue-700",
-      Enterprise: "bg-purple-100 text-purple-700",
-      Premium: "bg-purple-100 text-purple-700",
-    };
-    return configs[plan as keyof typeof configs] || "bg-slate-100 text-slate-700";
+const getPlanConfig = (plan: string) => {
+  const configs = {
+    Basic: "bg-slate-100 text-slate-700",
+    Professional: "bg-blue-100 text-blue-700",
+    Enterprise: "bg-purple-100 text-purple-700",
+    Premium: "bg-purple-100 text-purple-700",
   };
+  return configs[plan as keyof typeof configs] || "bg-slate-100 text-slate-700";
+};
 
 export default function TenantsTable({
   tenants,
@@ -100,7 +103,7 @@ export default function TenantsTable({
 
   const paginatedTenants: Tenant[] = tenants.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
   const totalPages: number = Math.ceil(tenants.length / itemsPerPage);
 
@@ -153,7 +156,7 @@ export default function TenantsTable({
           <span
             className={`inline-flex px-2.5 py-1 text-xs font-medium rounded-full ${planClass}`}
           >
-            {tenant.plan ||'basic'}
+            {tenant.plan || "basic"}
           </span>
         );
 
@@ -185,8 +188,7 @@ export default function TenantsTable({
         return (
           <div className="flex items-center gap-1">
             <Euro className="w-3 h-3 text-slate-400" />
-            <span className="text-sm font-semibold text-slate-700">
-            </span>
+            <span className="text-sm font-semibold text-slate-700"></span>
           </div>
         );
 
@@ -197,13 +199,13 @@ export default function TenantsTable({
               href={`/superAdmin/tenants`}
               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
             >
-              <Eye className="w-4 h-4 text-slate-500" />
+              <Eye className="w-4 h-4 text-blue-500" />
             </Link>
             <Link
               href={`/superAdmin/tenants/${tenant.id}`}
               className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
             >
-              <Edit className="w-4 h-4 text-slate-500" />
+              <Edit className="w-4 h-4 text-green-500" />
             </Link>
             <button className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors">
               <MoreVertical className="w-4 h-4 text-slate-500" />

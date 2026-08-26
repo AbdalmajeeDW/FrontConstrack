@@ -1,15 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Eye, EyeClosed, BrickWall } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { tenantAdminLogin } from "@/store/slices/admin/tenantAdminAuthSlice";
 import { useRouter } from "next/navigation";
 import { decodeJWT } from "../AuthGuard";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
 
 const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
   tenantName,
 }) => {
+  const { t } = useTranslation();
+  useEffect(() => {
+    const lang = i18n.language || localStorage.getItem("lang") || "en";
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.lang = lang;
+  }, [i18n.language]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -22,12 +30,12 @@ const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
 
   const validateForm = () => {
     if (!email.trim()) {
-      setAlertMessage("Email is required.");
+      setAlertMessage(t("auth.email_required"));
       setShowAlert(true);
       return false;
     }
     if (!password.trim()) {
-      setAlertMessage("Password is required.");
+      setAlertMessage(t("auth.password_required"));
       setShowAlert(true);
       return false;
     }
@@ -66,41 +74,42 @@ const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
               <BrickWall size={48} />
             </div>
             <div>
-              <h1 className="text-4xl font-bold">Tenant Admin</h1>
+              <h1 className="text-4xl font-bold">
+                {/* {t("auth.tenant_admin_title")} */}
+              </h1>
               <p className="mt-3 text-sm text-slate-200 leading-relaxed">
-                Log in as an admin to your dashboard using your email and
-                password{" "}
+                {/* {t("auth.tenant_admin_description")} */}
               </p>
             </div>
           </div>
 
           <div className="p-10">
             <h2 className="text-2xl font-semibold text-slate-900 mb-4">
-              Admin Login
+              {t("auth.admin_login_title")}
             </h2>
 
             {(showAlert || error) && (
               <div className="mb-4 rounded-xl bg-red-50 border border-red-200 p-4 text-red-700">
-                {alertMessage || error || "A login error occurred.."}
+                {alertMessage || error || t("auth.login_error")}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Email
+                  {t("auth.email_label")}
                 </label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-2xl border border-slate-200 px-4 py-3 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
-                  placeholder="Enter admin email"
+                  placeholder={t("auth.email_placeholder")}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Password
+                  {t("auth.password_label")}
                 </label>
                 <div className="relative">
                   <input
@@ -108,7 +117,7 @@ const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-12 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-100"
-                    placeholder="Enter password"
+                    placeholder={t("auth.password_placeholder")}
                   />
                   <button
                     type="button"
@@ -125,7 +134,7 @@ const TenantAdminLoginForm: React.FC<{ tenantName: string }> = ({
                 disabled={isLoading}
                 className="w-full rounded-2xl bg-violet-600 px-5 py-3 text-white font-semibold transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isLoading ? "Logging in, please wait..." : "Login"}
+                {isLoading ? t("auth.logging_in") : t("auth.login_button")}
               </button>
             </form>
           </div>

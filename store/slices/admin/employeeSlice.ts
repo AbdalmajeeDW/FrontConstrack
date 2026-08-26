@@ -1,15 +1,22 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getEmployees, createEmployee, updateEmployee as updateEmployeeService, employee } from '../../services/admin/employee';
+import { getEmployees, createEmployee, updateEmployee as updateEmployeeService, employee, deleteEmployee } from '../../services/admin/employee';
 interface employeesState {
   employees: employee[];
   isLoading: boolean;
   error: string | null;
+    selectedEmployee: employee | null;
+      loading: boolean;
+
+
 }
 
 
 const initialState: employeesState = {
   employees: [],
   isLoading: false,
+    selectedEmployee: null,
+  loading: false,
+
   error: null,
 };
 
@@ -51,7 +58,17 @@ export const updateEmployee = createAsyncThunk<
     return rejectWithValue(error.response?.data?.message || 'Failed to update employee');
   }
 });
-
+export const deleteEmployeeById = createAsyncThunk(
+  "employee/deleteEmployee",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      await deleteEmployee(id);
+      return id; 
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Failed to delete employee");
+    }
+  }
+);
 const employeeSlice = createSlice({
   name: 'employee',
   initialState,
@@ -102,6 +119,25 @@ const employeeSlice = createSlice({
       .addCase(updateEmployee.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Unable to update employee';
+      })
+        .addCase(deleteEmployeeById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteEmployeeById.fulfilled, (state, action) => {
+        state.loading = false;
+        // إزالة الموظف المحذوف من القائمة
+        state.employees = state.employees.filter(
+          (emp) => emp.id !== action.payload
+        );
+        // إذا كان الموظف المحذوف هو المحدد، نقوم بإلغاء تحديده
+        if (state.selectedEmployee?.id === action.payload) {
+          state.selectedEmployee = null;
+        }
+      })
+      .addCase(deleteEmployeeById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });

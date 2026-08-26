@@ -1,0 +1,997 @@
+{
+  "invoices": {
+    "header": {
+      "title": "Invoices",
+      "subtitle": "Manage and view all employee invoices and receipts",
+      "upload_button": "Upload Invoice"
+    },
+    "stats": {
+      "total": "Total Invoices",
+      "total_desc": "All invoices",
+      "today": "Today's Invoices",
+      "today_desc": "Invoices today",
+      "month": "This Month",
+      "month_desc": "Invoices this month",
+      "employees": "Active Employees",
+      "employees_desc": "With invoices"
+    },
+    "filters": {
+      "search_placeholder": "Search by invoice number, description, or employee...",
+      "date_placeholder": "Filter by date",
+      "all_actions": "All Actions",
+
+      "all_employees": "All Employees",
+      "reset": "Reset"
+    },
+    "loading": "Loading invoices...",
+    "no_data": {
+      "title": "No Invoices Found",
+      "description": "There are no invoices available yet.",
+      "no_results": "No invoices match your search criteria."
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "invoices": "invoices",
+      "page": "Page"
+    },
+    "card": {
+      "images": "images",
+      "employee": "Employee"
+    },
+    "gallery": {
+      "close": "Close"
+    },
+    "insights": {
+      "title": "Quick Insights",
+      "total": "Total Invoices",
+      "total_desc": "All time",
+      "today": "Today's Invoices",
+      "today_desc": "Today",
+      "employees": "Active Employees",
+      "employees_desc": "With invoices"
+    },
+    "invoice": "Invoice Number"
+  },
+  "navigation": {
+    "Home": "Home",
+    "Employees": "Employees",
+    "Projects": "Projects",
+    "Invoices": "Invoices",
+    "Reports": "Reports",
+    "Tasks": "Tasks",
+    "Activity": "Activity",
+    "My Tasks": "My Tasks",
+    "Public holidays": "Public Holidays",
+    "Profile": "Profile",
+    "Logout": "Logout",
+    "Super Admins": "Super Admins",
+    "Tenants": "Tenants",
+    "Subscriptions": "Subscriptions",
+    "Dashboard": "Dashboard",
+    "Users Management": "Users Management",
+    "Companies Management": "Companies Management",
+    "Subscriptions Management": "Subscriptions Management",
+    "Employee Dashboard": "Employee Dashboard",
+    "Overview of your company and operations": "Overview of your company and operations",
+    "View all employees in the company": "View all employees in the company",
+    "View all projects in the company": "View all projects in the company",
+    "View performance and statistics Invoices": "View performance and statistics invoices",
+    "View performance and statistics reports": "View performance and statistics reports",
+    "View and manage company tasks": "View and manage company tasks",
+    "View and manage company Activity": "View and manage company activity",
+    "Welcome to your employee workspace": "Welcome to your employee workspace",
+    "View your assigned tasks": "View your assigned tasks",
+    "View public holidays": "View public holidays",
+    "Update your personal account information": "Update your personal account information",
+    "Welcome to the dashboard": "Welcome to the dashboard",
+    "Manage all users on the platform": "Manage all users on the platform",
+    "Manage all companies on the platform": "Manage all companies on the platform",
+    "Overview of subscriptions and plans": "Overview of subscriptions and plans"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}",
+    "stats": {
+      "projects": "Total Projects",
+      "projects_desc": "projects registered",
+      "employees": "Total Employees",
+      "employees_desc": "Registered employees",
+      "tasks": "Total Tasks",
+      "tasks_desc": "All tasks"
+    },
+    "quick_actions": {
+      "title": "Quick Actions",
+      "subtitle": "Manage your projects and team",
+      "new_project": "New Project",
+      "add_employee": "Add Employee",
+      "view_projects": "View All Projects"
+    },
+    "recent_projects": {
+      "title": "Recent Projects",
+      "view_all": "View All",
+      "no_projects": "No projects yet",
+      "create_first": "Create your first project"
+    },
+    "employee_overview": {
+      "title": "Employee Overview",
+      "view_all": "View All",
+      "total_employees": "Total Employees",
+      "driving_license": "With Driving License",
+      "specializations": "Specializations",
+      "average_salary": "Average Salary"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "completed": "Completed",
+    "planning": "Planning",
+    "cancelled": "Cancelled"
+  },
+  "employees": {
+    "stats": {
+      "total": "Total Employees",
+      "total_desc": "All employees",
+      "active": "Active",
+      "active_desc": "Active employees",
+      "inactive": "Inactive",
+      "inactive_desc": "Inactive employees",
+      "license": "With License",
+      "license_desc": "Have driving license"
+    },
+    "filter": "Filters",
+    "filter_all_specializations": "All Specializations",
+    "filter_all_status": "All Status",
+    "reset_filters": "Reset Filters",
+    "no_employees": "No employees found",
+    "no_results": "No results match your filters",
+    "start_adding": "Start adding employees",
+    "search_placeholder": "Search by name, email or company...",
+    "new_employee": "New Employee",
+    "add": "Add",
+    "yes": "Yes",
+    "no": "No",
+    "delete_success": "Employee deleted successfully.",
+    "delete_error": "Failed to delete employee",
+    "delete_title": "Delete Employee",
+    "delete_confirm": "Delete Employee",
+    "table": {
+      "user": "User",
+      "contact": "Contact",
+      "address": "Address",
+      "salary": "Salary",
+      "birth_date": "Birth Date",
+      "license": "Driving License",
+      "specialization": "Specialization",
+      "action": "Action",
+      "status": "Status"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "employees": "employees",
+      "page": "Page"
+    },
+    "insights": {
+      "title": "Quick Insights",
+      "average_salary": "Average Salary",
+      "employees_count": "employees",
+      "specializations": "Specializations",
+      "different_roles": "Different roles",
+      "license_holders": "License Holders",
+      "have_license": "have driving license"
+    }
+  },
+  "employeeAdd": {
+    "title": "Add New Employee",
+    "subtitle": "Create a new employee account for your workspace",
+    "success": "Employee created successfully.",
+    "error": "Failed to create employee",
+    "personal_info": "Personal Information",
+    "personal_info_desc": "Employee basic details",
+    "full_name": "Full Name",
+    "name_placeholder": "John Doe",
+    "birth_date": "Birth Date",
+    "email": "Email Address",
+    "email_placeholder": "employee@company.com",
+    "password": "Password",
+    "phone": "Phone Number",
+    "phone_placeholder": "+31",
+    "address": "Accommodation Address",
+    "address_placeholder": "Building name, street, city, country...",
+    "employment_info": "Employment & Financial Information",
+    "employment_info_desc": "Salary and work details",
+    "salary": "Monthly Salary",
+    "salary_placeholder": "2000",
+    "specialization": "Specialization",
+    "driving_license": "Driving License",
+    "has_license": "Has valid driving license",
+    "summary": "Employee Summary",
+    "summary_desc": "Review employee details",
+    "summary_name": "Name",
+    "summary_email": "Email",
+    "summary_phone": "Phone",
+    "summary_role": "Role",
+    "summary_admin": "Admin",
+    "summary_employee": "Employee",
+    "summary_specialization": "Specialization",
+    "summary_salary": "Monthly Salary",
+    "summary_birth_date": "Birth Date",
+    "summary_license": "Driving License",
+    "summary_address": "Address",
+    "yes": "Yes",
+    "no": "No",
+    "creating": "Creating Employee...",
+    "create": "Create Employee"
+  },
+  "employeeEdit": {
+    "title": "Edit Employee",
+    "subtitle": "Update employee information for",
+    "invalid_id": "Invalid employee ID",
+    "load_error": "Failed to load employee data",
+    "loading": "Loading employee data...",
+    "success": "Employee updated successfully.",
+    "update_error": "Failed to update employee",
+    "error": "An error occurred while updating employee",
+    "personal_info": "Personal Information",
+    "personal_info_desc": "Employee basic details",
+    "full_name": "Full Name",
+    "name_placeholder": "John Doe",
+    "birth_date": "Birth Date",
+    "email": "Email Address",
+    "email_placeholder": "employee@company.com",
+    "password": "Password",
+    "password_optional": "Leave blank to keep current",
+    "password_placeholder": "New password (optional)",
+    "phone": "Phone Number",
+    "phone_placeholder": "+31",
+    "address": "Accommodation Address",
+    "address_placeholder": "Building name, street, city, country...",
+    "employment_info": "Employment & Financial Information",
+    "employment_info_desc": "Salary and work details",
+    "salary": "Monthly Salary",
+    "salary_placeholder": "2000",
+    "specialization": "Specialization",
+    "driving_license": "Driving License",
+    "has_license": "Has valid driving license",
+    "summary": "Employee Summary",
+    "summary_desc": "Review employee details",
+    "summary_name": "Name",
+    "summary_email": "Email",
+    "summary_phone": "Phone",
+    "summary_specialization": "Specialization",
+    "summary_salary": "Monthly Salary",
+    "summary_birth_date": "Birth Date",
+    "summary_license": "Driving License",
+    "summary_address": "Address",
+    "yes": "Yes",
+    "no": "No",
+    "updating": "Updating Employee...",
+    "update": "Update Employee"
+  },
+  "profile": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "employee": "Employee",
+    "personal_info": "Personal Information",
+    "personal_info_desc": "Employee profile details",
+    "age": "Age",
+    "years": "years",
+    "salary": "Salary",
+    "driving_license": "Driving License",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "birth_date": "Birth Date",
+    "joined_date": "Joined Date",
+    "not_provided": "Not provided",
+    "yes": "Yes",
+    "no": "No",
+    "invoice_documents": "Invoice Documents",
+    "invoice_documents_desc": "All uploaded invoices and receipts",
+    "search_placeholder": "Search by invoice number, description, or employee...",
+    "loading_invoices": "Loading invoices...",
+    "no_invoices": "No Invoices Found",
+    "no_invoices_desc": "There are no invoices available yet.",
+    "no_results": "No invoices match your search criteria.",
+    "employee_name": "Employees Name",
+    "images": "images",
+    "delete_title": "Delete Employee",
+    "delete_confirm": "Delete Employee",
+    "delete_success": "Employee deleted successfully.",
+    "delete_error": "Failed to delete employee",
+    "invoices_error": "Failed to load invoices"
+  },
+  "projects": {
+    "stats": {
+      "total": "Total Projects",
+      "total_desc": "All projects",
+      "active": "Active Projects",
+      "active_desc": "Currently in progress",
+      "completed": "Completed",
+      "completed_desc": "Finished projects",
+      "planning": "Planning",
+      "planning_desc": "Across all projects",
+      "overdue": "Overdue",
+      "overdue_desc": "Overdue projects"
+    },
+    "status": {
+      "planning": "Planning",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "overdue": "Overdue"
+    },
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "search_placeholder": "Search by project name, location or manager...",
+    "filter_status": "All Status",
+    "filter_priority": "All Priority",
+    "filter_all": "All",
+    "new_project": "New Project",
+    "start": "start",
+    "end": "End",
+    "delete_success": "Project deleted successfully.",
+    "delete_error": "Failed to delete project",
+    "delete_title": "Delete Project",
+    "delete_confirm": "Delete Project",
+    "table": {
+      "name": "Project Name",
+      "location": "Location",
+      "client_name": "Client Name",
+      "client_phone": "Client Phone",
+      "postal_code": "Postal Code",
+      "city": "City",
+      "time": "Time",
+      "status": "Status",
+      "action": "Action"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "projects": "projects",
+      "page": "Page"
+    },
+    "insights": {
+      "title": "Quick Insights",
+      "most_active_city": "Most Active City",
+      "projects": "projects",
+      "newest_project": "Newest Project",
+      "no_projects": "No projects",
+      "ending_this_month": "Ending This Month",
+      "deadlines": "Deadlines approaching"
+    }
+  },
+  "projectDetails": {
+    "loading": "Loading project details...",
+    "load_error": "Failed to load project data",
+    "not_found": "Project Not Found",
+    "not_found_desc": "The project you're looking for doesn't exist.",
+    "go_back": "Go Back",
+    "project_info": "Project Information",
+    "project_info_desc": "Complete project details",
+    "description": "Description",
+    "no_description": "No description provided",
+    "client_name": "Client Name",
+    "client_phone": "Client Phone",
+    "location": "Location",
+    "city": "City",
+    "postal_code": "Postal Code",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "status": "Status",
+    "not_specified": "Not specified",
+    "not_provided": "Not provided",
+    "no_location": "No location specified",
+    "no_city": "No city",
+    "unknown": "Unknown"
+  },
+  "addProjects": {
+    "create_title": "Create New Project",
+    "create_subtitle": "Add a new construction project",
+    "create_name": "Project Name",
+    "create_name_placeholder": "Enter project name",
+    "create_name_required": "Project name is required",
+    "create_city": "City",
+    "create_city_placeholder": "Enter City name",
+    "create_client_name": "Client Name",
+    "create_client_name_placeholder": "Enter client name",
+    "create_client_phone": "Client Phone",
+    "create_client_phone_placeholder": "Enter client phone",
+    "create_location": "Location",
+    "create_location_placeholder": "Enter project location",
+    "create_postal_code": "Postal Code",
+    "create_postal_code_placeholder": "Enter postal code",
+    "create_description": "Description",
+    "create_description_placeholder": "Describe the project...",
+    "create_start_date": "Start Date",
+    "create_end_date": "End Date",
+    "create_success": "Project created successfully",
+    "create_error": "Failed to create project",
+    "create_saving": "Saving...",
+    "create_button": "Create Project"
+  },
+  "editProjects": {
+    "edit_title": "Edit Project",
+    "edit_subtitle": "Update project:",
+    "edit_status": "Status",
+    "edit_loading": "Loading project data...",
+    "edit_load_error": "Failed to load project data",
+    "edit_success": "Project updated successfully",
+    "edit_error": "Failed to update project",
+    "edit_updating": "Updating...",
+    "edit_button": "Update Project",
+    "status": {
+      "planning": "Planning",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "tasks": {
+    "choose_images": "Choose Images",
+    "no_employees_selected": "No employees selected",
+    "fix_errors": "Please fill in all required fields",
+
+    "search_placeholder": "Search for tasks...",
+    "filter_all_projects": "All Projects",
+    "filter_all_priorities": "All Priorities",
+    "filter_all_status": "All Status",
+    "new_task": "New Task",
+    "no_tasks": "No tasks available",
+    "no_tasks_filter": "No tasks match the selected filter.",
+    "no_tasks_add": "Add a new task to start.",
+    "create_success": "Created task successfully.",
+    "update_success": "Task updated successfully!",
+    "delete_success": "Task deleted successfully.",
+    "delete_error": "Failed to delete task",
+    "delete_title": "Delete Task",
+    "delete_confirm": "Delete Task",
+    "assign_employees": "Assign Employees",
+    "select_employees": "Select Employees (Hold Ctrl/Cmd for multiple)",
+    "select_employees_hint": "Hold Ctrl (Windows) or Cmd (Mac) to select multiple employees",
+    "selected_count": "Selected ({{count}}):",
+    "images_label": "Task Images",
+    "images": "images",
+    "images_limit": "(max 20 images, 5MB each)",
+    "saving": "Saving...",
+    "update": "Update",
+    "save": "Save",
+    "cancel": "Cancel",
+    "priority": {
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "status": {
+      "in_progress": "In Progress",
+      "done": "Done"
+    },
+    "stats": {
+      "all": "All Tasks",
+      "all_desc": "Total assigned tasks",
+      "completed": "Completed Tasks",
+      "completed_desc": "Finished tasks",
+      "in_progress": "In Progress",
+      "in_progress_desc": "Currently active",
+      "overdue": "Overdue Tasks",
+      "overdue_desc": "Need attention",
+      "high_priority": "High Priority",
+      "high_priority_desc": "Urgent tasks"
+    }
+  },
+  "activities": {
+    "search": "Search by employee name, message, or action...",
+    "filter_employee": "All Employees",
+    "filter_all_employees": "All Employees",
+    "filter_all_actions": "All Actions",
+    "most_active": "Most Active Employees",
+    "no_email": "No email",
+    "activities": "activities",
+    "employee_prefix": "Employee",
+    "load_error": "Failed to load activities",
+    "stats": {
+      "today": "Today's Activities",
+      "today_desc": "Activities today",
+      "month": "This Month",
+      "month_desc": "Activities this month",
+      "total": "Total Activities",
+      "total_desc": "All time"
+    },
+    "filter": {
+      "all_actions": "All Actions",
+      "login": "Login",
+      "logout": "Logout",
+      "upload_images_for_task": "Update Task",
+      "upload_invoice": "Upload Invoice",
+      "view_invoices": "View Invoice",
+      "view_tasks": "View Tasks"
+    },
+    "table": {
+      "employee": "Employee",
+      "action": "Action",
+      "message": "Message / Details",
+      "time": "Time"
+    },
+    "loading": "Loading activities...",
+    "no_data": {
+      "title": "No activities found",
+      "description": "Activities will appear here",
+      "no_results": "No activities match your search criteria"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "to": "to",
+      "of": "of",
+      "activities": "activities",
+      "page": "Page"
+    },
+    "insights": {
+      "title": "Quick Insights",
+      "most_active": "Most Active Action",
+      "most_active_desc": "Most frequent activity",
+      "today": "Today's Activities",
+      "today_desc": "Activities today",
+      "employees": "Active Employees",
+      "employees_desc": "Most active employees"
+    }
+  },
+  "holidays": {
+    "title": "Public Holidays",
+    "subtitle": "2026 Calendar",
+    "stats": {
+      "total": "Total Holidays",
+      "national": "National",
+      "religious": "Religious",
+      "weekend": "Weekend"
+    },
+    "search": "Search holidays...",
+    "filter": {
+      "all": "All Types",
+      "national": "National",
+      "religious": "Religious"
+    },
+    "no_results": "No holidays match your search criteria",
+    "no_holidays": "No holidays found",
+    "no_holidays_desc": "Try adjusting your search or filter criteria",
+    "types": {
+      "national": "National",
+      "religious": "Religious"
+    },
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "sunday_monday": "Sunday & Monday",
+      "friday_saturday": "Friday & Saturday"
+    },
+    "new_year": "New Year's Day",
+    "new_year_desc": "Celebration of the start of the new year. Many people attend fireworks and family gatherings.",
+    "good_friday": "Good Friday",
+    "good_friday_desc": "Commemoration of the crucifixion of Jesus. Many businesses remain open but some may close early.",
+    "easter": "Easter Sunday & Monday",
+    "easter_desc": "Celebration of the resurrection of Jesus. Two-day celebration with family gatherings and Easter egg hunts.",
+    "kings_day": "King's Day",
+    "kings_day_desc": "Celebration of the King's birthday. The entire country turns orange with festivals, flea markets, and parties.",
+    "liberation_day": "Liberation Day",
+    "liberation_day_desc": "Celebration of the end of WWII occupation. Special celebration in 2026 as it's a lustrum year (every 5 years).",
+    "ascension_day": "Ascension Day",
+    "ascension_day_desc": "Commemoration of Jesus' ascension to heaven. Many people take a long weekend.",
+    "pentecost": "Pentecost",
+    "pentecost_desc": "Celebration of the descent of the Holy Spirit. Two-day celebration with church services and family time.",
+    "christmas": "Christmas Day",
+    "christmas_desc": "Celebration of the birth of Jesus. Two-day celebration with family gatherings, feasts, and gift-giving."
+  },
+  "myTasks": {
+    "title": "My Tasks",
+    "subtitle": "Manage and track all tasks assigned to you",
+    "stats": {
+      "my_tasks": "My Tasks",
+      "my_tasks_desc": "Assigned to you",
+      "completed": "Completed",
+      "completed_desc": "Finished tasks",
+      "in_progress": "In Progress",
+      "in_progress_desc": "Ongoing tasks"
+    },
+    "search": "Search my tasks...",
+    "filter": {
+      "all_priorities": "All Priorities",
+      "all_status": "All Status",
+      "urgent": "Urgent",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low",
+      "in_progress": "In Progress",
+      "done": "Done"
+    },
+    "view_mode": {
+      "list": "List View",
+      "board": "Board View"
+    },
+    "no_tasks": "No tasks assigned to you",
+    "no_tasks_desc": "You don't have any tasks yet.",
+    "loading": "Loading tasks...",
+    "error": "An error occurred while loading tasks",
+    "task": {
+      "status": "Status",
+      "priority": "Priority",
+      "project": "Project",
+      "city": "City",
+      "location": "Location",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "description": "Description",
+      "assigned_to": "Assigned To",
+      "created_by": "Created By",
+      "no_description": "No description",
+      "no_location": "No location specified",
+      "no_city": "No city"
+    },
+    "priority": {
+      "urgent": "Urgent",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "status": {
+      "in_progress": "In Progress",
+      "done": "Done"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "update": "Update",
+      "create": "Create"
+    },
+    "update_success": "Task updated successfully!",
+    "update_error": "Failed to update task",
+    "delete_success": "Task deleted successfully.",
+    "delete_error": "Failed to delete task",
+    "delete_title": "Delete Task",
+    "delete_confirm": "Confirm Delete",
+    "delete_message": "Are you sure you want to delete this task?"
+  },
+  "validation": {
+    "required": "is required",
+    "invalid": "is invalid",
+    "min_length": "must be at least {{count}} characters",
+    "max_length": "must be less than {{count}} characters",
+
+    "name": {
+      "required": "Name is required",
+      "min_length": "Name must be at least 3 characters",
+      "project_required": "Project name is required",
+      "project_min_length": "Project name must be at least 3 characters",
+      "task_required": "Task name is required",
+      "task_min_length": "Task name must be at least 3 characters",
+      "company_required": "Company Name is required",
+      "company_empty": "Company Name cannot be empty spaces only",
+      "company_no_spaces": "Company Name cannot contain spaces",
+      "company_no_leading_space": "Company Name cannot start with a space",
+      "admin_required": "Admin Name is required"
+    },
+
+    "email": {
+      "required": "Email is required",
+      "invalid": "Invalid email address",
+      "admin_required": "Admin Email is required"
+    },
+
+    "password": {
+      "required": "Password is required",
+      "min_length": "Password must be at least 8 characters long",
+      "uppercase": "Password must contain at least one uppercase letter",
+      "lowercase": "Password must contain at least one lowercase letter",
+      "number": "Password must contain at least one number",
+      "special": "Password must contain at least one special character",
+      "admin_required": "Admin Password is required"
+    },
+
+    "birth_date": {
+      "required": "Birth date is required",
+      "min_age": "Age must be at least 18 years old"
+    },
+
+    "phone": {
+      "required": "Phone number is required",
+      "digits_only": "Phone number must contain only digits",
+      "length": "Phone number must be between 8 and 15 digits",
+      "client_required": "Client phone is required"
+    },
+
+    "address": {
+      "required": "Address is required"
+    },
+
+    "salary": {
+      "required": "Salary is required",
+      "positive": "Salary must be a positive number greater than 0"
+    },
+
+    "city": {
+      "required": "City is required",
+      "max_length": "City name must be less than 100 characters",
+      "invalid_chars": "City name can only contain letters, spaces, hyphens, and apostrophes"
+    },
+
+    "postal_code": {
+      "required": "Postal code is required",
+      "invalid": "Postal code must be 4 digits followed by 2 capital letters (e.g. 1234AB)"
+    },
+
+    "location": {
+      "required": "Location is required"
+    },
+
+    "client_name": {
+      "required": "Client name is required"
+    },
+
+    "status": {
+      "required": "Status is required",
+      "invalid": "Invalid status"
+    },
+
+    "priority": {
+      "required": "Priority is required",
+      "invalid": "Invalid priority level"
+    },
+
+    "start_date": {
+      "required": "Start date is required",
+      "past": "Start date cannot be in the past"
+    },
+
+    "end_date": {
+      "required": "End date is required"
+    },
+
+    "description": {
+      "required": "Description is required",
+      "max_length": "Description must be less than 500 characters"
+    },
+
+    "house_number": {
+      "required": "House number is required",
+      "max_length": "House number must be less than 20 characters",
+      "invalid": "Invalid house number format"
+    },
+
+    "worker_arrival_time": {
+      "required": "Worker arrival time is required",
+      "invalid": "Invalid time format (HH:MM)"
+    },
+
+    "task_type": {
+      "required": "Task type is required",
+      "max_length": "Task type must be less than 100 characters"
+    },
+
+    "work_area": {
+      "required": "Work area is required"
+    },
+
+    "bus_number": {
+      "required": "Bus number is required",
+      "max_length": "Bus number must be less than 20 characters",
+      "invalid": "Invalid bus number format"
+    },
+
+    "driver_name": {
+      "required": "Driver name is required"
+    },
+
+    "industry": {
+      "required": "Industry is required"
+    },
+
+    "database_name": {
+      "required": "Database Name is required"
+    },
+
+    "kvk_number": {
+      "required": "KVK Number is required"
+    },
+
+    "btw_number": {
+      "required": "BTW Number is required"
+    },
+
+    "max_employees": {
+      "required": "Employees count is required",
+      "min": "Minimum number of employees is 3"
+    }
+  },
+  "auth": {
+    "tenant_admin_title": "Tenant Admin",
+    "tenant_admin_description": "Log in as an admin to your dashboard using your email and password",
+    "admin_login_title": "Login",
+    "email_label": "Email",
+    "email_placeholder": "Enter  email",
+    "email_required": "Email is required",
+    "password_label": "Password",
+    "password_placeholder": "Enter password",
+    "password_required": "Password is required",
+    "login_button": "Login",
+    "logging_in": "Logging in, please wait...",
+    "login_error": "A login error occurred",
+    "show_password": "Show password",
+    "hide_password": "Hide password"
+  },
+  "taskCard": {
+    "status": {
+      "in_progress": "In Progress",
+      "completed": "Completed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "images": "images",
+    "image_count": "image|images",
+    "click_to_view": "Click to view all",
+    "view": "View",
+    "due_date": "Due Date",
+    "area": "Area (m²)",
+    "location": "Work Location",
+    "bus": "Bus",
+    "driver": "Driver",
+    "arrival_time": "Arrival Time",
+    "in_progress_title": "In Progress",
+    "completed_title": "Completed",
+    "edit_title": "Edit",
+    "delete_title": "Delete",
+    "already_in_progress": "Task \"{{name}}\" is already in progress",
+    "already_completed": "Task \"{{name}}\" is already completed",
+    "confirm_in_progress": "Change task status to in progress?",
+    "confirm_completed": "Move task \"{{name}}\" to Completed?",
+    "images_title": "Task Images",
+    "no_images": "No images available",
+    "close": "Close",
+    "click_to_close": "Click anywhere to close"
+  },
+  "employeeDashboard": {
+    "welcome": "Welcome back, {{name}}",
+    "employee": "Employee",
+    "expired": "Expired",
+    "days_left": "{{count}} day left",
+    "days_left_plural": "{{count}} days left",
+    "hours_left": "{{count}} hour left",
+    "hours_left_plural": "{{count}} hours left",
+    "current_tasks": "My Current Tasks",
+    "view_all": "View All",
+    "in_progress": "In Progress",
+    "completed": "Completed",
+    "remaining": "Remaining",
+    "driver_name": "Driver Name",
+    "bus_number": "Bus Number",
+    "location": "Location",
+    "deadline": "Deadline",
+    "stats": {
+      "all": "All Tasks",
+      "all_desc": "Total assigned tasks",
+      "completed": "Completed Tasks",
+      "completed_desc": "Finished tasks",
+      "in_progress": "In Progress",
+      "in_progress_desc": "Currently active",
+      "overdue": "Overdue Tasks",
+      "overdue_desc": "Need attention",
+      "high_priority": "High Priority",
+      "high_priority_desc": "Urgent tasks"
+    }
+  },
+  "addTask": {
+    "fields": {
+      "task_name": "Task Name",
+      "project_name": "Project Name",
+      "task_description": "Task Description",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "priority": "Priority",
+      "task_type": "Task Type",
+      "city": "City",
+      "postal_code": "Postal Code",
+      "house_number": "House Number",
+      "arrival_time": "Arrival Time",
+      "work_area": "Work Area (m²)",
+      "bus_number": "Bus Number",
+      "driver_name": "Driver Name"
+    },
+    "placeholders": {
+      "task_name": "e.g. Foundation Excavation",
+      "task_description": "Describe the task...",
+      "task_type": "e.g. Concrete Work",
+      "city": "e.g. Amsterdam",
+      "postal_code": "e.g. 1012 AB",
+      "house_number": "e.g. 25A",
+      "work_area": "e.g. 250",
+      "bus_number": "e.g. BUS-01",
+      "driver_name": "e.g. John Smith"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "add_title": "Add New Task",
+    "edit_title": "Edit Task",
+    "basic_info": "Basic Task Information",
+    "location_info": "Task Location",
+    "details_info": "Additional Details",
+    "transportation_info": "Transportation",
+    "assign_employees": "Assign Employees",
+    "select_employees": "Select Employees (Hold Ctrl/Cmd for multiple)",
+    "select_employees_hint": "Hold Ctrl (Windows) or Cmd (Mac) to select multiple employees",
+    "selected_count": "Selected ({{count}}):",
+    "no_employees_selected": "No employees selected",
+    "images_label": "Task Images",
+    "images_limit": "(max 20 images, 5MB each)",
+    "clear_all": "Clear All",
+    "saved": "Saved",
+    "choose_images": "Choose Images",
+    "max_images": "Max 20 images",
+    "images": "images",
+    "image_max": "You can upload maximum 20 images",
+    "image_too_large": "{{name}} is too large (max 5MB)",
+    "image_invalid": "{{name}} is not an image",
+    "cancel": "Cancel",
+    "save": "Save",
+    "update": "Update",
+    "saving": "Saving...",
+    "create_success": "Task created successfully",
+    "update_success": "Task updated successfully",
+    "create_error": "Failed to create task",
+    "update_error": "Failed to update task",
+    "fix_errors": "Please fix all errors before submitting"
+  },
+
+  "specializations": {
+    "select": "Select Specialization",
+    "concrete_worker": "Concrete Worker",
+    "electrician": "Electrician",
+    "plumber": "Plumber",
+    "carpenter": "Carpenter",
+    "steel_fixer": "Steel Fixer",
+    "painter": "Painter",
+    "tiler": "Tiler",
+    "welder": "Welder",
+    "driver": "Driver",
+    "safety_officer": "Safety Officer",
+    "site_supervisor": "Site Supervisor",
+    "foreman": "Foreman",
+    "not_specified": "Not specified"
+  },
+  "upload_receipt": {
+    "title": "New Invoice",
+    "subtitle": "Fill in the details below",
+    "select_employee_label": "Select Employee",
+    "select_employee_placeholder": "Select an employee...",
+    "select_employee": "Please select an employee",
+    "description": "Description",
+    "description_placeholder": "Add a short description...",
+    "images": "Invoice Images",
+    "click_to_upload": "Click to upload",
+    "upload_hint": "PNG, JPG, WEBP up to 10MB",
+    "no_images": "Please select at least one image",
+    "success": "Invoice uploaded successfully!",
+    "error": "Failed to upload invoice",
+    "cancel": "Cancel",
+    "upload": "Upload Invoice",
+    "processing": "Processing...",
+    "select_employee_required": "Please select an employee",
+    "images_required": "Please select at least one image"
+  }
+}

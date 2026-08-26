@@ -15,7 +15,7 @@ const initialState: EmployeeState = {
   error: null,
 };
 
-export const fetchEmployee = createAsyncThunk<EmployeeUser, number, { rejectValue: string }>(
+export const fetchEmployee = createAsyncThunk<EmployeeUser, number, { rejectValue: string, source?: string }>(
   'employeeProfile/fetchEmployee',
   async (employeeId, { rejectWithValue }) => {
     try {

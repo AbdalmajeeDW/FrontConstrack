@@ -50,15 +50,15 @@ export default function HomePage() {
       return;
     }
 
-    if (tenantAdmin.role === "tenant_admin") {
+    if (tenantAdmin.roleEn === "tenant_admin") {
       router.replace(`/${tenantName}/`);
 
       return;
     }
 
     if (
-      tenantAdmin.role === "tenant_employee" ||
-      tenantAdmin.role === "employee"
+      tenantAdmin.roleEn === "tenant_employee" ||
+      tenantAdmin.roleEn === "employee"
     ) {
       router.replace(`/${tenantName}/employee`);
 

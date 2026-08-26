@@ -15,6 +15,7 @@ export interface employee {
   createdAt?: string;
   updatedAt?: string;
   role?: string;
+  is_active?:boolean
 }
 
 export async function getEmployees(): Promise<employee[]> {
@@ -30,7 +31,12 @@ export async function getEmployeeById(id: number): Promise<employee> {
   );
   return response.data;
 }
-
+export async function deleteEmployee(id: number): Promise<void> {
+  const response = await api.delete(
+    `${API_ENDPOINTS_ADMIN.EMPLOYEES.DELETE(id)}`,
+  );
+  return response.data;
+}
 export async function createEmployee(employeeData: Partial<employee>) {
   const response = await api.post<employee>(
     `${API_ENDPOINTS_ADMIN.EMPLOYEES.CREATE}`,

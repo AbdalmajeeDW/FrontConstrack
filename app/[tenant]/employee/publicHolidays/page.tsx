@@ -10,22 +10,22 @@ import {
   Gift,
   Star,
   Clock,
-  ChevronRight,
   Filter,
   Search,
   Sun,
   Moon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const holidaysData = [
   {
     id: 1,
-    title: "New Year's Day",
+    titleKey: "holidays.new_year",
     date: "2026-01-01",
-    day: "Thursday",
+    dayKey: "holidays.days.thursday",
     dutchName: "Nieuwjaarsdag",
-    type: "national",
-    description: "Celebration of the start of the new year. Many people attend fireworks and family gatherings.",
+    typeKey: "holidays.types.national",
+    descriptionKey: "holidays.new_year_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-blue-500 to-purple-500",
     bgColor: "bg-blue-100",
@@ -33,12 +33,12 @@ const holidaysData = [
   },
   {
     id: 2,
-    title: "Good Friday",
+    titleKey: "holidays.good_friday",
     date: "2026-04-03",
-    day: "Friday",
+    dayKey: "holidays.days.friday",
     dutchName: "Goede Vrijdag",
-    type: "religious",
-    description: "Commemoration of the crucifixion of Jesus. Many businesses remain open but some may close early.",
+    typeKey: "holidays.types.religious",
+    descriptionKey: "holidays.good_friday_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-purple-500 to-pink-500",
     bgColor: "bg-purple-100",
@@ -46,12 +46,12 @@ const holidaysData = [
   },
   {
     id: 3,
-    title: "Easter Sunday & Monday",
+    titleKey: "holidays.easter",
     date: "2026-04-05 - 2026-04-06",
-    day: "Sunday & Monday",
+    dayKey: "holidays.days.sunday_monday",
     dutchName: "Pasen",
-    type: "religious",
-    description: "Celebration of the resurrection of Jesus. Two-day celebration with family gatherings and Easter egg hunts.",
+    typeKey: "holidays.types.religious",
+    descriptionKey: "holidays.easter_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-pink-500 to-rose-500",
     bgColor: "bg-pink-100",
@@ -59,12 +59,12 @@ const holidaysData = [
   },
   {
     id: 4,
-    title: "King's Day",
+    titleKey: "holidays.kings_day",
     date: "2026-04-27",
-    day: "Monday",
+    dayKey: "holidays.days.monday",
     dutchName: "Koningsdag",
-    type: "national",
-    description: "Celebration of the King's birthday. The entire country turns orange with festivals, flea markets, and parties.",
+    typeKey: "holidays.types.national",
+    descriptionKey: "holidays.kings_day_desc",
     icon: <Gift className="w-5 h-5" />,
     color: "from-orange-500 to-red-500",
     bgColor: "bg-orange-100",
@@ -72,12 +72,12 @@ const holidaysData = [
   },
   {
     id: 5,
-    title: "Liberation Day",
+    titleKey: "holidays.liberation_day",
     date: "2026-05-05",
-    day: "Tuesday",
+    dayKey: "holidays.days.tuesday",
     dutchName: "Bevrijdingsdag",
-    type: "national",
-    description: "Celebration of the end of WWII occupation. Special celebration in 2026 as it's a lustrum year (every 5 years).",
+    typeKey: "holidays.types.national",
+    descriptionKey: "holidays.liberation_day_desc",
     icon: <Gift className="w-5 h-5" />,
     color: "from-red-500 to-orange-500",
     bgColor: "bg-red-100",
@@ -85,12 +85,12 @@ const holidaysData = [
   },
   {
     id: 6,
-    title: "Ascension Day",
+    titleKey: "holidays.ascension_day",
     date: "2026-05-14",
-    day: "Thursday",
+    dayKey: "holidays.days.thursday",
     dutchName: "Hemelvaartsdag",
-    type: "religious",
-    description: "Commemoration of Jesus' ascension to heaven. Many people take a long weekend.",
+    typeKey: "holidays.types.religious",
+    descriptionKey: "holidays.ascension_day_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-indigo-500 to-blue-500",
     bgColor: "bg-indigo-100",
@@ -98,12 +98,12 @@ const holidaysData = [
   },
   {
     id: 7,
-    title: "Pentecost",
+    titleKey: "holidays.pentecost",
     date: "2026-05-24 - 2026-05-25",
-    day: "Sunday & Monday",
+    dayKey: "holidays.days.sunday_monday",
     dutchName: "Pinksteren",
-    type: "religious",
-    description: "Celebration of the descent of the Holy Spirit. Two-day celebration with church services and family time.",
+    typeKey: "holidays.types.religious",
+    descriptionKey: "holidays.pentecost_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-violet-500 to-purple-500",
     bgColor: "bg-violet-100",
@@ -111,12 +111,12 @@ const holidaysData = [
   },
   {
     id: 8,
-    title: "Christmas Day",
+    titleKey: "holidays.christmas",
     date: "2026-12-25 - 2026-12-26",
-    day: "Friday & Saturday",
+    dayKey: "holidays.days.friday_saturday",
     dutchName: "Kerstmis",
-    type: "religious",
-    description: "Celebration of the birth of Jesus. Two-day celebration with family gatherings, feasts, and gift-giving.",
+    typeKey: "holidays.types.religious",
+    descriptionKey: "holidays.christmas_desc",
     icon: <Star className="w-5 h-5" />,
     color: "from-green-500 to-emerald-500",
     bgColor: "bg-green-100",
@@ -124,43 +124,46 @@ const holidaysData = [
   },
 ];
 
-const holidayStats = {
-  total: holidaysData.length,
-  national: holidaysData.filter(h => h.type === "national").length,
-  religious: holidaysData.filter(h => h.type === "religious").length,
-  weekends: holidaysData.filter(h => h.day.includes("Sunday") || h.day.includes("Saturday")).length,
-};
-
 export default function PublicHolidays() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all");
 
+  const holidayStats = {
+    total: holidaysData.length,
+    national: holidaysData.filter(
+      (h) => t(h.typeKey) === t("holidays.types.national"),
+    ).length,
+    religious: holidaysData.filter(
+      (h) => t(h.typeKey) === t("holidays.types.religious"),
+    ).length,
+    weekends: holidaysData.filter(
+      (h) =>
+        t(h.dayKey).includes("Sunday") ||
+        t(h.dayKey).includes("Saturday") ||
+        t(h.dayKey).includes("الأحد") ||
+        t(h.dayKey).includes("السبت"),
+    ).length,
+  };
+
   const filteredHolidays = holidaysData.filter((holiday) => {
-    const matchesSearch = holiday.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          holiday.dutchName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = selectedType === "all" || holiday.type === selectedType;
+    const search = searchTerm.toLowerCase();
+    const title = t(holiday.titleKey).toLowerCase();
+    const dutchName = holiday.dutchName.toLowerCase();
+    const type = t(holiday.typeKey).toLowerCase();
+
+    const matchesSearch = title.includes(search) || dutchName.includes(search);
+    const matchesType =
+      selectedType === "all" ||
+      type === t("holidays.types.national").toLowerCase() ||
+      type === t("holidays.types.religious").toLowerCase();
+
     return matchesSearch && matchesType;
   });
-
-  const getDayName = (dateString: string) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const date = new Date(dateString);
-    return days[date.getDay()];
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-8">
       <div className="mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -174,35 +177,52 @@ export default function PublicHolidays() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-slate-800">
-                    Public Holidays 
+                    {t("holidays.title")}
                   </h1>
                   <p className="text-sm text-slate-500">
-                    2026 Calendar • {holidaysData.length} Official Holidays
+                    {t("holidays.subtitle")} • {holidaysData.length}{" "}
+                    {t("holidays.stats.total")}
                   </p>
                 </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl shadow-sm">
-                <Sun className="w-4 h-4 text-yellow-500" />
-                <span className="text-sm text-slate-600">2026</span>
-                <Moon className="w-4 h-4 text-slate-400" />
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* Stats Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
         >
           {[
-            { label: "Total Holidays", value: holidayStats.total, icon: Calendar, color: "from-blue-500 to-cyan-500", bg: "bg-blue-100" },
-            { label: "National", value: holidayStats.national, icon: Building2, color: "from-orange-500 to-red-500", bg: "bg-orange-100" },
-            { label: "Religious", value: holidayStats.religious, icon: Users, color: "from-purple-500 to-pink-500", bg: "bg-purple-100" },
-            { label: "Weekend", value: holidayStats.weekends, icon: Clock, color: "from-green-500 to-emerald-500", bg: "bg-green-100" },
+            {
+              label: t("holidays.stats.total"),
+              value: holidayStats.total,
+              icon: Calendar,
+              color: "from-blue-500 to-cyan-500",
+              bg: "bg-blue-100",
+            },
+            {
+              label: t("holidays.stats.national"),
+              value: holidayStats.national,
+              icon: Building2,
+              color: "from-orange-500 to-red-500",
+              bg: "bg-orange-100",
+            },
+            {
+              label: t("holidays.stats.religious"),
+              value: holidayStats.religious,
+              icon: Users,
+              color: "from-purple-500 to-pink-500",
+              bg: "bg-purple-100",
+            },
+            {
+              label: t("holidays.stats.weekend"),
+              value: holidayStats.weekends,
+              icon: Clock,
+              color: "from-green-500 to-emerald-500",
+              bg: "bg-green-100",
+            },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -214,9 +234,13 @@ export default function PublicHolidays() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
+                  <p className="text-2xl font-bold text-slate-800">
+                    {stat.value}
+                  </p>
                 </div>
-                <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center bg-gradient-to-br ${stat.color}`}>
+                <div
+                  className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center bg-gradient-to-br ${stat.color}`}
+                >
                   <stat.icon className="w-5 h-5 text-white" />
                 </div>
               </div>
@@ -224,37 +248,6 @@ export default function PublicHolidays() {
           ))}
         </motion.div>
 
-        {/* Filters */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-6 flex flex-wrap items-center gap-4"
-        >
-          <div className="flex items-center gap-2 flex-1 min-w-[200px]">
-            <Search className="w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search holidays..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 bg-transparent outline-none text-sm text-slate-700 placeholder:text-slate-400"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-slate-400" />
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-orange-500"
-            >
-              <option value="all">All Types</option>
-              <option value="national">National</option>
-              <option value="religious">Religious</option>
-            </select>
-          </div>
-        </motion.div>
-
-        {/* Holidays Grid */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -273,13 +266,15 @@ export default function PublicHolidays() {
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <h3 className="font-semibold text-slate-800 group-hover:text-orange-600 transition-colors">
-                      {holiday.title}
+                      {t(holiday.titleKey)}
                     </h3>
                     <p className="text-sm text-slate-500">
                       {holiday.dutchName}
                     </p>
                   </div>
-                  <div className={`w-10 h-10 rounded-xl ${holiday.bgColor} flex items-center justify-center`}>
+                  <div
+                    className={`w-10 h-10 rounded-xl ${holiday.bgColor} flex items-center justify-center`}
+                  >
                     {holiday.icon}
                   </div>
                 </div>
@@ -291,25 +286,25 @@ export default function PublicHolidays() {
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Clock className="w-4 h-4 text-slate-400" />
-                    <span className="text-slate-700">{holiday.day}</span>
+                    <span className="text-slate-700">{t(holiday.dayKey)}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="w-4 h-4 text-slate-400" />
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      holiday.type === 'national' 
-                        ? 'bg-orange-100 text-orange-700' 
-                        : 'bg-purple-100 text-purple-700'
-                    }`}>
-                      {holiday.type.charAt(0).toUpperCase() + holiday.type.slice(1)}
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                        t(holiday.typeKey) === t("holidays.types.national")
+                          ? "bg-orange-100 text-orange-700"
+                          : "bg-purple-100 text-purple-700"
+                      }`}
+                    >
+                      {t(holiday.typeKey)}
                     </span>
                   </div>
                 </div>
 
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  {holiday.description}
+                  {t(holiday.descriptionKey)}
                 </p>
-
-                
               </div>
             </motion.div>
           ))}
@@ -322,14 +317,14 @@ export default function PublicHolidays() {
             className="text-center py-16 bg-white rounded-2xl border border-slate-100"
           >
             <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-700 mb-2">No holidays found</h3>
+            <h3 className="text-lg font-medium text-slate-700 mb-2">
+              {t("holidays.no_holidays")}
+            </h3>
             <p className="text-sm text-slate-500">
-              Try adjusting your search or filter criteria
+              {t("holidays.no_holidays_desc")}
             </p>
           </motion.div>
         )}
-
- 
       </div>
     </div>
   );

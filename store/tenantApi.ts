@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const tenantApi = axios.create({
-  baseURL: 'http://localhost:3000/tenant/',
- 
+ baseURL: 'http://187.124.0.42:3007/tenant/', 
 });
 
 tenantApi.interceptors.request.use(

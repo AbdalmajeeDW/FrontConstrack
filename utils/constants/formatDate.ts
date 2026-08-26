@@ -1,4 +1,4 @@
-export const formatDateOnly = (date?: string | null) => {
+export const formatDateOnly = (date?: string | null,locale?:string) => {
   if (!date) return "—";
 
   const parts = date.substring(0, 10).split("-");
@@ -15,7 +15,7 @@ export const formatDateOnly = (date?: string | null) => {
 
   if (isNaN(parsedDate.getTime())) return "—";
 
-  return new Intl.DateTimeFormat("en-EG", {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year:"numeric"

@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { activateTenant, createTenant, getTenants, Tenant, updateTenant as updateTenantService } from '../../services/superAdmins/tenantService';
+import { activateTenant, createTenant, getTenantById, getTenants, Tenant, updateTenant as updateTenantService } from '../../services/superAdmins/tenantService';
 
 interface TenantState {
   tenants: Tenant[];
   isLoading: boolean;
+    selectedTenant: Tenant | null;
+
   error: string | null;
 }
 
@@ -11,6 +13,8 @@ interface TenantState {
 const initialState: TenantState = {
   tenants: [],
   isLoading: false,
+    selectedTenant: null,
+
   error: null,
 };
 
@@ -26,7 +30,18 @@ export const fetchTenants = createAsyncThunk<
     return rejectWithValue(error.response?.data?.message || 'Failed to load tenants');
   }
 });
-
+export const fetchTenantById = createAsyncThunk<
+  Tenant,
+  number,
+  { rejectValue: string }
+>('tenant/fetchTenantById', async (id, { rejectWithValue }) => {
+  try {
+    const tenant = await getTenantById(id);
+    return tenant;
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to load tenant');
+  }
+});
 export const addTenant = createAsyncThunk<
   Tenant,
   Partial<Tenant>,
@@ -128,7 +143,19 @@ const tenantSlice = createSlice({
       .addCase(activateTenantById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Unable to activate tenant';
-      });
+      })
+           .addCase(fetchTenantById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTenantById.fulfilled, (state, action) => {
+        state.selectedTenant = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchTenantById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || 'Unable to load tenant';
+      })
   },
 });
 

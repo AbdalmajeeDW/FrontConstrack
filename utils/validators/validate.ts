@@ -1,28 +1,34 @@
+import i18n from '@/i18n/i18n';
+
+const t = i18n.t;
+
 export const validateFieldForEmployee = (name: string, value: any): string => {
   switch (name) {
     case "name":
-      return !value ? "Name is required" : "";
+      return !value ? t("validation.name.required") : "";
+      
     case "email":
-      if (!value) return "Email is required";
+      if (!value) return t("validation.email.required");
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-        return "Invalid email address";
+        return t("validation.email.invalid");
       return "";
+      
     case "password":
-      if (!value) return "Password is required";
+      if (!value) return t("validation.password.required");
       if (value.length < 8)
-        return "Password must be at least 8 characters long";
+        return t("validation.password.min_length");
       if (!/[A-Z]/.test(value))
-        return "Password must contain at least one uppercase letter";
+        return t("validation.password.uppercase");
       if (!/[a-z]/.test(value))
-        return "Password must contain at least one lowercase letter";
+        return t("validation.password.lowercase");
       if (!/[0-9]/.test(value))
-        return "Password must contain at least one number";
+        return t("validation.password.number");
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(value))
-        return "Password must contain at least one special character";
-
+        return t("validation.password.special");
       return "";
+      
     case "birth_date": {
-      if (!value) return "Birth date is required";
+      if (!value) return t("validation.birth_date.required");
       const selected = new Date(value);
       const today = new Date();
       const minDate = new Date(
@@ -31,46 +37,50 @@ export const validateFieldForEmployee = (name: string, value: any): string => {
         today.getDate(),
       );
       if (selected > minDate) {
-        return "Age must be at least 18 years old";
-      }
-    }
-    case "salary": {
-      if (!value) return "Salary is required";
-      const salary = parseFloat(value);
-      if (isNaN(salary) || salary <= 0) {
-        return "Salary must be a positive number greater than 0";
+        return t("validation.birth_date.min_age");
       }
       return "";
     }
+    
+    case "salary": {
+      if (!value) return t("validation.salary.required");
+      const salary = parseFloat(value);
+      if (isNaN(salary) || salary <= 0) {
+        return t("validation.salary.positive");
+      }
+      return "";
+    }
+    
     case "phone": {
-      if (!value) return "Phone number is required";
+      if (!value) return t("validation.phone.required");
       const cleanPhone = value.replace(/[\s\-\(\)\+]/g, "");
       if (!/^\d+$/.test(cleanPhone)) {
-        return "Phone number must contain only digits";
+        return t("validation.phone.digits_only");
       }
       if (cleanPhone.length < 8 || cleanPhone.length > 15) {
-        return "Phone number must be between 8 and 15 digits";
+        return t("validation.phone.length");
       }
-
       return "";
     }
 
     case "status":
-      if (!value) return "Status is required";
-      if (!["todo", "in_progress", "review", "done"].includes(value)) {
-        return "Invalid status";
+      if (!value) return t("validation.status.required");
+      if (!["in_progress", "done"].includes(value)) {
+        return t("validation.status.invalid");
       }
       return "";
+      
     default:
       return "";
   }
 };
-export const validateFieldForTask = (name: string, value: any): string => {
+
+ export const validateFieldForTask = (name: string, value: any,isEditing?: boolean): string => {
   switch (name) {
     case "taskName":
-      if (!value || value.trim() === "") return "Task name is required";
+      if (!value || value.trim() === "") return t("validation.name.task_required");
       if (value.trim().length < 3)
-        return "Task name must be at least 3 characters";
+        return t("validation.name.task_min_length");
       return "";
 
     case "projectName":
@@ -78,183 +88,190 @@ export const validateFieldForTask = (name: string, value: any): string => {
       return "";
 
     case "startWork":
-      if (!value) return "Start date is required";
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (new Date(value) < today) return "Start date cannot be in the past";
+      if (!value) return t("validation.start_date.required");
+      
+      if (!isEditing) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (new Date(value) < today) return t("validation.start_date.past");
+      }
       return "";
 
-    case "endWork":
-      if (!value) return "End date is required";
 
+    case "endWork":
+      if (!value) return t("validation.end_date.required");
       return "";
 
     case "taskDescription":
-      if (!value || value.trim() === "") return "Task description is required";
-
+      if (!value || value.trim() === "") return t("validation.description.required");
       if (value && value.length > 500) {
-        return "Description must be less than 500 characters";
+        return t("validation.description.max_length");
       }
       return "";
 
     case "city":
-      if (!value || value.trim() === "") return "City is required";
-
+      if (!value || value.trim() === "") return t("validation.city.required");
       if (value && value.length > 100) {
-        return "City name must be less than 100 characters";
+        return t("validation.city.max_length");
       }
       if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
-        return "City name can only contain letters, spaces, hyphens, and apostrophes";
+        return t("validation.city.invalid_chars");
       }
       return "";
 
     case "postal_code":
-      if (!value || value.trim() === "") return "Postal code is required";
-
-      if (value && !/^[0-9]{4,10}$/.test(value)) {
-        return "Invalid postal code format (must be 4-10 digits)";
+      if (!value || value.trim() === "") {
+        return t("validation.postal_code.required");
+      }
+      if (!/^\d{4}[A-Z]{2}$/.test(value.trim())) {
+        return t("validation.postal_code.invalid");
       }
       return "";
 
     case "house_number":
-      if (!value || value.trim() === "") return "House number is required";
+      if (!value || value.trim() === "") return t("validation.house_number.required");
       if (value && value.length > 20) {
-        return "House number must be less than 20 characters";
+        return t("validation.house_number.max_length");
       }
       if (value && !/^[a-zA-Z0-9\s\-]+$/.test(value)) {
-        return "Invalid house number format";
+        return t("validation.house_number.invalid");
       }
       return "";
 
     case "worker_arrival_time":
       if (!value || value.trim() === "")
-        return "Worker arrival time is required";
+        return t("validation.worker_arrival_time.required");
       if (value && !/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(value)) {
-        return "Invalid time format (HH:MM)";
+        return t("validation.worker_arrival_time.invalid");
       }
       return "";
 
     case "task_type":
-      if (!value || value.trim() === "") return "Task type is required";
-
+      if (!value || value.trim() === "") return t("validation.task_type.required");
       if (value && value.length > 100) {
-        return "Task type must be less than 100 characters";
+        return t("validation.task_type.max_length");
       }
       return "";
 
     case "work_area":
-      if (!value || value.trim() === "") return "Work area is required";
-
+      if (!value || value.trim() === "") return t("validation.work_area.required");
       return "";
 
     case "bus_number":
-      if (!value || value.trim() === "") return "Bus number is required";
-
+      if (!value || value.trim() === "") return t("validation.bus_number.required");
       if (value && value.length > 20) {
-        return "Bus number must be less than 20 characters";
+        return t("validation.bus_number.max_length");
       }
       if (value && !/^[a-zA-Z0-9\-]+$/.test(value)) {
-        return "Invalid bus number format";
+        return t("validation.bus_number.invalid");
       }
       return "";
 
     case "driver_name":
-      if (!value || value.trim() === "") return "Driver name is required";
-
+      if (!value || value.trim() === "") return t("validation.driver_name.required");
       return "";
 
     case "priority":
-      if (!value) return "Priority is required";
+      if (!value) return t("validation.priority.required");
       if (!["low", "medium", "high", "urgent"].includes(value)) {
-        return "Invalid priority level";
+        return t("validation.priority.invalid");
       }
       return "";
 
     case "status":
+      if (!value) return t("validation.status.required");
+      if (!["in_progress", "done", "planning", "active", "completed", "cancelled"].includes(value)) {
+        return t("validation.status.invalid");
+      }
+      return "";
 
     default:
       return "";
   }
 };
+
 export const fieldsToValidateForTask = [
-      "taskName",
-      "taskDescription",
-      "startWork",
-      "endWork",
-      "priority",
-      "status",
-      "city",
-      "postal_code",
-      "house_number",
-      "worker_arrival_time",
-      "task_type",
-      "work_area",
-      "bus_number",
-      "driver_name",
-    ];
+  "taskName",
+  "taskDescription",
+  "startWork",
+  "endWork",
+  "priority",
+  "status",
+  "city",
+  "postal_code",
+  "house_number",
+  "worker_arrival_time",
+  "task_type",
+  "work_area",
+  "bus_number",
+  "driver_name",
+];
 
 export const validateFieldForTenants = (name: string, value: any): string => {
   switch (name) {
     case "adminName":
-      return !value ? "Name Admin is required" : "";
-         case "address":
-      return !value ? "Address is required" : "";
-            case "industry":
-      return !value ? "Industry is required" : "";
+      return !value ? t("validation.name.admin_required") : "";
+      
+    case "address":
+      return !value ? t("validation.address.required") : "";
+      
+    case "industry":
+      return !value ? t("validation.industry.required") : "";
 
-
-          case "databaseName":
-      return !value ? "Database Name is required" : "";
-              case "kvkNumber":
-      return !value ? "kvk Number is required" : "";
-              case "btwNumber":
-      return !value ? "btw Number is required" : "";
+    case "databaseName":
+      return !value ? t("validation.database_name.required") : "";
+      
+    case "kvkNumber":
+      return !value ? t("validation.kvk_number.required") : "";
+      
+    case "btwNumber":
+      return !value ? t("validation.btw_number.required") : "";
+      
     case "name":
-      if (!value) return "Company Name is required";
+      if (!value) return t("validation.name.company_required");
       if (value.trim() === "")
-        return "Company Name cannot be empty spaces only";
-      if (/\s/.test(value)) return "Company Name cannot contain spaces";
-      if (/^\s/.test(value)) return "Company Name cannot start with a space";
+        return t("validation.name.company_empty");
+      if (/\s/.test(value)) return t("validation.name.company_no_spaces");
+      if (/^\s/.test(value)) return t("validation.name.company_no_leading_space");
       return "";
+      
     case "adminEmail":
-      if (!value) return "Email is required";
+      if (!value) return t("validation.email.admin_required");
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-        return "Invalid email address";
+        return t("validation.email.invalid");
       return "";
+      
     case "adminPassword":
-      if (!value) return "Password is required";
+      if (!value) return t("validation.password.admin_required");
       if (value.length < 8)
-        return "Password must be at least 8 characters long";
+        return t("validation.password.min_length");
       if (!/[A-Z]/.test(value))
-        return "Password must contain at least one uppercase letter";
+        return t("validation.password.uppercase");
       if (!/[a-z]/.test(value))
-        return "Password must contain at least one lowercase letter";
+        return t("validation.password.lowercase");
       if (!/[0-9]/.test(value))
-        return "Password must contain at least one number";
+        return t("validation.password.number");
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(value))
-        return "Password must contain at least one special character";
-
+        return t("validation.password.special");
       return "";
 
     case "maxEmployees":
-      if (!value) return "Employees count is required";
-      if (value < 3) return "Minimum number of employees is 3";
+      if (!value) return t("validation.max_employees.required");
+      if (value < 3) return t("validation.max_employees.min");
       return "";
 
     case "phone": {
-      if (!value) return "Phone number is required";
+      if (!value) return t("validation.phone.required");
       const cleanPhone = value.replace(/[\s\-\(\)\+]/g, "");
       if (!/^\d+$/.test(cleanPhone)) {
-        return "Phone number must contain only digits";
+        return t("validation.phone.digits_only");
       }
       if (cleanPhone.length < 8 || cleanPhone.length > 15) {
-        return "Phone number must be between 8 and 15 digits";
+        return t("validation.phone.length");
       }
-
       return "";
     }
 
-  
     default:
       return "";
   }
@@ -272,53 +289,65 @@ export const getInputClassName = (
 
   return `${baseClass} ${errorClass}`;
 };
+
 export const validateFieldForProject = (name: string, value: any): string => {
   switch (name) {
     case "name":
-      if (!value || value.trim() === "") return "Project name is required";
+      if (!value || value.trim() === "") return t("validation.name.project_required");
       if (value.trim().length < 3)
-        return "Task name must be at least 3 characters";
+        return t("validation.name.project_min_length");
       return "";
-    case "city":
-      if (!value || value.trim() === "") return "City is required";
 
+    case "city":
+      if (!value || value.trim() === "") return t("validation.city.required");
       if (value && value.length > 100) {
-        return "City name must be less than 100 characters";
+        return t("validation.city.max_length");
       }
       if (value && !/^[a-zA-Z\s\-']+$/.test(value)) {
-        return "City name can only contain letters, spaces, hyphens, and apostrophes";
+        return t("validation.city.invalid_chars");
       }
       return "";
 
     case "postal_code":
-      if (!value || value.trim() === "") return "Postal code is required";
-
-      if (value && !/^[0-9]{4,10}$/.test(value)&&!/[A-Z]/.test(value)) {
-        return "Invalid postal code format (must be 4-10 digits)";
+      if (!value || value.trim() === "") {
+        return t("validation.postal_code.required");
+      }
+      if (!/^\d{4}[A-Z]{2}$/.test(value.trim())) {
+        return t("validation.postal_code.invalid");
       }
       return "";
- 
+
     case "location":
-      if (!value || value.trim() === "") return "Location is required";
+      if (!value || value.trim() === "") return t("validation.location.required");
       return "";
 
     case "client_name":
-      if (!value || value.trim() === "") return "Client name is required";
-
+      if (!value || value.trim() === "") return t("validation.client_name.required");
       return "";
 
-   case "client_phone": {
-      if (!value) return "Phone number is required";
+    case "client_phone": {
+      if (!value) return t("validation.phone.client_required");
       const cleanPhone = value.replace(/[\s\-\(\)\+]/g, "");
       if (!/^\d+$/.test(cleanPhone)) {
-        return "Phone number must contain only digits";
+        return t("validation.phone.digits_only");
       }
       if (cleanPhone.length < 8 || cleanPhone.length > 15) {
-        return "Phone number must be between 8 and 15 digits";
+        return t("validation.phone.length");
       }
-
       return "";
     }
+
+    case "start_date":
+      if (!value || value.trim() === "") {
+        return t("validation.start_date.required");
+      }
+      return "";
+
+    case "end_date":
+      if (!value || value.trim() === "") {
+        return t("validation.end_date.required");
+      }
+      return "";
 
     default:
       return "";

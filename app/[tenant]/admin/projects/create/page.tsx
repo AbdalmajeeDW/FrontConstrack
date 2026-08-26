@@ -25,8 +25,11 @@ import {
   validateFieldForProject,
   validateFieldForTenants,
 } from "@/utils/validators/validate";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
 
 export default function CreateProjectPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -76,6 +79,8 @@ export default function CreateProjectPage() {
       "phone",
       "client_name",
       "location",
+      "start_date",
+      "end_date",
     ];
     const newErrors: Record<string, string> = {};
     let hasError = false;
@@ -92,29 +97,31 @@ export default function CreateProjectPage() {
       return;
     }
     if (!form.name.trim()) {
-      toast.error("Project name is required");
+      toast.error(t("addProjects.create_name_required"));
       return;
     }
 
     try {
       setLoading(true);
       await dispatch(createProject(form)).unwrap();
-      toast.success("Project created successfully");
+      toast.success(t("addProjects.create_success"));
       router.back();
     } catch (error: any) {
       console.error("Create project error:", error);
-      toast.error(error?.response?.data?.message || "Failed to create project");
+      toast.error(
+        error?.response?.data?.message || t("addProjects.create_error"),
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100 p-6">
+    <div className="bg-linear-to-br from-gray-50 via-white to-gray-100 p-6">
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-20 -z-10" />
 
-      <div className=" mx-auto">
-        <HeaderSection router={router} />
+      <div className="mx-auto">
+        <HeaderSection router={router} t={t} />
 
         <motion.form
           onSubmit={handleSubmit}
@@ -122,15 +129,15 @@ export default function CreateProjectPage() {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white rounded-2xl shadow-lg p-8 space-y-6"
         >
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-4 gap-5">
             <div>
               <FormField
-                label="Project Name"
+                label={t("addProjects.create_name")}
                 name="name"
                 value={form.name}
                 onChange={handleChange}
                 icon={Building2}
-                placeholder="Enter project name"
+                placeholder={t("addProjects.create_name_placeholder")}
                 className={getInputClassName("name", errors)}
               />
               {errors.name && (
@@ -139,29 +146,27 @@ export default function CreateProjectPage() {
             </div>
             <div>
               <FormField
-                label="City"
+                label={t("addProjects.create_city")}
                 name="city"
                 value={form.city || ""}
                 onChange={handleChange}
                 icon={Building2}
-                placeholder="Enter City name"
+                placeholder={t("addProjects.create_city_placeholder")}
                 className={getInputClassName("city", errors)}
               />
               {errors.city && (
                 <p className="text-red-500 text-sm mt-1">{errors.city}</p>
               )}
             </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-5">
             <div>
               <FormField
-                label="Client Name"
+                label={t("addProjects.create_client_name")}
                 name="client_name"
                 value={form.client_name || ""}
                 onChange={handleChange}
                 icon={Building2}
                 className={getInputClassName("client_name", errors)}
-                placeholder="Enter client name"
+                placeholder={t("addProjects.create_client_name_placeholder")}
               />
               {errors.client_name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -171,12 +176,12 @@ export default function CreateProjectPage() {
             </div>
             <div>
               <FormField
-                label="Client Phone"
+                label={t("addProjects.create_client_phone")}
                 name="client_phone"
                 value={form.client_phone || ""}
                 onChange={handleChange}
                 icon={Phone}
-                placeholder="Enter client phone"
+                placeholder={t("addProjects.create_client_phone_placeholder")}
                 className={getInputClassName("client_phone", errors)}
                 type="tel"
               />
@@ -186,18 +191,15 @@ export default function CreateProjectPage() {
                 </p>
               )}
             </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-5">
             <div>
               <FormField
-                label="Location"
+                label={t("addProjects.create_location")}
                 name="location"
                 value={form.location || ""}
                 onChange={handleChange}
                 icon={MapPin}
                 className={getInputClassName("location", errors)}
-                placeholder="Enter project location"
+                placeholder={t("addProjects.create_location_placeholder")}
               />
               {errors.location && (
                 <p className="text-red-500 text-sm mt-1">{errors.location}</p>
@@ -205,13 +207,13 @@ export default function CreateProjectPage() {
             </div>
             <div>
               <FormField
-                label="Postal Code"
+                label={t("addProjects.create_postal_code")}
                 name="postal_code"
                 value={form.postal_code || ""}
                 className={getInputClassName("postal_code", errors)}
                 onChange={handleChange}
                 icon={Hash}
-                placeholder="Enter postal code"
+                placeholder={t("addProjects.create_postal_code_placeholder")}
               />
               {errors.postal_code && (
                 <p className="text-red-500 text-sm mt-1">
@@ -219,60 +221,65 @@ export default function CreateProjectPage() {
                 </p>
               )}
             </div>
+            <div>
+              <FormField
+                label={t("addProjects.create_start_date")}
+                name="start_date"
+                value={form.start_date || ""}
+                onChange={handleChange}
+                icon={Calendar}
+                type="date"
+                className={getInputClassName("start_date", errors)}
+              />
+              {errors.start_date && (
+                <p className="text-red-500 text-sm mt-1">{errors.start_date}</p>
+              )}
+            </div>
+            <div>
+              <FormField
+                label={t("addProjects.create_end_date")}
+                name="end_date"
+                value={form.end_date || ""}
+                onChange={handleChange}
+                icon={Calendar}
+                type="date"
+                className={getInputClassName("end_date", errors)}
+              />
+              {errors.end_date && (
+                <p className="text-red-500 text-sm mt-1">{errors.end_date}</p>
+              )}
+            </div>
           </div>
-          <div className="relative">
-            <select
-              name="status"
-              value={form.status}
-              onChange={handleChange}
-              className={getInputClassName("status", errors)}
-            >
-              <option value="all">All Statuses</option>
-              <option value="planning">Planning</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-            <Filter className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          </div>
+
           <FormTextarea
-            label="Description"
+            label={t("addProjects.create_description")}
             name="description"
             value={form.description || ""}
             onChange={handleChange}
             icon={FileText}
-            placeholder="Describe the project..."
+            placeholder={t("addProjects.create_description_placeholder")}
             rows={5}
           />
 
-          <div className="grid md:grid-cols-2 gap-5">
-            <FormField
-              label="Start Date"
-              name="start_date"
-              value={form.start_date || ""}
-              onChange={handleChange}
-              icon={Calendar}
-              type="date"
-            />
-
-            <FormField
-              label="End Date"
-              name="end_date"
-              value={form.end_date || ""}
-              onChange={handleChange}
-              icon={Calendar}
-              type="date"
-            />
+          <div className="flex justify-end pt-5">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="flex items-center gap-2 px-8 py-3 rounded-xl bg-linear-to-r from-purple-600 to-blue-600 text-white font-medium hover:opacity-90 transition disabled:opacity-50"
+            >
+              <Save className="w-5 h-5" />
+              {loading
+                ? t("addProjects.create_saving")
+                : t("addProjects.create_button")}
+            </Button>
           </div>
-
-          {/* Submit Button */}
-          <SubmitButton loading={loading} />
         </motion.form>
       </div>
     </div>
   );
 }
 
-function HeaderSection({ router }: { router: any }) {
+function HeaderSection({ router, t }: { router: any; t: any }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -282,9 +289,9 @@ function HeaderSection({ router }: { router: any }) {
       <div>
         <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
           <Building2 className="text-purple-600 w-8 h-8" />
-          Create New Project
+          {t("addProjects.create_title")}
         </h1>
-        <p className="text-gray-500 mt-2">Add a new construction project</p>
+        <p className="text-gray-500 mt-2">{t("addProjects.create_subtitle")}</p>
       </div>
     </motion.div>
   );
@@ -323,21 +330,6 @@ function FormTextarea({
           className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
         />
       </div>
-    </div>
-  );
-}
-
-function SubmitButton({ loading }: { loading: boolean }) {
-  return (
-    <div className="flex justify-end pt-5">
-      <button
-        type="submit"
-        disabled={loading}
-        className="flex items-center gap-2 px-8 py-3 rounded-xl bg-linear-to-r from-purple-600 to-blue-600 text-white font-medium hover:opacity-90 transition disabled:opacity-50"
-      >
-        <Save className="w-5 h-5" />
-        {loading ? "Saving..." : "Create Project"}
-      </button>
     </div>
   );
 }

@@ -9,6 +9,9 @@ export interface Project {
   postal_code?: string;
   start_date?: string;
   end_date?: string;
-  status:"planning" | "active" | "completed" | "cancelled" 
+  status:"planning" | "active" | "completed" | "cancelled" ,
+      created_at?: "",
+
+ 
 }
  

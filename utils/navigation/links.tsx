@@ -1,9 +1,22 @@
-import { ChartArea, Users, Home, Settings, FileText, ClipboardList, User, LogOut, Projector, Building2 } from "lucide-react";
+import {
+  ChartArea,
+  Users,
+  Home,
+  Settings,
+  FileText,
+  ClipboardList,
+  User,
+  LogOut,
+  Projector,
+  Building2,
+  Receipt,
+  Activity,
+} from "lucide-react";
 import { BrickWall } from "lucide-react";
 import { ReactNode } from "react";
-import { FolderOpenDot } from 'lucide-react';
-import { CalendarCheck } from 'lucide-react';
-import { PartyPopper } from 'lucide-react';
+import { FolderOpenDot } from "lucide-react";
+import { CalendarCheck } from "lucide-react";
+import { PartyPopper } from "lucide-react";
 
 export interface NavLink {
   id: number;
@@ -27,7 +40,7 @@ export const superAdminLinks: NavLink[] = [
   },
   {
     id: 2,
-    name: "Users",
+    name: "Super Admins",
     icon: <Users size={20} />,
     url: "/superAdmin/users",
     title: "Users Management",
@@ -64,7 +77,7 @@ export const adminLinks: NavLink[] = [
     name: "Home",
     icon: <Home size={20} />,
     url: "",
-    title: "Tenant Admin Dashboard",
+    title: "Dashboard",
     description: "Overview of your company and operations",
   },
   {
@@ -75,7 +88,7 @@ export const adminLinks: NavLink[] = [
     title: "Employees",
     description: "View all employees in the company",
   },
-   {
+  {
     id: 3,
     name: "Projects",
     icon: <Building2 size={20} />,
@@ -85,14 +98,22 @@ export const adminLinks: NavLink[] = [
   },
   {
     id: 4,
-    name: "Reports",
-    icon: <FileText size={20} />,
-    url: "reports",
-    title: "Reports",
-    description: "View performance and statistics reports",
+    name: "Invoices",
+    icon: <Receipt size={20} />,
+    url: "Invoices",
+    title: "Invoices",
+    description: "View performance and statistics Invoices",
   },
-    {
-    id: 5,
+  // {
+  //   id: 5,
+  //   name: "Reports",
+  //   icon: <FileText size={20} />,
+  //   url: "reports",
+  //   title: "Reports",
+  //   description: "View performance and statistics reports",
+  // },
+  {
+    id: 6,
     name: "Tasks",
     icon: <CalendarCheck size={20} />,
     url: "tasks",
@@ -100,10 +121,12 @@ export const adminLinks: NavLink[] = [
     description: "View and manage company tasks",
   },
   {
-    id: 6,
-    name: "Logout",
-    icon: <LogOut size={20} />,
-    url: "/login",
+    id: 7,
+    name: "Activity",
+    icon: <Activity size={20} />,
+    url: "activities",
+    title: "Activity",
+    description: "View and manage company Activity",
   },
 ];
 
@@ -124,7 +147,7 @@ export const employeeLinks: NavLink[] = [
     title: "My Tasks",
     description: "View your assigned tasks",
   },
-    {
+  {
     id: 3,
     name: "Public holidays",
     icon: <PartyPopper size={20} />,
@@ -139,12 +162,6 @@ export const employeeLinks: NavLink[] = [
     url: "profile",
     title: "Profile",
     description: "Update your personal account information",
-  },
-  {
-    id: 5,
-    name: "Logout",
-    icon: <LogOut size={20} />,
-    url: "/login",
   },
 ];
 

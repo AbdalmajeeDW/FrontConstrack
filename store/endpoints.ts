@@ -50,10 +50,13 @@ export const API_ENDPOINTS_ADMIN = {
     ASSIGN_EMPLOYEES: (taskId: number) => `/tasks/${taskId}/assign-employees`,
     DELETE: (id: number) => `/tasks/${id}`,
   },
-   PROJECTS: {
-    BASE: tenantApi,
-    GET_ALL: "/projects/",
+
+    PROJECTS: {
+    GET_ALL: "projects",
+    GET_BY_ID: (id: number) => `/projects/${id}`,
     CREATE: "/projects",
+    UPDATE: (id: number) => `/projects/${id}`,
+    DELETE: (id: number) => `/projects/${id}`,
   },
   AUTHSUPERADMIN: {
     BASE: tenantApi,

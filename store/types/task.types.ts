@@ -10,9 +10,9 @@ export interface Task {
   id: number;
   taskName: string;
   taskDescription?: string;
-  project_id: number;
+  project_id: number|null;
   priority: "low" | "medium" | "high" | "urgent";
-  status: "in_progress" | "review" | "done" | "high";
+  status: "in_progress" | "done";
   startWork: string;
   endWork: string;
   assigned_at?: string;

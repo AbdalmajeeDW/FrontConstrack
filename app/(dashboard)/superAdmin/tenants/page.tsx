@@ -59,7 +59,7 @@ export default function TenantsPage() {
   const tenantsData = tenants;
   const loadingMessage = isLoading ? "جاري تحميل بيانات التيننت..." : "";
   const errorMessage = error ? `حدث خطأ في تحميل البيانات: ${error}` : "";
-  
+
   const filteredTenants = tenantsData.filter((tenant) => {
     const matchesSearch =
       tenant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -77,16 +77,12 @@ export default function TenantsPage() {
     },
   };
 
-  const itemVariants = {
-    visible: { opacity: 1, y: 0 },
-  };
-
   const statCards = [
     {
       title: "Total Companies",
       value: stats.totalTenants,
-     
-      icon: <Building2 className="w-6 h-6 text-purple-600"/>,
+
+      icon: <Building2 className="w-6 h-6 text-purple-600" />,
       linear: "from-purple-500 to-blue-500",
       bgColor: "bg-purple-200",
       textColor: "text-purple-600",
@@ -95,8 +91,8 @@ export default function TenantsPage() {
     {
       title: "Active Companies",
       value: stats.activeTenants,
-   
-      icon: <CheckCircle className="w-6 h-6 text-green-600"/>,
+
+      icon: <CheckCircle className="w-6 h-6 text-green-600" />,
       linear: "from-green-500 to-emerald-500",
       bgColor: "bg-green-200",
       textColor: "text-green-600",
@@ -105,8 +101,8 @@ export default function TenantsPage() {
     {
       title: "Total Users",
       value: stats.totalUsers,
-      
-      icon: <Users className="w-6 h-6 text-blue-600"/>,
+
+      icon: <Users className="w-6 h-6 text-blue-600" />,
       linear: "from-blue-500 to-cyan-500",
       bgColor: "bg-blue-200",
       textColor: "text-blue-600",
@@ -121,7 +117,7 @@ export default function TenantsPage() {
       icon: Clock,
       color: "from-amber-500 to-orange-500",
     },
-  
+
     {
       label: "Expired",
       value: stats.expiredTenants,
@@ -155,14 +151,10 @@ export default function TenantsPage() {
 
         <motion.div
           variants={containerVariants}
-          animate="visible"
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {statCards.map((card, index) => (
-          <StatsCard
-                       key={index}
-                      {...card}
-                     />
+            <StatsCard key={index} {...card} />
           ))}
         </motion.div>
 
@@ -227,7 +219,6 @@ export default function TenantsPage() {
                     <option value="all">All Plans</option>
                     <option value="Basic">Basic</option>
                     <option value="Professional">Professional</option>
-                 
                   </select>
                 </div>
                 <Link

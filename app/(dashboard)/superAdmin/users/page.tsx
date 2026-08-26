@@ -70,10 +70,9 @@ export default function UsersPage() {
 
   
 
-  // Stats cards for users
   const statCards = [
     {
-      title: "Total Users",
+      title: "Total Super Admins",
       value: stats.totalUsers,
       icon: <Users className="w-6 h-6 text-purple-600" />,
       gradient: "from-purple-500 to-blue-500",
@@ -110,32 +109,7 @@ export default function UsersPage() {
     },
   ];
 
-  const additionalStats = [
-    {
-      label: "Regular Users",
-      value: stats.regularUsers,
-      icon: Users,
-      color: "from-slate-500 to-gray-500",
-    },
-    {
-      label: "Pending Approval",
-      value: stats.pendingUsers,
-      icon: Clock,
-      color: "from-amber-500 to-orange-500",
-    },
-    {
-      label: "Inactive",
-      value: stats.inactiveUsers,
-      icon: UserX,
-      color: "from-rose-500 to-red-500",
-    },
-    {
-      label: "Companies",
-      value: stats.totalCompanies,
-      icon: Building2,
-      color: "from-emerald-500 to-teal-500",
-    },
-  ];
+
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
@@ -153,27 +127,7 @@ export default function UsersPage() {
             ))}
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-          >
-            {additionalStats.map((stat, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl shadow-md p-4 hover:shadow-lg transition-all duration-300 group"
-              >
-                <div
-                  className={`inline-flex p-2 rounded-lg bg-linear-to-r ${stat.color} text-white mb-3 group-hover:scale-110 transition-transform`}
-                >
-                  <stat.icon className="w-4 h-4" />
-                </div>
-                <p className="text-gray-500 text-xs mb-1">{stat.label}</p>
-                <p className="text-xl font-bold text-gray-800">{stat.value}</p>
-              </div>
-            ))}
-          </motion.div>
+    
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

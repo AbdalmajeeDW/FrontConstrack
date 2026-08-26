@@ -1,6 +1,5 @@
 import { API_ENDPOINTS_ADMIN } from '@/store/endpoints';
 import tenantApi from '../../tenantApi';
-import { Task } from '../../types/task.types';
 import { EmployeeUser } from '@/store/types/employee.types';
 
 export async function getByEmployeeId(employeeId: number): Promise<EmployeeUser> {

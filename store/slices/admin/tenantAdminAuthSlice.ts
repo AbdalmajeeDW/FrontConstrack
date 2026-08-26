@@ -31,6 +31,8 @@ export const tenantAdminLogin = createAsyncThunk(
   async (credentials: TenantLoginCredentials, { rejectWithValue }) => {
     try {
       const response = await loginApi(credentials);
+          console.log('✅ Login response:', response); 
+
       return response;
     } catch (error: any) {
       return rejectWithValue(

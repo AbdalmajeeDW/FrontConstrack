@@ -21,25 +21,8 @@ export default function MotionCard({
 }: MotionCardProps) {
   return (
     <motion.div
-      whileHover={{
-        y: hoverY,
-        scale: hoverScale,
-        transition: {
-          type: "spring",
-          stiffness: 500,
-          damping: 25,
-          mass: 0.5,
-          duration: duration,
-        },
-      }}
-      whileTap={
-        enableTap
-          ? {
-              scale: 0.98,
-              transition: { duration: 0.08 },
-            }
-          : undefined
-      }
+  
+   
       className={`
         bg-white rounded-2xl shadow-xl overflow-hidden 
         will-change-transform

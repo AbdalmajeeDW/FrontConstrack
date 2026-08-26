@@ -1,142 +1,238 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  Building2,
+  Check,
+  Database,
+  Shield,
+  FileText,
+  ArrowLeft,
+  Save,
+  Loader,
+} from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { selectTenantError, selectTenantLoading, updateTenant } from "@/store/slices/superAdmin/tenantSlice";
-import { getTenantById, Tenant } from "@/store/services/superAdmins/tenantService";
+import {
+  updateTenant,
+  selectTenantLoading,
+  selectTenantError,
+  selectTenants,
+  fetchTenantById,
+} from "@/store/slices/superAdmin/tenantSlice";
 import Select from "@/components/superAdmin/Select";
-import { planOptions, statusOptions } from "@/config/statusConfig";
-import { ArrowLeft, Building2, CalendarDays, Check, Mail, Phone, Shield, Users } from "lucide-react";
+import { planOptions, statusOptions } from "@/config/statsConfig";
+import { useRouter, useParams } from "next/navigation";
+import {
+  getInputClassName,
+  validateFieldForTenants,
+} from "@/utils/validators/validate";
+import { toast } from "sonner";
+import {
+  getInitialTenantForm,
+  Tenant,
+} from "@/store/services/superAdmins/tenantService";
+import { tenantFormFields } from "@/config/tenantFormConfig";
+import { FormField } from "@/components/Field/FormField";
 
 export default function EditTenantPage() {
-  const params = useParams() as { id?: string };
-  const tenantId = params.id ? Number(params.id) : 1;
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const params = useParams();
+  const tenantId = params?.id as string;
+
   const isLoading = useAppSelector(selectTenantLoading);
   const error = useAppSelector(selectTenantError);
+  const selectedTenant = useAppSelector(selectTenants);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const [tenant, setTenant] = useState<Tenant | null>(null);
-  const [formData, setFormData] = useState<Partial<Tenant>>({
-    name: "",
-    address: "",
-    phone: "",
-    plan: "Basic",
-    adminName: "",
-    adminEmail: "",
-    adminPassword: "",
-    databaseName: "",
-    subscriptionStartDate: "",
-    subscriptionEndDate: "",
-    discount: 0,
-    industry: "",
-    maxEmployees: 10,
-    kvkNumber: "",
-    btwNumber: "",
-    status: "pending",
-  });
-  const [loadingTenant, setLoadingTenant] = useState(true);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [formData, setFormData] = useState<Tenant>(getInitialTenantForm());
 
   useEffect(() => {
-    if (!tenantId) return;
-
-    const loadTenant = async () => {
-      setLoadingTenant(true);
-      try {
-        const data = await getTenantById(tenantId);
-        setTenant(data);
-        setFormData({
-          name: data.name,
-          address: data.address,
-          phone: data.phone,
-          plan: data.plan,
-          adminName: data.adminName,
-          adminEmail: data.adminEmail,
-          adminPassword: data.adminPassword,
-
-          databaseName: data.databaseName,
-          maxEmployees: data.maxEmployees,
-          subscriptionStartDate: data.subscriptionStartDate,
-          subscriptionEndDate: data.subscriptionEndDate,
-          kvkNumber: data.kvkNumber,
-          btwNumber: data.btwNumber,
-          status: data.status,
-        });
-      } catch (err) {
-        console.error("Failed to load tenant:", err);
-      } finally {
-        setLoadingTenant(false);
-      }
-    };
-    loadTenant();
+    if (tenantId) {
+      fetchTenantData();
+    }
   }, [tenantId]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
-    const value = e.target.type === "number" ? Number(e.target.value) : e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: value,
-    }));
+  const fetchTenantData = async () => {
+    setIsLoadingData(true);
+    try {
+      const result = await dispatch(fetchTenantById(Number(tenantId))).unwrap();
+      setFormData({
+        name: result.name || "",
+        address: result.address || "",
+        phone: result.phone || "",
+        plan: result.plan || "basic",
+        adminName: result.adminName || "",
+        adminEmail: result.adminEmail || "",
+        adminPassword: "",
+        databaseName: result.databaseName || "",
+        subscriptionStartDate: result.subscriptionStartDate || "",
+        subscriptionEndDate: result.subscriptionEndDate || "",
+        discount: result.discount || 0,
+        industry: result.industry || "",
+        maxEmployees: result.maxEmployees || 0,
+        kvkNumber: result.kvkNumber || "",
+        btwNumber: result.btwNumber || "",
+        status: result.status || "active",
+      });
+    } catch (error: any) {
+      toast.error(error?.message || "Failed to load tenant data");
+      router.back();
+    } finally {
+      setIsLoadingData(false);
+    }
   };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
+    const { name, value, type } = e.target;
+    const errorMsg = validateFieldForTenants(name, value);
+
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    if (errorMsg) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: errorMsg }));
+    } else {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[e.target.name];
+        return newErrors;
+      });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccessMessage("");
 
-    if (!tenantId) return;
+    const fieldsToValidate = [
+      "name",
+      "adminEmail",
+      "phone",
+      "adminName",
+      "maxEmployees",
+      "address",
+      "industry",
+      "kvkNumber",
+      "btwNumber",
+      "databaseName",
+    ];
 
-const payload = {
-  name: formData.name,
-  address: formData.address,
-  phone: formData.phone,
-  plan: formData.plan,
-  adminName: formData.adminName,
-  adminEmail: formData.adminEmail,
-  adminPassword: formData.adminPassword,
-  databaseName: formData.databaseName,
-  subscriptionStartDate: formData.subscriptionStartDate,
-  subscriptionEndDate: formData.subscriptionEndDate,
-  discount: formData.discount,
-  industry: formData.industry,
-  maxEmployees: Number(formData.maxEmployees) || 0,
-  kvkNumber: formData.kvkNumber,
-  btwNumber: formData.btwNumber,
-  status: formData.status,
-};
+    const newErrors: Record<string, string> = {};
+    let hasError = false;
 
+    fieldsToValidate.forEach((field) => {
+      const value = formData[field as keyof typeof formData];
+      const msg = validateFieldForTenants(field, value);
+      if (msg) {
+        newErrors[field] = msg;
+        hasError = true;
+      }
+    });
+
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const cleanString = (value: any): string | undefined => {
+      if (!value) return undefined;
+      const str = String(value).trim();
+      return (
+        str.replace(/[`~!@#$%^&*()_+={}[\];:'"<>,.?/\\|]/g, "").trim() ||
+        undefined
+      );
+    };
+
+    const cleanNumber = (value: any): number | undefined => {
+      if (!value) return undefined;
+      const num = Number(String(value).replace(/[^0-9.]/g, ""));
+      return isNaN(num) ? undefined : num;
+    };
+
+    let startDate = null;
+    let endDate = null;
+
+    if (formData.subscriptionStartDate) {
+      const date = new Date(formData.subscriptionStartDate);
+      if (!isNaN(date.getTime())) {
+        startDate = date.toISOString().split("T")[0];
+      }
+    }
+
+    if (formData.subscriptionEndDate) {
+      const date = new Date(formData.subscriptionEndDate);
+      if (!isNaN(date.getTime())) {
+        endDate = date.toISOString().split("T")[0];
+      }
+    }
+
+    const payload: any = {
+      name: cleanString(formData.name),
+      address: cleanString(formData.address),
+      phone: cleanString(formData.phone),
+      plan: formData.plan,
+      adminName: cleanString(formData.adminName),
+      adminEmail: formData.adminEmail?.trim(),
+      databaseName: cleanString(formData.databaseName),
+      subscriptionStartDate: startDate,
+      subscriptionEndDate: endDate,
+      discount: cleanNumber(formData.discount),
+      industry: cleanString(formData.industry),
+      maxEmployees: cleanNumber(formData.maxEmployees) || 0,
+      kvkNumber: cleanString(formData.kvkNumber),
+      btwNumber: cleanString(formData.btwNumber),
+      status: formData.status,
+    };
+
+    Object.keys(payload).forEach((key) => {
+      if (payload[key] === undefined || payload[key] === null) {
+        delete payload[key];
+      }
+    });
+
+    if (formData.adminPassword && formData.adminPassword.length > 0) {
+      payload.adminPassword = formData.adminPassword;
+    }
+
+    console.log("📤 Clean payload:", JSON.stringify(payload, null, 2));
 
     try {
-      
-      const resultAction = await dispatch(updateTenant({ id: tenantId, data: payload }));
+      const resultAction = await dispatch(
+        updateTenant({ id: Number(tenantId), data: payload }),
+      );
+
       if (updateTenant.fulfilled.match(resultAction)) {
-        setSuccessMessage("تم تحديث بيانات التيننت بنجاح.");
+        toast.success("Tenant updated successfully.");
+        router.push("/superAdmin/tenants");
+      } else {
+        toast.error(error || "Failed to update tenant");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to update tenant");
     }
   };
 
   const inputClass =
     "w-full h-12 rounded-xl border border-slate-200 bg-slate-50/80 px-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all";
 
-  if (loadingTenant) {
-    return (
-      <div className="min-h-screen bg-[#f5f7fb] flex items-center justify-center p-6">
-        <div className="rounded-3xl border border-slate-200 bg-white shadow-lg p-8 text-slate-700">
-          جاري تحميل تفاصيل التيننت...
-        </div>
-      </div>
-    );
-  }
+  const labelClass = "mb-2 block text-sm font-medium text-slate-700";
 
-  if (!tenant) {
+  const cardClass = "rounded-3xl border border-slate-200 bg-white shadow-sm";
+  const tenantFields = tenantFormFields(formData);
+
+  if (isLoadingData) {
     return (
-      <div className="min-h-screen bg-[#f5f7fb] p-6">
-        <div className="rounded-3xl border border-rose-200 bg-rose-50 shadow-sm p-8 text-rose-700">
-          لم يتم العثور على بيانات التيننت.
+      <div className="min-h-screen bg-[#f5f7fb] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader className="w-12 h-12 text-purple-600 animate-spin" />
+          <p className="text-slate-600 font-medium">Loading tenant data...</p>
         </div>
       </div>
     );
@@ -145,171 +241,261 @@ const payload = {
   return (
     <div className="min-h-screen bg-[#f5f7fb]">
       <div className="mx-auto px-6 lg:px-8 pb-10 relative z-20">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-semibold text-slate-900">تعديل بيانات التيننت</h1>
-            <p className="text-sm text-slate-500">قم بتحديث معلومات التيننت ثم احفظ التغييرات.</p>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center gap-4 mb-2">
+            <button
+              onClick={() => router.back()}
+              className="w-12 h-12 rounded-2xl bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-all shadow-sm"
+            >
+              <ArrowLeft className="w-6 h-6 text-slate-700" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800">Edit Tenant</h1>
+              <p className="text-sm text-slate-500">
+                Update tenant information for {formData.name || "..."}
+              </p>
+            </div>
           </div>
-          <Link
-            href="/superAdmin/tenants"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm hover:bg-slate-50"
-          >
-            <ArrowLeft className="w-4 h-4" /> العودة إلى القائمة
-          </Link>
-        </div>
+        </motion.div>
 
-        {error ? (
-          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">
-            حدث خطأ: {error}
-          </div>
-        ) : null}
-        {successMessage ? (
-          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-700">
-            {successMessage}
-          </div>
-        ) : null}
-
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-2 space-y-6">
-            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-indigo-600" />
-                </div>
-                <div>
-                  <h2 className="font-semibold text-slate-800">Company Information</h2>
-                  <p className="text-sm text-slate-500">تحديث معلومات الشركة الأساسية.</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Company Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name || ""}
-                    onChange={handleChange}
-                    className={inputClass}
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Phone Number</label>
-                  <div className="relative">
-                    <Phone className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      name="phone"
-                      value={formData.phone || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-11`}
-                    />
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div className="xl:col-span-2 space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={cardClass}
+              >
+                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-indigo-100 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-slate-800">
+                      Company Information
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                      Basic company details
+                    </p>
                   </div>
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">البريد الإلكتروني للمسؤول</label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="email"
-                      name="adminEmail"
-                      value={formData.adminEmail || ""}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-11`}
-                    />
+
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {tenantFields.map((e, i) => {
+                    if (e.id <= 5) {
+                      return (
+                        <div key={i}>
+                          <FormField
+                            type={e.type}
+                            label={e.label}
+                            name={e.name}
+                            value={e.value}
+                            className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
+                            placeholder={e.placeHolder}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className={cardClass}
+              >
+                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-violet-100 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-violet-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-slate-800">
+                      Admin Information
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                      Workspace administrator account
+                    </p>
                   </div>
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Max Employees</label>
-                  <div className="relative">
-                    <Users className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="number"
-                      name="maxEmployees"
-                      value={formData.maxEmployees || 0}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-11`}
-                    />
+
+                <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 5 && e.id <= 8) {
+                      return (
+                        <div key={i}>
+                          <FormField
+                            type={e.type}
+                            label={e.label}
+                            name={e.name}
+                            value={e.value}
+                            className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
+                            placeholder={e.placeHolder}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              </motion.div>
+
+              {/* Legal Information */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className={cardClass}
+              >
+                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-orange-100 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-slate-800">
+                      Legal Information
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                      Registration and tax details
+                    </p>
                   </div>
                 </div>
-                <div className="md:col-span-2">
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Address</label>
-                  <input
-                    name="address"
-                    value={formData.address || ""}
-                    onChange={handleChange}
-                    className={inputClass}
-                  />
+
+                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 8 && e.id <= 10) {
+                      return (
+                        <div key={i}>
+                          <FormField
+                            type={e.type}
+                            label={e.label}
+                            name={e.name}
+                            value={e.value}
+                            className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
+                            placeholder={e.placeHolder}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
-              </div>
+              </motion.div>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-6 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-violet-100 flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-violet-600" />
+            {/* Right Column - Subscription */}
+            <div className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, x: 15 }}
+                animate={{ opacity: 1, x: 0 }}
+                className={cardClass}
+              >
+                <div className="p-6 border-b border-slate-100 flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-blue-100 flex items-center justify-center">
+                    <Database className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-slate-800">
+                      Subscription
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                      Plan and database setup
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-semibold text-slate-800">Subscription</h2>
-                  <p className="text-sm text-slate-500">تحديث حالة الاشتراك والخطة.</p>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
+                <div className="p-6 space-y-5">
+                  {tenantFields.map((e, i) => {
+                    if (e.id > 10) {
+                      return (
+                        <div key={i}>
+                          <FormField
+                            type={e.type}
+                            label={e.label}
+                            name={e.name}
+                            value={e.value}
+                            className={getInputClassName(e.name, errors)}
+                            onChange={handleChange}
+                            icon={e.icon}
+                            placeholder={e.placeHolder}
+                          />
+                          {errors[e.name] && (
+                            <p className="text-red-500 text-sm mt-1">
+                              {errors[e.name]}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
+
                   <Select
                     name="plan"
-                    value={formData.plan || "Basic"}
+                    value={formData.plan}
                     onChange={handleChange}
                     options={planOptions}
                     label="Plan"
+                    className={inputClass}
                   />
-                </div>
-                <div>
+
                   <Select
                     name="status"
-                    value={formData.status || "active"}
+                    value={formData.status}
                     onChange={handleChange}
                     options={statusOptions}
                     label="Status"
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Subscription Start</label>
-                  <input
-                    type="date"
-                    name="subscriptionStartDate"
-                    value={formData.subscriptionStartDate || ""}
-                    onChange={handleChange}
                     className={inputClass}
                   />
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">Subscription End</label>
-                  <input
-                    type="date"
-                    name="subscriptionEndDate"
-                    value={formData.subscriptionEndDate || ""}
-                    onChange={handleChange}
-                    className={inputClass}
-                  />
-                </div>
-              </div>
-            </div>
+              </motion.div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
-              <button
+              <motion.button
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
                 type="submit"
                 disabled={isLoading}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full h-14 rounded-2xl bg-linear-to-r from-indigo-600 via-violet-600 to-blue-600 text-white font-semibold shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <Check className="w-4 h-4" />
-                {isLoading ? "جاري الحفظ..." : "حفظ التغييرات"}
-              </button>
+                {isLoading ? (
+                  <>
+                    <Loader className="w-5 h-5 animate-spin" />
+                    Updating Tenant...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    Update Tenant
+                  </>
+                )}
+              </motion.button>
             </div>
           </div>
-
-      
         </form>
       </div>
     </div>

@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Building2,
-  Check,
-  Database,
-  Shield,
-  FileText,
-} from "lucide-react";
+import { Building2, Check, Database, Shield, FileText } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   addTenant,
@@ -16,7 +10,7 @@ import {
   selectTenantError,
 } from "@/store/slices/superAdmin/tenantSlice";
 import Select from "@/components/superAdmin/Select";
-import { planOptions, statusOptions } from "@/config/statusConfig";
+import { planOptions, statusOptions } from "@/config/statsConfig";
 import { useRouter } from "next/navigation";
 import {
   getInputClassName,

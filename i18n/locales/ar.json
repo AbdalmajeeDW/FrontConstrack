@@ -1,0 +1,999 @@
+{
+  "invoices": {
+    "header": {
+      "title": "الفواتير",
+      "subtitle": "إدارة وعرض جميع فواتير وإيصالات الموظفين",
+      "upload_button": "رفع فاتورة"
+    },
+    "stats": {
+      "total": "إجمالي الفواتير",
+      "total_desc": "جميع الفواتير",
+      "today": "فواتير اليوم",
+      "today_desc": "فواتير اليوم",
+      "month": "هذا الشهر",
+      "month_desc": "فواتير هذا الشهر",
+      "employees": "الموظفين النشطين",
+      "employees_desc": "لديهم فواتير"
+    },
+    "filters": {
+      "search_placeholder": "البحث برقم الفاتورة أو الوصف أو اسم الموظف...",
+      "date_placeholder": "تصفية حسب التاريخ",
+      "all_actions": "جميع الإجراءات",
+      "all_employees": "جميع الموظفين",
+      "reset": "إعادة تعيين"
+    },
+    "loading": "جاري تحميل الفواتير...",
+    "no_data": {
+      "title": "لا توجد فواتير",
+      "description": "لا توجد فواتير متاحة حتى الآن.",
+      "no_results": "لا توجد فواتير تطابق معايير البحث."
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "invoices": "فواتير",
+      "page": "الصفحة"
+    },
+    "card": {
+      "images": "صور",
+      "employee": "الموظف"
+    },
+    "gallery": {
+      "close": "إغلاق"
+    },
+    "insights": {
+      "title": "رؤى سريعة",
+      "total": "إجمالي الفواتير",
+      "total_desc": "كل الوقت",
+      "today": "فواتير اليوم",
+      "today_desc": "اليوم",
+      "employees": "الموظفين النشطين",
+      "employees_desc": "لديهم فواتير"
+    },
+    "invoice": "فاتورة رقم "
+  },
+  "navigation": {
+    "Home": "الرئيسية",
+    "Employees": "الموظفين",
+    "Projects": "المشاريع",
+    "Invoices": "الفواتير",
+    "Reports": "التقارير",
+    "Tasks": "المهام",
+    "Activity": "النشاطات",
+    "My Tasks": "مهامي",
+    "Public holidays": "العطلات الرسمية",
+    "Profile": "الملف الشخصي",
+    "Logout": "تسجيل الخروج",
+    "Super Admins": "المشرفين",
+    "Tenants": "الشركات",
+    "Subscriptions": "الاشتراكات",
+    "Dashboard": "لوحة التحكم",
+    "Users Management": "إدارة المستخدمين",
+    "Companies Management": "إدارة الشركات",
+    "Subscriptions Management": "إدارة الاشتراكات",
+    "Employee Dashboard": "لوحة تحكم الموظف",
+    "Overview of your company and operations": "نظرة عامة على شركتك وعملياتها",
+    "View all employees in the company": "عرض جميع الموظفين في الشركة",
+    "View all projects in the company": "عرض جميع المشاريع في الشركة",
+    "View performance and statistics Invoices": "عرض أداء وإحصائيات الفواتير",
+    "View performance and statistics reports": "عرض أداء وإحصائيات التقارير",
+    "View and manage company tasks": "عرض وإدارة مهام الشركة",
+    "View and manage company Activity": "عرض وإدارة نشاطات الشركة",
+    "Welcome to your employee workspace": "مرحباً بك في مساحة عمل الموظف",
+    "View your assigned tasks": "عرض مهامك الموكلة",
+    "View public holidays": "عرض العطلات الرسمية",
+    "Update your personal account information": "تحديث معلومات حسابك الشخصي",
+    "Welcome to the dashboard": "مرحباً بك في لوحة التحكم",
+    "Manage all users on the platform": "إدارة جميع المستخدمين على المنصة",
+    "Manage all companies on the platform": "إدارة جميع الشركات على المنصة",
+    "Overview of subscriptions and plans": "نظرة عامة على الاشتراكات والخطط"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بعودتك، {{name}}",
+    "stats": {
+      "projects": "إجمالي المشاريع",
+      "projects_desc": "مشاريع مسجلة",
+      "employees": "إجمالي الموظفين",
+      "employees_desc": "موظفين مسجلين",
+      "tasks": "إجمالي المهام",
+      "tasks_desc": "جميع المهام"
+    },
+    "quick_actions": {
+      "title": "إجراءات سريعة",
+      "subtitle": "إدارة مشاريعك وفريقك",
+      "new_project": "مشروع جديد",
+      "add_employee": "إضافة موظف",
+      "view_projects": "عرض جميع المشاريع"
+    },
+    "recent_projects": {
+      "title": "المشاريع الأخيرة",
+      "view_all": "عرض الكل",
+      "no_projects": "لا توجد مشاريع بعد",
+      "create_first": "أنشئ مشروعك الأول"
+    },
+    "employee_overview": {
+      "title": "نظرة عامة على الموظفين",
+      "view_all": "عرض الكل",
+      "total_employees": "إجمالي الموظفين",
+      "driving_license": "لديهم رخصة قيادة",
+      "specializations": "التخصصات",
+      "average_salary": "متوسط الراتب"
+    }
+  },
+  "status": {
+    "active": "نشط",
+    "completed": "مكتمل",
+    "planning": "قيد التخطيط",
+    "cancelled": "ملغي"
+  },
+  "employees": {
+    "stats": {
+      "total": "إجمالي الموظفين",
+      "total_desc": "جميع الموظفين",
+      "active": "نشطين",
+      "active_desc": "موظفين نشطين",
+      "inactive": "غير نشطين",
+      "inactive_desc": "موظفين غير نشطين",
+      "license": "لديهم رخصة",
+      "license_desc": "لديهم رخصة قيادة"
+    },
+    "filter": "فلاتر",
+    "filter_all_specializations": "جميع التخصصات",
+    "filter_all_status": "جميع الحالات",
+    "reset_filters": "إعادة تعيين",
+    "no_employees": "لا يوجد موظفين",
+    "no_results": "لا توجد نتائج تطابق الفلاتر",
+    "start_adding": "ابدأ بإضافة موظفين",
+    "search_placeholder": "البحث بالاسم أو البريد الإلكتروني أو الشركة...",
+    "new_employee": "موظف جديد",
+    "add": "إضافة",
+    "yes": "نعم",
+    "no": "لا",
+    "delete_success": "تم حذف الموظف بنجاح.",
+    "delete_error": "فشل حذف الموظف",
+    "delete_title": "حذف موظف",
+    "delete_confirm": "حذف الموظف",
+    "table": {
+      "status": "الحالة",
+      "user": "المستخدم",
+      "contact": "جهة الاتصال",
+      "address": "العنوان",
+      "salary": "الراتب",
+      "birth_date": "تاريخ الميلاد",
+      "license": "رخصة القيادة",
+      "specialization": "التخصص",
+      "action": "الإجراء"
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "employees": "موظفين",
+      "page": "الصفحة"
+    },
+    "insights": {
+      "title": "رؤى سريعة",
+      "average_salary": "متوسط الراتب",
+      "employees_count": "موظف",
+      "specializations": "التخصصات",
+      "different_roles": "أدوار مختلفة",
+      "license_holders": "حاملي الرخصة",
+      "have_license": "لديهم رخصة قيادة"
+    }
+  },
+  "employeeAdd": {
+    "title": "إضافة موظف جديد",
+    "subtitle": "إنشاء حساب موظف جديد لمساحة العمل الخاصة بك",
+    "success": "تم إنشاء الموظف بنجاح.",
+    "error": "فشل إنشاء الموظف",
+    "personal_info": "المعلومات الشخصية",
+    "personal_info_desc": "تفاصيل الموظف الأساسية",
+    "full_name": "الاسم الكامل",
+    "name_placeholder": "جون دو",
+    "birth_date": "تاريخ الميلاد",
+    "email": "البريد الإلكتروني",
+    "email_placeholder": "employee@company.com",
+    "password": "كلمة المرور",
+    "phone": "رقم الهاتف",
+    "phone_placeholder": "+31",
+    "address": "عنوان السكن",
+    "address_placeholder": "اسم المبنى، الشارع، المدينة، الدولة...",
+    "employment_info": "معلومات التوظيف والمالية",
+    "employment_info_desc": "الراتب وتفاصيل العمل",
+    "salary": "الراتب الشهري",
+    "salary_placeholder": "2000",
+    "specialization": "التخصص",
+    "driving_license": "رخصة القيادة",
+    "has_license": "لديه رخصة قيادة سارية",
+    "summary": "ملخص الموظف",
+    "summary_desc": "مراجعة تفاصيل الموظف",
+    "summary_name": "الاسم",
+    "summary_email": "البريد الإلكتروني",
+    "summary_phone": "الهاتف",
+    "summary_role": "الدور",
+    "summary_admin": "مدير",
+    "summary_employee": "موظف",
+    "summary_specialization": "التخصص",
+    "summary_salary": "الراتب الشهري",
+    "summary_birth_date": "تاريخ الميلاد",
+    "summary_license": "رخصة القيادة",
+    "summary_address": "العنوان",
+    "yes": "نعم",
+    "no": "لا",
+    "creating": "جاري إنشاء الموظف...",
+    "create": "إنشاء الموظف"
+  },
+  "employeeEdit": {
+    "title": "تعديل الموظف",
+    "subtitle": "تحديث معلومات الموظف لـ",
+    "invalid_id": "معرف الموظف غير صالح",
+    "load_error": "فشل تحميل بيانات الموظف",
+    "loading": "جاري تحميل بيانات الموظف...",
+    "success": "تم تحديث الموظف بنجاح.",
+    "update_error": "فشل تحديث الموظف",
+    "error": "حدث خطأ أثناء تحديث الموظف",
+    "personal_info": "المعلومات الشخصية",
+    "personal_info_desc": "تفاصيل الموظف الأساسية",
+    "full_name": "الاسم الكامل",
+    "name_placeholder": "جون دو",
+    "birth_date": "تاريخ الميلاد",
+    "email": "البريد الإلكتروني",
+    "email_placeholder": "employee@company.com",
+    "password": "كلمة المرور",
+    "password_optional": "اتركه فارغاً للاحتفاظ بالكلمة الحالية",
+    "password_placeholder": "كلمة مرور جديدة (اختياري)",
+    "phone": "رقم الهاتف",
+    "phone_placeholder": "+31",
+    "address": "عنوان السكن",
+    "address_placeholder": "اسم المبنى، الشارع، المدينة، الدولة...",
+    "employment_info": "معلومات التوظيف والمالية",
+    "employment_info_desc": "الراتب وتفاصيل العمل",
+    "salary": "الراتب الشهري",
+    "salary_placeholder": "2000",
+    "specialization": "التخصص",
+    "driving_license": "رخصة القيادة",
+    "has_license": "لديه رخصة قيادة سارية",
+    "summary": "ملخص الموظف",
+    "summary_desc": "مراجعة تفاصيل الموظف",
+    "summary_name": "الاسم",
+    "summary_email": "البريد الإلكتروني",
+    "summary_phone": "الهاتف",
+    "summary_specialization": "التخصص",
+    "summary_salary": "الراتب الشهري",
+    "summary_birth_date": "تاريخ الميلاد",
+    "summary_license": "رخصة القيادة",
+    "summary_address": "العنوان",
+    "yes": "نعم",
+    "no": "لا",
+    "updating": "جاري تحديث الموظف...",
+    "update": "تحديث الموظف"
+  },
+  "profile": {
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "employee": "موظف",
+    "personal_info": "المعلومات الشخصية",
+    "personal_info_desc": "تفاصيل الملف الشخصي للموظف",
+    "age": "العمر",
+    "years": "سنة",
+    "salary": "الراتب",
+    "driving_license": "رخصة القيادة",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "birth_date": "تاريخ الميلاد",
+    "joined_date": "تاريخ الانضمام",
+    "not_provided": "غير محدد",
+    "yes": "نعم",
+    "no": "لا",
+    "invoice_documents": "وثائق الفواتير",
+    "invoice_documents_desc": "جميع الفواتير والإيصالات المرفوعة",
+    "search_placeholder": "البحث برقم الفاتورة أو الوصف أو اسم الموظف...",
+    "loading_invoices": "جاري تحميل الفواتير...",
+    "no_invoices": "لا توجد فواتير",
+    "no_invoices_desc": "لا توجد فواتير متاحة حتى الآن.",
+    "no_results": "لا توجد فواتير تطابق معايير البحث.",
+    "employee_name": "اسم الموظف",
+    "images": "صور",
+    "delete_title": "حذف الموظف",
+    "delete_confirm": "حذف الموظف",
+    "delete_success": "تم حذف الموظف بنجاح.",
+    "delete_error": "فشل حذف الموظف",
+    "invoices_error": "فشل تحميل الفواتير"
+  },
+  "projects": {
+    "stats": {
+      "total": "إجمالي المشاريع",
+      "total_desc": "جميع المشاريع",
+      "active": "مشاريع نشطة",
+      "active_desc": "قيد التنفيذ حالياً",
+      "completed": "مكتملة",
+      "completed_desc": "مشاريع منتهية",
+      "planning": "قيد التخطيط",
+      "planning_desc": "عبر جميع المشاريع",
+      "overdue": "المشاريع المتأخرة",
+      "overdue_desc": "مشاريع متأخرة التسليم"
+    },
+    "status": {
+      "planning": "قيد التخطيط",
+      "active": "نشط",
+      "completed": "مكتمل",
+      "cancelled": "ملغي",
+      "overdue": "متأخر"
+    },
+    "priority": {
+      "high": "عالي",
+      "medium": "متوسط",
+      "low": "منخفض"
+    },
+    "search_placeholder": "البحث باسم المشروع أو الموقع أو المدير...",
+    "filter_status": "جميع الحالات",
+    "filter_priority": "جميع الأولويات",
+    "filter_all": "الكل",
+    "new_project": "مشروع جديد",
+    "start": "البداية",
+    "end": "النهاية",
+    "delete_success": "تم حذف المشروع بنجاح.",
+    "delete_error": "فشل حذف المشروع",
+    "delete_title": "حذف المشروع",
+    "delete_confirm": "حذف المشروع",
+    "table": {
+      "name": "اسم المشروع",
+      "location": "الموقع",
+      "client_name": "اسم العميل",
+      "client_phone": "هاتف العميل",
+      "postal_code": "الرمز البريدي",
+      "city": "المدينة",
+      "time": "الوقت",
+      "status": "الحالة",
+      "action": "الإجراء"
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "projects": "مشاريع",
+      "page": "الصفحة"
+    },
+    "insights": {
+      "title": "رؤى سريعة",
+      "most_active_city": "المدينة الأكثر نشاطاً",
+      "projects": "مشروع",
+      "newest_project": "أحدث مشروع",
+      "no_projects": "لا توجد مشاريع",
+      "ending_this_month": "تنتهي هذا الشهر",
+      "deadlines": "مواعيد نهائية قريبة"
+    }
+  },
+  "projectDetails": {
+    "loading": "جاري تحميل تفاصيل المشروع...",
+    "load_error": "فشل تحميل بيانات المشروع",
+    "not_found": "المشروع غير موجود",
+    "not_found_desc": "المشروع الذي تبحث عنه غير موجود.",
+    "go_back": "العودة",
+    "project_info": "معلومات المشروع",
+    "project_info_desc": "تفاصيل المشروع الكاملة",
+    "description": "الوصف",
+    "no_description": "لا يوجد وصف",
+    "client_name": "اسم العميل",
+    "client_phone": "هاتف العميل",
+    "location": "الموقع",
+    "city": "المدينة",
+    "postal_code": "الرمز البريدي",
+    "start_date": "تاريخ البداية",
+    "end_date": "تاريخ النهاية",
+    "status": "الحالة",
+    "not_specified": "غير محدد",
+    "not_provided": "غير محدد",
+    "no_location": "لا يوجد موقع محدد",
+    "no_city": "لا توجد مدينة",
+    "unknown": "غير معروف"
+  },
+  "addProjects": {
+    "create_title": "إنشاء مشروع جديد",
+    "create_subtitle": "إضافة مشروع بناء جديد",
+    "create_name": "اسم المشروع",
+    "create_name_placeholder": "أدخل اسم المشروع",
+    "create_name_required": "اسم المشروع مطلوب",
+    "create_city": "المدينة",
+    "create_city_placeholder": "أدخل اسم المدينة",
+    "create_client_name": "اسم العميل",
+    "create_client_name_placeholder": "أدخل اسم العميل",
+    "create_client_phone": "هاتف العميل",
+    "create_client_phone_placeholder": "أدخل هاتف العميل",
+    "create_location": "الموقع",
+    "create_location_placeholder": "أدخل موقع المشروع",
+    "create_postal_code": "الرمز البريدي",
+    "create_postal_code_placeholder": "أدخل الرمز البريدي",
+    "create_description": "الوصف",
+    "create_description_placeholder": "صف المشروع...",
+    "create_start_date": "تاريخ البداية",
+    "create_end_date": "تاريخ النهاية",
+    "create_success": "تم إنشاء المشروع بنجاح",
+    "create_error": "فشل إنشاء المشروع",
+    "create_saving": "جاري الحفظ...",
+    "create_button": "إنشاء المشروع"
+  },
+  "editProjects": {
+    "edit_title": "تعديل المشروع",
+    "edit_subtitle": "تحديث المشروع:",
+    "edit_status": "الحالة",
+    "edit_loading": "جاري تحميل بيانات المشروع...",
+    "edit_load_error": "فشل تحميل بيانات المشروع",
+    "edit_success": "تم تحديث المشروع بنجاح",
+    "edit_error": "فشل تحديث المشروع",
+    "edit_updating": "جاري التحديث...",
+    "edit_button": "تحديث المشروع",
+    "status": {
+      "planning": "قيد التخطيط",
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل",
+      "cancelled": "ملغي"
+    }
+  },
+  "tasks": {
+    "choose_images": "اختر الصور",
+    "no_employees_selected": "لم يتم اختيار أي موظف",
+    "fix_errors": "يرجى تعبئة جميع الحقول المطلوبة",
+
+    "search_placeholder": "البحث عن المهام...",
+    "filter_all_projects": "جميع المشاريع",
+    "filter_all_priorities": "جميع الأولويات",
+    "filter_all_status": "جميع الحالات",
+    "new_task": "مهمة جديدة",
+    "no_tasks": "لا توجد مهام",
+    "no_tasks_filter": "لا توجد مهام تطابق الفلتر المحدد.",
+    "no_tasks_add": "أضف مهمة جديدة للبدء.",
+    "create_success": "تم إنشاء المهمة بنجاح.",
+    "update_success": "تم تحديث المهمة بنجاح!",
+    "delete_success": "تم حذف المهمة بنجاح.",
+    "delete_error": "فشل حذف المهمة",
+    "delete_title": "حذف المهمة",
+    "delete_confirm": "حذف المهمة",
+    "assign_employees": "تعيين الموظفين",
+    "select_employees": "اختر الموظفين (اضغط Ctrl/Cmd للاختيار المتعدد)",
+    "select_employees_hint": "اضغط Ctrl (ويندوز) أو Cmd (ماك) لاختيار عدة موظفين",
+    "selected_count": "المحددون ({{count}}):",
+    "images_label": "صور المهمة",
+    "images": "صور",
+    "images_limit": "(الحد الأقصى 20 صورة، 5 ميجابايت لكل صورة)",
+    "saving": "جاري الحفظ...",
+    "update": "تحديث",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "priority": {
+      "high": "عالي",
+      "medium": "متوسط",
+      "low": "منخفض"
+    },
+    "status": {
+      "in_progress": "قيد التنفيذ",
+      "done": "مكتمل"
+    },
+    "stats": {
+      "all": "جميع المهام",
+      "all_desc": "إجمالي المهام الموكلة",
+      "completed": "المهام المكتملة",
+      "completed_desc": "المهام المنتهية",
+      "in_progress": "قيد التنفيذ",
+      "in_progress_desc": "نشطة حالياً",
+      "overdue": "المهام المتأخرة",
+      "overdue_desc": "بحاجة إلى اهتمام",
+      "high_priority": "أولوية عالية",
+      "high_priority_desc": "مهام عاجلة"
+    }
+  },
+  "activities": {
+    "title": "سجل نشاطات الموظفين",
+    "subtitle": "تتبع جميع إجراءات الموظفين واستخدام النظام في الوقت الفعلي",
+    "search": "البحث باسم الموظف أو الرسالة أو الإجراء...",
+    "filter_employee": "جميع الموظفين",
+    "filter_all_employees": "جميع الموظفين",
+    "filter_all_actions": "جميع الإجراءات",
+    "most_active": "الموظفين الأكثر نشاطاً",
+    "no_email": "لا يوجد بريد إلكتروني",
+    "activities": "نشاطات",
+    "employee_prefix": "موظف",
+    "load_error": "فشل تحميل النشاطات",
+    "stats": {
+      "today": "نشاطات اليوم",
+      "today_desc": "نشاطات اليوم",
+      "month": "هذا الشهر",
+      "month_desc": "نشاطات هذا الشهر",
+      "total": "إجمالي النشاطات",
+      "total_desc": "كل الوقت"
+    },
+    "filter": {
+      "all_actions": "جميع الإجراءات",
+      "login": "تسجيل دخول",
+      "logout": "تسجيل خروج",
+      "upload_images_for_task": "تعديل مهمة",
+      "upload_invoice": "رفع فاتورة",
+      "view_invoices": "عرض الفواتير",
+      "view_tasks": "عرض المهام"
+    },
+    "table": {
+      "employee": "الموظف",
+      "action": "الإجراء",
+      "message": "الرسالة / التفاصيل",
+      "time": "الوقت"
+    },
+    "loading": "جاري تحميل النشاطات...",
+    "no_data": {
+      "title": "لا توجد نشاطات",
+      "description": "ستظهر النشاطات هنا",
+      "no_results": "لا توجد نشاطات تطابق معايير البحث"
+    },
+    "pagination": {
+      "showing": "عرض",
+      "to": "إلى",
+      "of": "من",
+      "activities": "نشاطات",
+      "page": "الصفحة"
+    },
+    "insights": {
+      "title": "رؤى سريعة",
+      "most_active": "أكثر إجراء نشط",
+      "most_active_desc": "الإجراء الأكثر تكراراً",
+      "today": "نشاطات اليوم",
+      "today_desc": "نشاطات اليوم",
+      "employees": "الموظفين النشطين",
+      "employees_desc": "الموظفين الأكثر نشاطاً"
+    }
+  },
+
+  "holidays": {
+    "title": "العطلات الرسمية",
+    "subtitle": "تقويم 2026",
+    "stats": {
+      "total": "إجمالي العطلات",
+      "national": "عطلات وطنية",
+      "religious": "عطلات دينية",
+      "weekend": "عطلات نهاية الأسبوع"
+    },
+    "search": "البحث عن العطلات...",
+    "filter": {
+      "all": "جميع الأنواع",
+      "national": "وطني",
+      "religious": "ديني"
+    },
+    "no_results": "لا توجد عطلات تطابق معايير البحث",
+    "no_holidays": "لا توجد عطلات",
+    "no_holidays_desc": "حاول تعديل البحث أو الفلتر",
+    "types": {
+      "national": "وطني",
+      "religious": "ديني"
+    },
+    "days": {
+      "monday": "الإثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد",
+      "sunday_monday": "الأحد والإثنين",
+      "friday_saturday": "الجمعة والسبت"
+    },
+    "new_year": "رأس السنة الميلادية",
+    "new_year_desc": "احتفال ببداية العام الجديد. يحضر الكثير من الناس الألعاب النارية والتجمعات العائلية.",
+    "good_friday": "الجمعة العظيمة",
+    "good_friday_desc": "إحياء ذكرى صلب المسيح. تبقى العديد من الشركات مفتوحة ولكن قد يغلق البعض مبكراً.",
+    "easter": "أحد الفصح وإثنين الفصح",
+    "easter_desc": "احتفال بقيامة المسيح. احتفال لمدة يومين مع التجمعات العائلية وصيد بيض الفصح.",
+    "kings_day": "يوم الملك",
+    "kings_day_desc": "احتفال بعيد ميلاد الملك. تتحول البلاد بأكملها إلى اللون البرتقالي مع المهرجانات والأسواق والحفلات.",
+    "liberation_day": "يوم التحرير",
+    "liberation_day_desc": "احتفال بنهاية الاحتلال في الحرب العالمية الثانية. احتفال خاص في 2026 لأنه عام الذكرى الخامسة.",
+    "ascension_day": "يوم الصعود",
+    "ascension_day_desc": "إحياء ذكرى صعود المسيح إلى السماء. يأخذ الكثير من الناس عطلة نهاية أسبوع طويلة.",
+    "pentecost": "يوم الخمسين",
+    "pentecost_desc": "احتفال بحلول الروح القدس. احتفال لمدة يومين مع خدمات الكنيسة وأوقات العائلة.",
+    "christmas": "عيد الميلاد",
+    "christmas_desc": "احتفال بميلاد المسيح. احتفال لمدة يومين مع التجمعات العائلية والولائم وتبادل الهدايا."
+  },
+  "myTasks": {
+    "title": "مهامي",
+    "subtitle": "إدارة ومتابعة جميع المهام الموكلة إليك",
+    "stats": {
+      "my_tasks": "مهامي",
+      "my_tasks_desc": "المهام الموكلة إليك",
+      "completed": "مكتملة",
+      "completed_desc": "المهام المنتهية",
+      "in_progress": "قيد التنفيذ",
+      "in_progress_desc": "المهام النشطة حالياً"
+    },
+    "search": "البحث في مهامي...",
+    "filter": {
+      "all_priorities": "جميع الأولويات",
+      "all_status": "جميع الحالات",
+      "urgent": "عاجل",
+      "high": "عالية",
+      "medium": "متوسطة",
+      "low": "منخفضة",
+      "in_progress": "قيد التنفيذ",
+      "done": "مكتمل"
+    },
+    "view_mode": {
+      "list": "عرض القائمة",
+      "board": "عرض اللوحة"
+    },
+    "no_tasks": "لا توجد مهام موكلة إليك",
+    "no_tasks_desc": "ليس لديك أي مهام حتى الآن.",
+    "loading": "جاري تحميل المهام...",
+    "error": "حدث خطأ أثناء تحميل المهام",
+    "task": {
+      "status": "الحالة",
+      "priority": "الأولوية",
+      "project": "المشروع",
+      "city": "المدينة",
+      "location": "الموقع",
+      "start_date": "تاريخ البداية",
+      "end_date": "تاريخ النهاية",
+      "description": "الوصف",
+      "assigned_to": "موكل إلى",
+      "created_by": "تم الإنشاء بواسطة",
+      "no_description": "لا يوجد وصف",
+      "no_location": "لا يوجد موقع",
+      "no_city": "لا توجد مدينة"
+    },
+    "priority": {
+      "urgent": "عاجل",
+      "high": "عالية",
+      "medium": "متوسطة",
+      "low": "منخفضة"
+    },
+    "status": {
+      "in_progress": "قيد التنفيذ",
+      "done": "مكتمل"
+    },
+    "actions": {
+      "view": "عرض",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "update": "تحديث",
+      "create": "إنشاء"
+    },
+    "update_success": "تم تحديث المهمة بنجاح!",
+    "update_error": "فشل تحديث المهمة",
+    "delete_success": "تم حذف المهمة بنجاح.",
+    "delete_error": "فشل حذف المهمة",
+    "delete_title": "حذف المهمة",
+    "delete_confirm": "تأكيد الحذف",
+    "delete_message": "هل أنت متأكد من حذف هذه المهمة؟"
+  },
+  "validation": {
+    "required": "مطلوب",
+    "invalid": "غير صالح",
+    "min_length": "يجب أن يكون على الأقل {{count}} أحرف",
+    "max_length": "يجب أن يكون أقل من {{count}} أحرف",
+
+    "name": {
+      "required": "الاسم مطلوب",
+      "min_length": "يجب أن يكون الاسم على الأقل 3 أحرف",
+      "project_required": "اسم المشروع مطلوب",
+      "project_min_length": "اسم المشروع يجب أن يكون على الأقل 3 أحرف",
+      "task_required": "اسم المهمة مطلوب",
+      "task_min_length": "اسم المهمة يجب أن يكون على الأقل 3 أحرف",
+      "company_required": "اسم الشركة مطلوب",
+      "company_empty": "اسم الشركة لا يمكن أن يكون فارغاً",
+      "company_no_spaces": "اسم الشركة لا يمكن أن يحتوي على مسافات",
+      "company_no_leading_space": "اسم الشركة لا يمكن أن يبدأ بمسافة",
+      "admin_required": "الاسم  مطلوب"
+    },
+
+    "email": {
+      "required": "البريد الإلكتروني مطلوب",
+      "invalid": "البريد الإلكتروني غير صحيح",
+      "admin_required": "البريد الإلكتروني للمدير مطلوب"
+    },
+
+    "password": {
+      "required": "كلمة المرور مطلوبة",
+      "min_length": "كلمة المرور يجب أن تكون على الأقل 8 أحرف",
+      "uppercase": "كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل",
+      "lowercase": "كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل",
+      "number": "كلمة المرور يجب أن تحتوي على رقم واحد على الأقل",
+      "special": "كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل",
+      "admin_required": "كلمة المرور  مطلوبة"
+    },
+
+    "birth_date": {
+      "required": "تاريخ الميلاد مطلوب",
+      "min_age": "يجب أن يكون العمر 18 سنة على الأقل"
+    },
+
+    "phone": {
+      "required": "رقم الهاتف مطلوب",
+      "digits_only": "رقم الهاتف يجب أن يحتوي على أرقام فقط",
+      "length": "رقم الهاتف يجب أن يكون بين 8 و 15 رقماً",
+      "client_required": "هاتف العميل مطلوب"
+    },
+
+    "address": {
+      "required": "العنوان مطلوب"
+    },
+
+    "salary": {
+      "required": "الراتب مطلوب",
+      "positive": "الراتب يجب أن يكون رقماً موجباً أكبر من 0"
+    },
+
+    "city": {
+      "required": "المدينة مطلوبة",
+      "max_length": "اسم المدينة يجب أن يكون أقل من 100 حرف",
+      "invalid_chars": "اسم المدينة يمكن أن يحتوي فقط على أحرف، مسافات، شرطات، وعلامات اقتباس"
+    },
+
+    "postal_code": {
+      "required": "الرمز البريدي مطلوب",
+      "invalid": "الرمز البريدي يجب أن يكون 4 أرقام متبوعة بحرفين كبيرين (مثال: 1234AB)"
+    },
+
+    "location": {
+      "required": "الموقع مطلوب"
+    },
+
+    "client_name": {
+      "required": "اسم العميل مطلوب"
+    },
+
+    "status": {
+      "required": "الحالة مطلوبة",
+      "invalid": "حالة غير صالحة"
+    },
+
+    "priority": {
+      "required": "الأولوية مطلوبة",
+      "invalid": "مستوى أولوية غير صالح"
+    },
+
+    "start_date": {
+      "required": "تاريخ البدء مطلوب",
+      "past": "تاريخ البدء لا يمكن أن يكون في الماضي"
+    },
+
+    "end_date": {
+      "required": "تاريخ الانتهاء مطلوب"
+    },
+
+    "description": {
+      "required": "الوصف مطلوب",
+      "max_length": "الوصف يجب أن يكون أقل من 500 حرف"
+    },
+
+    "house_number": {
+      "required": "رقم المنزل مطلوب",
+      "max_length": "رقم المنزل يجب أن يكون أقل من 20 حرفاً",
+      "invalid": "تنسيق رقم المنزل غير صحيح"
+    },
+
+    "worker_arrival_time": {
+      "required": "وقت وصول العامل مطلوب",
+      "invalid": "تنسيق الوقت غير صحيح (HH:MM)"
+    },
+
+    "task_type": {
+      "required": "نوع المهمة مطلوب",
+      "max_length": "نوع المهمة يجب أن يكون أقل من 100 حرف"
+    },
+
+    "work_area": {
+      "required": "منطقة العمل مطلوبة"
+    },
+
+    "bus_number": {
+      "required": "رقم الباص مطلوب",
+      "max_length": "رقم الباص يجب أن يكون أقل من 20 حرفاً",
+      "invalid": "تنسيق رقم الباص غير صحيح"
+    },
+
+    "driver_name": {
+      "required": "اسم السائق مطلوب"
+    },
+
+    "industry": {
+      "required": "الصناعة مطلوبة"
+    },
+
+    "database_name": {
+      "required": "اسم قاعدة البيانات مطلوب"
+    },
+
+    "kvk_number": {
+      "required": "رقم KVK مطلوب"
+    },
+
+    "btw_number": {
+      "required": "رقم BTW مطلوب"
+    },
+
+    "max_employees": {
+      "required": "عدد الموظفين مطلوب",
+      "min": "الحد الأدنى لعدد الموظفين هو 3"
+    }
+  },
+  "auth": {
+    "tenant_admin_title": "مدير الشركة",
+    "tenant_admin_description": "قم بتسجيل الدخول كمدير إلى لوحة التحكم الخاصة بك باستخدام بريدك الإلكتروني وكلمة المرور",
+    "admin_login_title": "تسجيل لدخول ",
+    "email_label": "البريد الإلكتروني",
+    "email_placeholder": "أدخل البريد الإلكتروني ",
+    "email_required": "البريد الإلكتروني مطلوب",
+    "password_label": "كلمة المرور",
+    "password_placeholder": "أدخل كلمة المرور",
+    "password_required": "كلمة المرور مطلوبة",
+    "login_button": "تسجيل الدخول",
+    "logging_in": "جاري تسجيل الدخول، يرجى الانتظار...",
+    "login_error": "حدث خطأ أثناء تسجيل الدخول",
+    "show_password": "إظهار كلمة المرور",
+    "hide_password": "إخفاء كلمة المرور"
+  },
+  "taskCard": {
+    "status": {
+      "in_progress": "قيد التنفيذ",
+      "completed": "مكتمل"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية",
+      "urgent": "عاجلة"
+    },
+    "images": "صور",
+    "image_count": "صورة|صورتان|صور",
+    "click_to_view": "انقر لعرض الكل",
+    "view": "عرض",
+    "due_date": "تاريخ الاستحقاق",
+    "area": "المساحة (م²)",
+    "location": "موقع العمل",
+    "bus": "باص",
+    "driver": "سائق",
+    "arrival_time": "وقت الوصول",
+    "in_progress_title": "قيد التنفيذ",
+    "completed_title": "مكتمل",
+    "edit_title": "تعديل",
+    "delete_title": "حذف",
+    "already_in_progress": "المهمة \"{{name}}\" قيد التنفيذ بالفعل",
+    "already_completed": "المهمة \"{{name}}\" مكتملة بالفعل",
+    "confirm_in_progress": "تغيير حالة المهمة إلى قيد التنفيذ؟",
+    "confirm_completed": "نقل المهمة \"{{name}}\" إلى مكتملة؟",
+    "images_title": "صور المهمة",
+    "no_images": "لا توجد صور متاحة",
+    "close": "إغلاق",
+    "click_to_close": "انقر في أي مكان للإغلاق"
+  },
+  "employeeDashboard": {
+    "welcome": "مرحباً بعودتك، {{name}}",
+    "employee": "موظف",
+    "expired": "منتهي",
+    "days_left": "{{count}} يوم متبقي",
+    "days_left_plural": "{{count}} أيام متبقية",
+    "hours_left": "{{count}} ساعة متبقية",
+    "hours_left_plural": "{{count}} ساعات متبقية",
+    "current_tasks": "مهامي الحالية",
+    "view_all": "عرض الكل",
+    "in_progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "remaining": "المتبقي",
+    "driver_name": "اسم السائق",
+    "bus_number": "رقم الباص",
+    "location": "الموقع",
+    "deadline": "الموعد النهائي",
+    "stats": {
+      "all": "جميع المهام",
+      "all_desc": "إجمالي المهام الموكلة",
+      "completed": "المهام المكتملة",
+      "completed_desc": "المهام المنتهية",
+      "in_progress": "قيد التنفيذ",
+      "in_progress_desc": "نشطة حالياً",
+      "overdue": "المهام المتأخرة",
+      "overdue_desc": "بحاجة إلى اهتمام",
+      "high_priority": "أولوية عالية",
+      "high_priority_desc": "مهام عاجلة"
+    }
+  },
+  "addTask": {
+    "fields": {
+      "task_name": "اسم المهمة",
+      "project_name": "اسم المشروع",
+      "task_description": "وصف المهمة",
+      "start_date": "تاريخ البدء",
+      "end_date": "تاريخ الانتهاء",
+      "priority": "الأولوية",
+      "task_type": "نوع المهمة",
+      "city": "المدينة",
+      "postal_code": "الرمز البريدي",
+      "house_number": "رقم المنزل",
+      "arrival_time": "وقت الوصول",
+      "work_area": "مساحة العمل (م²)",
+      "bus_number": "رقم الباص",
+      "driver_name": "اسم السائق"
+    },
+    "placeholders": {
+      "task_name": "مثال: حفر الأساسات",
+      "task_description": "اكتب وصف المهمة...",
+      "task_type": "مثال: أعمال خرسانية",
+      "city": "مثال: أمستردام",
+      "postal_code": "مثال: 1012 AB",
+      "house_number": "مثال: 25A",
+      "work_area": "مثال: 250",
+      "bus_number": "مثال: BUS-01",
+      "driver_name": "مثال: أحمد محمد"
+    },
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية",
+      "urgent": "عاجلة"
+    },
+
+    "add_title": "إضافة مهمة جديدة",
+    "edit_title": "تعديل المهمة",
+    "basic_info": "معلومات المهمة الأساسية",
+    "location_info": "موقع المهمة",
+    "details_info": "تفاصيل إضافية",
+    "transportation_info": "وسائل النقل",
+    "assign_employees": "تعيين الموظفين",
+    "select_employees": "اختر الموظفين (اضغط Ctrl/Cmd للاختيار المتعدد)",
+    "select_employees_hint": "اضغط Ctrl (ويندوز) أو Cmd (ماك) لاختيار عدة موظفين",
+    "selected_count": "المحددون ({{count}}):",
+    "no_employees_selected": "لم يتم اختيار أي موظف",
+    "images_label": "صور المهمة",
+    "images_limit": "(الحد الأقصى 20 صورة، 5 ميجابايت لكل صورة)",
+    "clear_all": "مسح الكل",
+    "saved": "محفوظ",
+    "choose_images": "اختر الصور",
+    "max_images": "الحد الأقصى 20 صورة",
+    "images": "صور",
+    "image_max": "يمكنك رفع 20 صورة كحد أقصى",
+    "image_too_large": "{{name}} كبيرة جداً (الحد الأقصى 5 ميجابايت)",
+    "image_invalid": "{{name}} ليست صورة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "update": "تحديث",
+    "saving": "جاري الحفظ...",
+    "create_success": "تم إنشاء المهمة بنجاح",
+    "update_success": "تم تحديث المهمة بنجاح",
+    "create_error": "فشل إنشاء المهمة",
+    "update_error": "فشل تحديث المهمة",
+    "fix_errors": "يرجى إصلاح جميع الأخطاء قبل الإرسال"
+  },
+  "specializations": {
+    "select": "اختر التخصص",
+    "concrete_worker": "عامل خرسانة",
+    "not_specified": "غير محدد",
+    "electrician": "كهربائي",
+    "plumber": "سباك",
+    "carpenter": "نجار",
+    "steel_fixer": "حداد تسليح",
+    "painter": "دهان",
+    "tiler": "مبلط",
+    "welder": "لحام",
+    "driver": "سائق",
+    "safety_officer": "مسؤول سلامة",
+    "site_supervisor": "مشرف موقع",
+    "foreman": "رئيس عمال"
+  },
+  "upload_receipt": {
+    "title": "رفع فاتورة جديدة",
+    "subtitle": "املأ التفاصيل أدناه",
+    "select_employee_label": "اختر الموظف",
+    "select_employee_placeholder": "اختر موظف...",
+    "select_employee": "يرجى اختيار موظف",
+    "description": "الوصف",
+    "description_placeholder": "أضف وصفاً مختصراً...",
+    "images": "صور الفاتورة",
+    "click_to_upload": "انقر للرفع",
+    "upload_hint": "PNG, JPG, WEBP حتى 10 ميجابايت",
+    "no_images": "يرجى اختيار صورة واحدة على الأقل",
+    "success": "تم رفع الفاتورة بنجاح!",
+    "error": "فشل رفع الفاتورة",
+    "cancel": "إلغاء",
+    "upload": "رفع الفاتورة",
+    "processing": "جاري المعالجة...",
+    "select_employee_required": "يرجى اختيار موظف",
+    "images_required": "يرجى اختيار صورة واحدة على الأقل"
+  }
+}
