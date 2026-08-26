@@ -17,7 +17,7 @@ export const ImageGallery = ({ images, children }: ImageGalleryProps) => {
   if (!images?.length) return <>{children}</>;
 
   const urls = images.map((img) =>
-    img.startsWith("http") ? img : `http://localhost:3000${img}`,
+    img.startsWith("http") ? img : `http://localhost:3007${img}`,
   );
 
   const next = () => setIndex((i) => (i + 1) % urls.length);

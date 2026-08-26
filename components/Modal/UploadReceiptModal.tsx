@@ -199,7 +199,7 @@ export default function UploadReceiptModal({
       });
 
       const token = localStorage.getItem("tenant-token");
-      const response = await fetch("http://localhost:3000/tenant/invoices", {
+      const response = await fetch("http://localhost:3007/tenant/invoices", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

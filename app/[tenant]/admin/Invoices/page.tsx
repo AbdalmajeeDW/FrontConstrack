@@ -64,7 +64,7 @@ export default function InvoicesPage() {
       setIsLoading(true);
       try {
         const token = localStorage.getItem("tenant-token");
-        const response = await fetch("http://localhost:3000/tenant/invoices", {
+        const response = await fetch("http://localhost:3007/tenant/invoices", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -170,7 +170,7 @@ export default function InvoicesPage() {
 
   const getImageUrls = (images: string[]) => {
     if (images && images.length > 0) {
-      return images.map((img) => `http://localhost:3000${img}`);
+      return images.map((img) => `http://localhost:3007${img}`);
     }
     return [];
   };
