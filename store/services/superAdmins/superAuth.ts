@@ -12,6 +12,7 @@ export interface User {
   tenantName?: string;
   avatar?: string;
   phone?: string;
+  role?:string
   createdAt?: string;
 }
 
