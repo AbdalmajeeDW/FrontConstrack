@@ -78,11 +78,11 @@ export default function InvoicesPage() {
       const data = await response.json();
       setInvoices(data);
       if (showToast) {
-        toast.success("Invoices updated successfully!");
+        toast.success(t("invoices.refresh.success"));
       }
     } catch (error) {
       console.error("Error fetching invoices:", error);
-      toast.error("Failed to refresh invoices");
+      toast.error(t("invoices.refresh.error"));
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

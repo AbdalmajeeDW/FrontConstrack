@@ -15,13 +15,17 @@
       "employees": "الموظفين النشطين",
       "employees_desc": "لديهم فواتير"
     },
+       "refresh": {
+      "success": "تم تحديث الفواتير بنجاح!",
+      "error": "فشل في تحديث الفواتير"
+    },
     "filters": {
       "search_placeholder": "البحث برقم الفاتورة أو الوصف أو اسم الموظف...",
       "date_placeholder": "تصفية حسب التاريخ",
       "all_actions": "جميع الإجراءات",
       "all_employees": "جميع الموظفين",
       "refreshing": "جاري التحديث...",
-"refresh": "تحديث",
+      "refresh": "تحديث",
       "reset": "إعادة تعيين"
     },
     "loading": "جاري تحميل الفواتير...",
