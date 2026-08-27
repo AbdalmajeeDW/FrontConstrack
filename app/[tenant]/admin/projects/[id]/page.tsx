@@ -19,6 +19,8 @@ import {
   Loader,
   User,
   Info,
+  ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -235,6 +237,17 @@ export default function ProjectDetailsPage() {
                 className="p-2 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-rose-50"
               >
                 <Trash2 className="w-5 h-5 text-rose-600" />
+              </button>
+              <button
+                onClick={() => router.back()}
+                className=" p-2 bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:bg-white hover:shadow-lg transition-all duration-200 border border-gray-200/50 group"
+                aria-label={t("profile.back")}
+              >
+                {isRTL ? (
+                  <ArrowRight className="w-5 h-5 text-gray-700 group-hover:text-indigo-600 transition-colors" />
+                ) : (
+                  <ArrowLeft className="w-5 h-5 text-gray-700 group-hover:text-indigo-600 transition-colors" />
+                )}
               </button>
             </div>
           </div>

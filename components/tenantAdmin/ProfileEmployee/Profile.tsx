@@ -21,6 +21,8 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -259,7 +261,17 @@ export default function ProfilePage({
                 )}
               </div>
             </div>
-
+            <button
+              onClick={() => router.back()}
+              className=" p-2.5 bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:bg-white hover:shadow-lg transition-all duration-200 border border-gray-200/50 group"
+              aria-label={t("profile.back")}
+            >
+              {isRTL ? (
+                <ArrowRight className="w-5 h-5 text-gray-700 group-hover:text-indigo-600 transition-colors" />
+              ) : (
+                <ArrowLeft className="w-5 h-5 text-gray-700 group-hover:text-indigo-600 transition-colors" />
+              )}
+            </button>
             {!isEmployee && (
               <div className="flex items-center gap-2 shrink-0">
                 <Link

@@ -637,7 +637,7 @@ export default function AddTaskModal({
                   className="text-sm text-red-500 hover:text-red-700 flex items-center gap-1"
                 >
                   <Trash2 className="w-4 h-4" />
-                  {t("tasks.clear_all")}
+                  {t("addTask.clear_all")}
                 </button>
               )}
             </div>

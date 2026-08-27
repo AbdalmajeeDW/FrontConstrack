@@ -332,16 +332,16 @@ export default function EditProjectPage() {
             value={form.description || ""}
             onChange={handleChange}
             icon={FileText}
-            placeholder={t("projects.create_description_placeholder")}
+            placeholder={t("addProjects.create_description_placeholder")}
             rows={5}
           />
           <div className="flex justify-end gap-2 ">
-            <div
+            <Button
               className="w-32 h-8 rounded-xl bg-gray-300 cursor-pointer  flex items-center justify-center shadow-2xl"
               onClick={() => router.back()}
             >
               {t("addTask.cancel")}
-            </div>
+            </Button>
             <Button
               type="submit"
               disabled={loading}

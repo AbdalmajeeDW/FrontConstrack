@@ -261,7 +261,13 @@ export default function CreateProjectPage() {
             rows={5}
           />
 
-          <div className="flex justify-end pt-5">
+          <div className="flex justify-end gap-2 pt-5">
+            <Button
+              className="px-8 py-3 rounded-xl bg-gray-300 cursor-pointer  flex items-center justify-center shadow-2xl"
+              onClick={() => router.back()}
+            >
+              {t("addTask.cancel")}
+            </Button>
             <Button
               type="submit"
               disabled={loading}

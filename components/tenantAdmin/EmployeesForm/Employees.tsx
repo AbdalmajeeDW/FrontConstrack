@@ -34,6 +34,7 @@ import { specializationOptions } from "@/utils/constants/specializationOptions";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
+import { Button } from "@base-ui/react";
 
 interface EmployeeFormProps {
   mode: "add" | "edit";
@@ -664,12 +665,12 @@ export default function EmployeeForm({ mode, employeeId }: EmployeeFormProps) {
                 </div>
               </motion.div>
               <div className="flex gap-2">
-                <div
+                <Button
                   className="w-32 h-10 rounded-2xl bg-gray-300 cursor-pointer  flex items-center justify-center shadow-2xl"
                   onClick={() => router.back()}
                 >
                   {t("addTask.cancel")}
-                </div>
+                </Button>
                 <motion.button
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
