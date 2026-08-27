@@ -80,7 +80,7 @@ export default function TaskCard({
   return (
     <>
       <motion.div
-        className="relative bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full"
+        className="relative bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full w-full"
         style={{
           boxShadow: "0 20px 35px -10px rgba(0,0,0,0.1)",
         }}

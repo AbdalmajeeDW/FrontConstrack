@@ -73,6 +73,7 @@ export default function InvoicesPage() {
         },
       });
       if (!response.ok) {
+        toast.error(t("invoices.refresh.error"));
         throw new Error("Failed to fetch invoices");
       }
       const data = await response.json();

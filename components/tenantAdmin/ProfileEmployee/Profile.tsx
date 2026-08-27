@@ -32,6 +32,7 @@ import { getSpecializationLabel } from "@/utils/constants/specializationOptions"
 
 interface EmployeeProfileProps {
   employee: EmployeeUser;
+  isEmployee?: boolean;
 }
 
 interface Invoice {
@@ -48,7 +49,10 @@ interface Invoice {
   };
 }
 
-export default function ProfilePage({ employee }: EmployeeProfileProps) {
+export default function ProfilePage({
+  employee,
+  isEmployee = false,
+}: EmployeeProfileProps) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar";
   const fullName = employee.name;
@@ -256,25 +260,27 @@ export default function ProfilePage({ employee }: EmployeeProfileProps) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
-              <Link
-                href={`/${tenantName}/admin/employees/edit/${employee.id}`}
-                className="p-2.5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-green-50 border border-gray-200 hover:border-green-200"
-              >
-                <Edit className="w-5 h-5 text-green-500" />
-              </Link>
-              <button
-                onClick={() => {
-                  setDeleteModal({
-                    id: employee.id!,
-                    name: employee.name || "Unknown",
-                  });
-                }}
-                className="p-2.5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-rose-50 border border-gray-200 hover:border-rose-200"
-              >
-                <Trash2 className="w-5 h-5 text-rose-600" />
-              </button>
-            </div>
+            {!isEmployee && (
+              <div className="flex items-center gap-2 shrink-0">
+                <Link
+                  href={`/${tenantName}/admin/employees/edit/${employee.id}`}
+                  className="p-2.5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-green-50 border border-gray-200 hover:border-green-200"
+                >
+                  <Edit className="w-5 h-5 text-green-500" />
+                </Link>
+                <button
+                  onClick={() => {
+                    setDeleteModal({
+                      id: employee.id!,
+                      name: employee.name || "Unknown",
+                    });
+                  }}
+                  className="p-2.5 bg-white rounded-xl shadow-sm hover:shadow-md transition-all hover:bg-rose-50 border border-gray-200 hover:border-rose-200"
+                >
+                  <Trash2 className="w-5 h-5 text-rose-600" />
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500"></div>
@@ -327,7 +333,6 @@ export default function ProfilePage({ employee }: EmployeeProfileProps) {
           </div>
         </motion.div>
 
-        {/* Invoice Documents */}
         <motion.div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
           <div className="bg-linear-to-r from-amber-500 to-orange-500 px-6 py-5">
             <div className="flex items-center gap-3">

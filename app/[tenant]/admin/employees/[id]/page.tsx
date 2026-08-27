@@ -30,7 +30,7 @@ export default function EmployeeProfilePage() {
 
   return (
     <div>
-      <ProfilePage employee={employee} />
+      <ProfilePage employee={employee} isEmployee={false} />
     </div>
   );
 }
