@@ -183,7 +183,7 @@ export default function EditProjectPage() {
         <div className="flex flex-col items-center gap-4">
           <Loader className="w-12 h-12 text-purple-600 animate-spin" />
           <p className="text-gray-600 font-medium">
-            {t("projects.edit_loading")}
+            {t("editProjects.edit_loading")}
           </p>
         </div>
       </div>
@@ -335,8 +335,13 @@ export default function EditProjectPage() {
             placeholder={t("projects.create_description_placeholder")}
             rows={5}
           />
-          <div className="grid md:grid-cols-2 gap-5"></div>
-          <div className="flex justify-end ">
+          <div className="flex justify-end gap-2 ">
+            <div
+              className="w-32 h-8 rounded-xl bg-gray-300 cursor-pointer  flex items-center justify-center shadow-2xl"
+              onClick={() => router.back()}
+            >
+              {t("addTask.cancel")}
+            </div>
             <Button
               type="submit"
               disabled={loading}

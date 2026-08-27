@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { statsTasks } from "@/config/statsConfig";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
 
 export type TaskFilter =
   | "all"
@@ -38,7 +39,7 @@ export function useTaskData(tasks: any[]) {
 
   const stats = useMemo(
     () => statsTasks(tasks,t),
-    [tasks]
+    [tasks,t,i18n.language]
   );
 
   return {

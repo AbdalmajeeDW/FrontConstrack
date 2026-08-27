@@ -88,19 +88,15 @@ export default function ProjectsPage() {
     today.setHours(0, 0, 0, 0);
 
     return projects.filter((p) => {
-      // ✅ استثناء المكتملة والملغية
       if (p.status === "completed" || p.status === "cancelled") return false;
 
-      // ✅ لا يوجد تاريخ بداية
       if (!p.start_date) return false;
 
       const startDate = new Date(p.start_date);
       startDate.setHours(0, 0, 0, 0);
 
-      // ✅ بدأت (start_date <= today)
       if (startDate > today) return false;
 
-      // ✅ إذا كان هناك تاريخ انتهاء، تأكد من أنه لم ينتهي بعد
       if (p.end_date) {
         const endDate = new Date(p.end_date);
         endDate.setHours(0, 0, 0, 0);
@@ -515,13 +511,14 @@ export default function ProjectsPage() {
                       <td colSpan={8} className="px-6 py-12 text-center">
                         <Building2 className="w-12 h-12 mx-auto text-gray-300 mb-2" />
                         <p className="text-gray-500">
-                          {t("projects.no_projects") || "لا توجد مشاريع"}
+                          {t("dashboard.recent_projects.no_projects") ||
+                            "لا توجد مشاريع"}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">
                           {searchTerm || filterStatus !== "all"
                             ? t("projects.no_results") ||
                               "لا توجد نتائج تطابق الفلاتر"
-                            : t("projects.start_adding") ||
+                            : t("dashboard.recent_projects.create_first") ||
                               "ابدأ بإضافة مشاريع"}
                         </p>
                       </td>

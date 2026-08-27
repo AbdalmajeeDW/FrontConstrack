@@ -7,7 +7,7 @@ export function useTasks(tasks: Task[]) {
   const [status, setStatus] = useState("all");
   const [project, setProject] = useState<number | "all">("all");
   const [filterType, setFilterType] = useState<
-    "all" | "done" | "in_progress" | "high_priority" | "overdue"
+    "all" | "done" | "in_progress" | "high_priority" | "overdue"|'urgent'
   >("all");
 
   const handleSetSearch = useCallback((value: string) => {
@@ -60,6 +60,9 @@ export function useTasks(tasks: Task[]) {
           break;
         case "high_priority":
           result = result.filter((t) => t.priority === "high");
+          break;
+           case "urgent":
+          result = result.filter((t) => t.priority === "urgent");
           break;
         case "overdue":
           result = result.filter(

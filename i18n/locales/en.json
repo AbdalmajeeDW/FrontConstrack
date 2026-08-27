@@ -339,7 +339,7 @@
     "filter_priority": "All Priority",
     "filter_all": "All",
     "new_project": "New Project",
-    "start": "start",
+    "start": "Start",
     "end": "End",
     "delete_success": "Project deleted successfully.",
     "delete_error": "Failed to delete project",
@@ -878,7 +878,7 @@
     "welcome": "Welcome back, {{name}}",
     "employee": "Employee",
     "expired": "Expired",
-    "days_left": "{{count}} day left",
+    "days_left": "{{count}} days left",
     "days_left_plural": "{{count}} days left",
     "hours_left": "{{count}} hour left",
     "hours_left_plural": "{{count}} hours left",
@@ -1005,5 +1005,15 @@
     "processing": "Processing...",
     "select_employee_required": "Please select an employee",
     "images_required": "Please select at least one image"
+  },
+    "deleteModal": {
+    "title": "Delete Item",
+    "confirm": "Delete",
+    "cancel": "Cancel",
+    "itemType": "item",
+    "message": "Are you sure you want to delete this {{itemType}}? All associated data will be permanently removed.",
+    "messageWithName": "Are you sure you want to delete {{itemType}} \"{{itemName}}\"? All associated data will be permanently removed.",
+    "undo": "This action cannot be undone",
+    "deleting": "Deleting..."
   }
 }

@@ -168,7 +168,6 @@ export default function TasksPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 via-white to-gray-100">
       <div className="mx-auto px-4 py-6 space-y-6">
-        {/* Stats Cards */}
         <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {statCards.map((card, index) => {
             const Icon = card.icon;
@@ -225,6 +224,7 @@ export default function TasksPage() {
                 <option value="high">{t("tasks.priority.high")}</option>
                 <option value="medium">{t("tasks.priority.medium")}</option>
                 <option value="low">{t("tasks.priority.low")}</option>
+                <option value="urgent">{t("addTask.priority.urgent")}</option>
               </select>
               <select
                 value={filterStatus}

@@ -1,11 +1,11 @@
 import { Trash2, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  // البيانات الديناميكية
   title?: string;
   itemName?: string;
   itemType?: string;
@@ -13,7 +13,6 @@ interface DeleteConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   isLoading?: boolean;
-  // التخصيص
   icon?: React.ReactNode;
   confirmButtonColor?: string;
   confirmButtonHoverColor?: string;
@@ -23,23 +22,27 @@ export function DeleteConfirmModal({
   isOpen,
   onClose,
   onConfirm,
-  // القيم الافتراضية
   title = "Delete Item",
   itemName = "this item",
   itemType = "item",
   message,
   confirmText = "Delete",
-  cancelText = "Cancel",
+  cancelText = "deleteModal.cancel",
   isLoading = false,
   icon,
   confirmButtonColor = "bg-red-600",
   confirmButtonHoverColor = "hover:bg-red-700",
 }: DeleteConfirmModalProps) {
   if (!isOpen) return null;
-  const defaultMessage = `Are you sure you want to delete ${itemType} "${
-    itemName || "this item"
-  }"? All associated data will be permanently removed.`;
+  const { t } = useTranslation();
 
+  const defaultMessage = t("deleteModal.messageWithName", {
+    itemType: itemType,
+    itemName: itemName || t("deleteModal.thisItem", "this item"),
+    defaultValue: `Are you sure you want to delete ${itemType} "${
+      itemName || "this item"
+    }"? All associated data will be permanently removed.`,
+  });
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <motion.div
@@ -54,9 +57,7 @@ export function DeleteConfirmModal({
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-800">{title}</h3>
-              <p className="text-sm text-slate-500">
-                This action cannot be undone
-              </p>
+              <p className="text-sm text-slate-500">{t("deleteModal.undo")}</p>
             </div>
           </div>
           <button
@@ -74,7 +75,7 @@ export function DeleteConfirmModal({
             onClick={onClose}
             className="flex-1 px-4 py-2 border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
           >
-            {cancelText}
+            {t(cancelText)}
           </button>
           <button
             onClick={onConfirm}
@@ -84,7 +85,7 @@ export function DeleteConfirmModal({
             {isLoading ? (
               <div className="flex items-center justify-center gap-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Deleting...
+                {t("deleteModal.deleting", "Deleting...")}
               </div>
             ) : (
               confirmText

@@ -14,6 +14,8 @@ import {
   Euro,
   Save,
   UserPlus,
+  ArrowBigRight,
+  ArrowBigLeft,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -31,6 +33,7 @@ import {
 import { specializationOptions } from "@/utils/constants/specializationOptions";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
 
 interface EmployeeFormProps {
   mode: "add" | "edit";
@@ -47,6 +50,7 @@ export default function EmployeeForm({ mode, employeeId }: EmployeeFormProps) {
   const [isLoadingData, setIsLoadingData] = useState(mode === "edit");
 
   const isEditMode = mode === "edit";
+  const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
 
   const [formData, setFormData] = useState<Partial<employee>>({
     name: "",
@@ -222,7 +226,6 @@ export default function EmployeeForm({ mode, employeeId }: EmployeeFormProps) {
   return (
     <div className="min-h-screen bg-[#f5f7fb]">
       <div className="mx-auto px-6 lg:px-8 pb-10 relative z-20">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -660,35 +663,42 @@ export default function EmployeeForm({ mode, employeeId }: EmployeeFormProps) {
                   </div>
                 </div>
               </motion.div>
-
-              <motion.button
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-14 rounded-2xl bg-linear-to-r from-indigo-600 via-violet-600 to-blue-600 text-white font-semibold shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {isEditMode
-                      ? t("employeeEdit.updating")
-                      : t("employeeAdd.creating")}
-                  </>
-                ) : (
-                  <>
-                    {isEditMode ? (
-                      <Save className="w-5 h-5" />
-                    ) : (
-                      <UserPlus className="w-5 h-5" />
-                    )}
-                    {isEditMode
-                      ? t("employeeEdit.update")
-                      : t("employeeAdd.create")}
-                  </>
-                )}
-              </motion.button>
+              <div className="flex gap-2">
+                <div
+                  className="w-32 h-10 rounded-2xl bg-gray-300 cursor-pointer  flex items-center justify-center shadow-2xl"
+                  onClick={() => router.back()}
+                >
+                  {t("addTask.cancel")}
+                </div>
+                <motion.button
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-10 rounded-2xl bg-linear-to-r from-indigo-600 via-violet-600 to-blue-600 text-white font-semibold shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {isEditMode
+                        ? t("employeeEdit.updating")
+                        : t("employeeAdd.creating")}
+                    </>
+                  ) : (
+                    <>
+                      {isEditMode ? (
+                        <Save className="w-5 h-5" />
+                      ) : (
+                        <UserPlus className="w-5 h-5" />
+                      )}
+                      {isEditMode
+                        ? t("employeeEdit.update")
+                        : t("employeeAdd.create")}
+                    </>
+                  )}
+                </motion.button>
+              </div>
             </div>
           </div>
         </form>

@@ -250,7 +250,7 @@ export default function AdminPage() {
                     {t("dashboard.recent_projects.no_projects")}
                   </h3>
                   <p className="text-sm text-gray-400 mb-4">
-                    {t("dashboard.recent_projects.start_creating")}
+                    {t("dashboard.recent_projects.create_first")}
                   </p>
                   <Link href={`/${tenantName}/admin/projects/create`}>
                     <button className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-lg hover:shadow-lg transition-all hover:-translate-y-0.5">

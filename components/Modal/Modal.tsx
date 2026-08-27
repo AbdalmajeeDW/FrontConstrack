@@ -489,7 +489,6 @@ export default function AddTaskModal({
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto"
       >
-        {/* Header */}
         <div className="sticky top-0 z-20 bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4 flex justify-between items-center rounded-t-2xl">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             {isEditing ? (
@@ -514,7 +513,6 @@ export default function AddTaskModal({
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Basic Info */}
           <div className="bg-gray-50 rounded-xl p-4">
             <h3 className="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
               <Briefcase className="w-4 h-4" />
@@ -525,7 +523,6 @@ export default function AddTaskModal({
             </div>
           </div>
 
-          {/* Location */}
           <div className="bg-gray-50 rounded-xl p-4">
             <h3 className="text-sm font-semibold text-gray-600 mb-3 flex items-center gap-2">
               <MapPin className="w-4 h-4" />

@@ -2,22 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  CheckCircle,
-  Clock,
-  AlertCircle,
-  FileText,
-  ArrowUpRight,
-  Clock1,
-  Loader,
-} from "lucide-react";
+import { CheckCircle, ArrowUpRight, Loader } from "lucide-react";
 import Link from "next/link";
-import {
-  fetchEmployee,
-  selectEmployee,
-} from "@/store/slices/employee/profileSlice";
+import { fetchEmployee } from "@/store/slices/employee/profileSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { EmployeeUser } from "@/store/types/employee.types";
 import {
   fetchEmployeeTasks,
   selectEmployeeTasks,
@@ -105,7 +93,6 @@ export default function EmployeePage() {
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-100 rounded-full filter blur-3xl opacity-20 -z-10"></div>
 
       <div className="mx-auto space-y-6">
-        {/* ✅ Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
@@ -121,7 +108,6 @@ export default function EmployeePage() {
           </div>
         </div>
 
-        {/* ✅ Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {stats.map((stat, index) => (
             <motion.div
@@ -153,7 +139,6 @@ export default function EmployeePage() {
           ))}
         </div>
 
-        {/* ✅ Current Tasks */}
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
