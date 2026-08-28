@@ -61,13 +61,13 @@ export default function Page() {
   const currentUser = user || tenantAdmin;
 
   const tenantName = pathname.split("/")[1] || "";
-  const currentRoleLabel = pathname.startsWith("/superAdmin")
-    ? user?.name
-    : pathname.includes("/admin")
-      ? tenantAdmin?.name
-      : pathname.includes("/employee")
-        ? "Employee"
-        : "Guest";
+  // const currentRoleLabel = pathname.startsWith("/superAdmin")
+  //   ? user?.name
+  //   : pathname.includes("/admin")
+  //     ? tenantAdmin?.name
+  //     : pathname.includes("/employee")
+  //       ? "Employee"
+  //       : "Guest";
 
   const displayName = currentUser?.name || "Guest";
 
@@ -170,29 +170,29 @@ export default function Page() {
     },
   };
 
-  const getActiveState = (link: NavLink) => {
-    if (link.url === "") {
-      const isHome =
-        pathname === `/${tenantName}/admin` ||
-        pathname === `/${tenantName}/employee` ||
-        pathname.endsWith(`/${tenantName}/admin`) ||
-        pathname.endsWith(`/${tenantName}/employee`);
-      return isHome;
-    }
+  // const getActiveState = (link: NavLink) => {
+  //   if (link.url === "") {
+  //     const isHome =
+  //       pathname === `/${tenantName}/admin` ||
+  //       pathname === `/${tenantName}/employee` ||
+  //       pathname.endsWith(`/${tenantName}/admin`) ||
+  //       pathname.endsWith(`/${tenantName}/employee`);
+  //     return isHome;
+  //   }
 
-    if (pathname === link.url) return true;
+  //   if (pathname === link.url) return true;
 
-    const lastSegment = pathname.split("/").pop();
-    if (link.url === lastSegment) return true;
+  //   const lastSegment = pathname.split("/").pop();
+  //   if (link.url === lastSegment) return true;
 
-    if (link.subLinks) {
-      return link.subLinks.some(
-        (sub) => pathname === sub.url || pathname.includes(sub.url),
-      );
-    }
+  //   if (link.subLinks) {
+  //     return link.subLinks.some(
+  //       (sub) => pathname === sub.url || pathname.includes(sub.url),
+  //     );
+  //   }
 
-    return false;
-  };
+  //   return false;
+  // };
 
   return (
     <>

@@ -122,11 +122,11 @@ export const adminLinks: NavLink[] = [
   },
   {
     id: 7,
-    name: "Activity",
+    name: "Activities",
     icon: <Activity size={20} />,
     url: "activities",
-    title: "Activity",
-    description: "View and manage company Activity",
+    title: "Activities",
+    description: "View and manage company Activities",
   },
 ];
 

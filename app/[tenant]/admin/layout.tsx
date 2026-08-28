@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import StoreProvider from "@/app/(dashboard)/superAdmin/StoreProvider";
 import { Toaster } from "@/components/ui/sonner";
 import I18nProvider from "@/components/I18nProvider";
+import VersionFooter from "@/components/Footer/VersionFooter";
 
 export default function AdminLayout({
   children,
@@ -32,6 +33,7 @@ export default function AdminLayout({
                 </main>
               </div>
             </div>
+            <VersionFooter />
           </I18nProvider>
         </AuthGuard>
       )}
