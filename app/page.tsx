@@ -27,6 +27,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import I18nProvider from "@/components/I18nProvider";
 import CompanyCheckModal from "@/components/landing/CompanyCheckModal";
+import VersionFooter from "@/components/Footer/VersionFooter";
 
 export default function LandingPage() {
   const { t } = useTranslation();
@@ -419,7 +420,7 @@ export default function LandingPage() {
               </Link>
               <span>© 2026 {t("app_name.footer.rights")}</span>
               <span className="bg-indigo-500/20 text-indigo-300 px-3 py-1 rounded-full text-xs font-mono">
-                v1.0.0
+                <VersionFooter />
               </span>
             </div>
           </div>
