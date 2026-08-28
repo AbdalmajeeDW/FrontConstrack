@@ -1015,5 +1015,85 @@
     "messageWithName": "Are you sure you want to delete {{itemType}} \"{{itemName}}\"? All associated data will be permanently removed.",
     "undo": "This action cannot be undone",
     "deleting": "Deleting..."
+  },
+    "app_name": {
+  "app_name": "Project Management System",
+
+      "nav": {
+        "features": "Features",
+        "why_us": "Why Us?",
+        "contact": "Contact",
+        "login": "Login"
+      },
+      "hero": {
+        "badge": "Project & Employee Management Platform",
+        "title_highlight": "Management System",
+        "title": "for Projects & Employees",
+        "subtitle": "An integrated platform for managing employees, tasks, and projects with multi-tenant system and full Arabic language support",
+        "start": "Get Started",
+        "watch": "Watch Demo"
+      },
+      "stats": {
+        "employees": "Employees",
+        "companies": "Companies",
+        "tasks": "Tasks",
+        "rating": "Rating"
+      },
+      "features": {
+        "title": "System Features",
+        "subtitle": "An integrated system covering all employee and project management needs",
+        "employees": "Employee Management",
+        "employees_desc": "Complete employee management with attendance tracking, performance, and tasks",
+        "tasks": "Task Management",
+        "tasks_desc": "Create and track tasks with priorities and deadlines",
+        "invoices": "Invoices",
+        "invoices_desc": "Create and manage invoices with image and document attachments",
+        "reports": "Reports & Analytics",
+        "reports_desc": "Advanced reports and real-time analytics for employee and project performance",
+        "security": "Advanced Security",
+        "security_desc": "Integrated permissions system with data isolation between companies",
+        "languages": "Multi-Language",
+        "languages_desc": "Full support for Arabic and English with automatic RTL/LTR direction"
+      },
+      "benefits": {
+        "title": "Why Choose Our System?",
+        "subtitle": "Integrated solutions to make your business management easier and more efficient",
+        "speed": "Lightning Fast",
+        "speed_desc": "Excellent performance with fast page loading",
+        "responsive": "Responsive Design",
+        "responsive_desc": "Works perfectly on all devices",
+        "time": "Time Saving",
+        "time_desc": "Automate processes and reduce manual effort",
+        "support": "24/7 Support",
+        "support_desc": "Dedicated support team around the clock"
+      },
+      "cta": {
+        "title": "Ready to Start Your Journey?",
+        "subtitle": "Join thousands of companies that trust our system in managing their employees and projects",
+        "trial": "Start Free Trial",
+        "contact": "Contact Us"
+      },
+      "footer": {
+        "terms": "Terms & Conditions",
+        "privacy": "Privacy Policy",
+        "rights": "All Rights Reserved"
+      }
+    },
+      "company": {
+    "title": "Company Access",
+    "ask": "Do you have a company account?",
+    "have_company": "Yes, I have a company",
+    "have_company_desc": "Sign in to your existing company",
+    "new_company": "No, create new company",
+    "new_company_desc": "Start a new company account",
+    "enter_name_label": "Enter your company name",
+    "enter_name_placeholder": "e.g. Acme Corp",
+    "continue": "Continue",
+    "checking": "Checking...",
+    "not_found": "Company not found. Please check the name or create a new company.",
+    "check_error": "Error checking company. Please try again.",
+    "enter_name": "Please enter your company name",
+    "redirecting": "Redirecting...",
+    "redirecting_desc": "Taking you to {{company}} login page"
   }
 }
